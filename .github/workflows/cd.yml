@@ -29,12 +29,11 @@ jobs:
         with:
           node-version: '20.x'
       - name: Install dependencies
-        run:
-          npm install --legacy-peer-deps
+        run: npm install
       # here add tests later (if needed)
       # @FIXME remove --legacy-peer-deps when all dependencies are compatible wit angular 21
       - name: Build project
-        run: npm run build -- --prod --legacy-peer-deps --base-href=/rpg-companion/
+        run: npm run build -- --prod --base-href=/rpg-companion/
       - name: Setup GitHub Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact

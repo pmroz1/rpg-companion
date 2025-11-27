@@ -30,4 +30,4 @@ jobs:
       # here add tests later (if needed)
       # @FIXME remove --legacy-peer-deps when all dependencies are compatible wit angular 21
       - name: Build project
-        run: npm run build -- --prod
+        run: npm run build -- --configuration=production

@@ -1,8 +1,12 @@
-rpg-companion
-<p-button label="Click me"></p-button>
+<div class="min-h-screen bg-[var(--color-bg)] text-[var(--text-normal)]">
+  <header class="bg-[var(--color-bg-soft)] border-b border-[var(--color-neutral)] px-6 py-4">
+    <h1 class="text-2xl font-bold" style="color: var(--color-accent)">D&D 5e Companion</h1>
+  </header>
 
-<h1 class="text-5xl font-bold underline">
-  Hello world!
-</h1>
+  <p-button
+    label="Create Character"
+    styleClass="mt-4 ml-6 px-4 py-2 bg-[var(--color-accent)] hover:bg-[var(--color-accent-dark)] text-[var(--text-light)] font-semibold border-none"
+  ></p-button>
+</div>
 
 <router-outlet></router-outlet>

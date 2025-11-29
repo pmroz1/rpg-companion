@@ -16,9 +16,7 @@ export const appConfig: ApplicationConfig = {
       theme: {
         preset: DndPreset,
         options: {
-          // keep system dark mode (good for now)
           darkModeSelector: 'system',
-          // make sure PrimeNG’s layer plays nice with Tailwind
           cssLayer: {
             name: 'primeng',
             order: 'app-styles, primeng, tailwind',

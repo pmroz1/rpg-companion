@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { JsonPipe } from '@angular/common';
-import { FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { startWith } from 'rxjs';
+import { ReactiveFormsModule } from '@angular/forms';
 import { DynamicFormService } from '../shared/services/dynamic-form.service';
 
 @Component({

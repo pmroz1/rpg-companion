@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { JsonPipe } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-import { DynamicFormService } from '../shared/services/dynamic-form.service';
+import { DynamicFormService } from '@shared/services/dynamic-form.service';
 import { ArmorClass } from './components/armor-class/armor-class';
 
 @Component({

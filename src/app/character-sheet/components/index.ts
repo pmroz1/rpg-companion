@@ -1,1 +1,1 @@
-export * from './';
+export * from './armor-class/armor-class';

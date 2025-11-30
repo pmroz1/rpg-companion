@@ -2,11 +2,11 @@ name: Angular CI Pipeline
 on:
   push:
     branches:
-      - main
+      - master
       - develop
   pull_request:
     branches:
-      - main
+      - master
       - develop
 jobs:
   test:
@@ -24,10 +24,12 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20.x'
+          node-version: '22.x'
       - name: Install dependencies
-        run: npm install
+        run: npm install --legacy-peer-deps
       # here add tests later (if needed)
       # @FIXME remove --legacy-peer-deps when all dependencies are compatible wit angular 21
+      - name: Format code
+        run: npm run format
       - name: Build project
         run: npm run build -- --configuration=production

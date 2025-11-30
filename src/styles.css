@@ -1,0 +1,37 @@
+@import 'tailwindcss';
+@import 'tailwindcss-primeui';
+
+:root {
+  --color-bg: #0a1a2f;
+  --color-bg-soft: #12395a;
+  --color-primary: #1f5c8a;
+
+  --color-accent: #ff7a1a;
+  --color-accent-dark: #db5a00;
+
+  --color-neutral: #c4c9d1;
+  --color-paper: #f2ece4;
+
+  --text-light: #f2ece4;
+  --text-normal: #c4c9d1;
+  --text-muted: #9aa2ae;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--text-normal);
+}
+
+.p-button {
+  border-radius: 9999px;
+}
+
+.p-button.p-button-primary {
+  background: var(--color-accent);
+  border-color: var(--color-accent-dark);
+  color: #0a1a2f;
+}
+
+.p-button.p-button-primary:hover {
+  background: var(--color-accent-dark);
+}

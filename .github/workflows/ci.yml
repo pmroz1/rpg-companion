@@ -1,13 +1,9 @@
 name: Angular CI Pipeline
 on:
   push:
-    branches:
-      - master
-      - develop
+    branches: [develop]
   pull_request:
-    branches:
-      - master
-      - develop
+    branches: [develop, master]
 jobs:
   test:
     runs-on: ubuntu-latest

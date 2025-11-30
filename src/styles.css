@@ -1,7 +1,6 @@
 @import 'tailwindcss';
 @import 'tailwindcss-primeui';
 
-/* Your D&D palette */
 :root {
   --color-bg: #0a1a2f;
   --color-bg-soft: #12395a;
@@ -23,7 +22,6 @@ body {
   color: var(--text-normal);
 }
 
-/* Optional: PrimeNG button tweaks (will sit on top of theme) */
 .p-button {
   border-radius: 9999px;
 }

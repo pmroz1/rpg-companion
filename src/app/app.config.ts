@@ -4,6 +4,7 @@ import { routes } from './app.routes';
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeuix/themes/aura';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import DndPreset from './dnd-preset';
 
 export const appConfig: ApplicationConfig = {
   //@FIXME: primeng@21 not yet released with angular 21 support
@@ -13,7 +14,14 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
     providePrimeNG({
       theme: {
-        preset: Aura,
+        preset: DndPreset,
+        options: {
+          darkModeSelector: 'system',
+          cssLayer: {
+            name: 'primeng',
+            order: 'app-styles, primeng, tailwind',
+          },
+        },
       },
     }),
   ],

@@ -22,10 +22,10 @@ export class ArmorClass implements OnInit, OnDestroy {
   control = new FormControl('', Validators.required);
 
   ngOnInit() {
-    this.formService.getFormGroup().addControl('armorClass', this.control);
+    this.formService.addControl('armorClass', this.control);
   }
 
   ngOnDestroy() {
-    this.formService.getFormGroup().removeControl('armorClass');
+    this.formService.removeControl('armorClass');
   }
 }

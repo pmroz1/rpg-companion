@@ -2,7 +2,7 @@ name: Angular CD Pipeline
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   deploy:

@@ -20,7 +20,8 @@
       "@assets/*": ["assets/*"],
       "@env/*": ["environments/*"],
       "@shared/*": ["app/shared/*"],
-      "@character-sheet/*": ["app/character-sheet/*"]
+      "@character-sheet/*": ["app/character-sheet/*"],
+      "@data/*": ["data/*"]
     }
   },
   "angularCompilerOptions": {

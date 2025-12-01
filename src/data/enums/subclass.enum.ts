@@ -1,4 +1,5 @@
 export enum SubclassType {
+  None = '',
   // Barbarian
   Berserker = 'berserker',
   WildHeart = 'wild heart',

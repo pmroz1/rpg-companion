@@ -1,37 +1,156 @@
 @import 'tailwindcss';
 @import 'tailwindcss-primeui';
 
+@font-face {
+  font-family: 'Cinzel';
+  src: url('https://fonts.gstatic.com/s/cinzel/v23/8vIU7ww63mVu7gtR-kwKxNvkNOjw-tbnfY3lCQ.woff2')
+    format('woff2');
+  font-weight: 400 700;
+  font-display: swap;
+}
+
 :root {
-  --color-bg: #0a1a2f;
-  --color-bg-soft: #12395a;
-  --color-primary: #1f5c8a;
+  --color-bg: #1a1410;
+  --color-bg-elevated: #241c16;
+  --color-bg-card: #2e241c;
+  --color-border: #4d3c2c;
+  --color-border-light: #5c4a38;
 
-  --color-accent: #ff7a1a;
-  --color-accent-dark: #db5a00;
+  --color-gold: #c9a227;
+  --color-gold-light: #d4b33a;
+  --color-gold-dark: #996515;
 
-  --color-neutral: #c4c9d1;
-  --color-paper: #f2ece4;
+  --color-crimson: #8b1e3f;
+  --color-crimson-light: #a62951;
+  --color-crimson-dark: #6b1730;
 
-  --text-light: #f2ece4;
-  --text-normal: #c4c9d1;
-  --text-muted: #9aa2ae;
+  --color-parchment: #f5e6c8;
+  --color-parchment-dark: #e8d4a8;
+  --color-ink: #2c1810;
+
+  --text-heading: #f5e6c8;
+  --text-body: #d4c4a8;
+  --text-muted: #9a866e;
+
+  --font-display: 'Cinzel', 'Times New Roman', serif;
+  --font-body: 'Segoe UI', system-ui, sans-serif;
 }
 
 body {
   background: var(--color-bg);
-  color: var(--text-normal);
+  color: var(--text-body);
+  font-family: var(--font-body);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-display);
+  color: var(--text-heading);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.dnd-card {
+  background: linear-gradient(145deg, var(--color-bg-card) 0%, var(--color-bg-elevated) 100%);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.3),
+    0 2px 4px -2px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(201, 162, 39, 0.1);
+}
+
+.dnd-card-header {
+  border-bottom: 2px solid var(--color-gold-dark);
+  background: linear-gradient(90deg, transparent 0%, rgba(201, 162, 39, 0.1) 50%, transparent 100%);
+}
+
+.dnd-divider {
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--color-gold-dark) 20%,
+    var(--color-gold) 50%,
+    var(--color-gold-dark) 80%,
+    transparent 100%
+  );
+}
+
+.dnd-box {
+  background: var(--color-bg-elevated);
+  border: 2px solid var(--color-border);
+  border-radius: 4px;
+  position: relative;
+}
+
+.dnd-box::before {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  border: 1px solid var(--color-border-light);
+  border-radius: 2px;
+  pointer-events: none;
 }
 
 .p-button {
-  border-radius: 9999px;
+  border-radius: 4px;
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  font-size: 0.85rem;
 }
 
-.p-button.p-button-primary {
-  background: var(--color-accent);
-  border-color: var(--color-accent-dark);
-  color: #0a1a2f;
+.p-button-primary {
+  background: linear-gradient(180deg, var(--color-crimson-light) 0%, var(--color-crimson) 100%);
+  border: 1px solid var(--color-crimson-dark);
+  color: var(--color-parchment);
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
-.p-button.p-button-primary:hover {
-  background: var(--color-accent-dark);
+.p-button-primary:hover {
+  background: linear-gradient(180deg, var(--color-crimson) 0%, var(--color-crimson-dark) 100%);
+}
+
+.p-button-secondary {
+  background: linear-gradient(180deg, var(--color-bg-card) 0%, var(--color-bg-elevated) 100%);
+  border: 1px solid var(--color-gold-dark);
+  color: var(--color-gold);
+}
+
+.p-button-secondary:hover {
+  border-color: var(--color-gold);
+  color: var(--color-gold-light);
+}
+
+.dnd-input {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  color: var(--text-body);
+  border-radius: 4px;
+}
+
+.dnd-input:focus {
+  border-color: var(--color-gold-dark);
+  box-shadow: 0 0 0 2px rgba(201, 162, 39, 0.2);
+  outline: none;
+}
+
+.gold-text {
+  color: var(--color-gold);
+}
+
+.parchment-text {
+  color: var(--color-parchment);
+}
+
+.crimson-text {
+  color: var(--color-crimson-light);
 }

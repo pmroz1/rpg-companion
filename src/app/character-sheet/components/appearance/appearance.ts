@@ -14,7 +14,7 @@ import { DividerModule } from 'primeng/divider';
       pTextarea
       [formControl]="control"
       rows="10"
-      class="appearance-textarea m-5"
+      class="appearance-textarea p-5"
       placeholder="Enter your appearance here.."
       fluid
     ></textarea>

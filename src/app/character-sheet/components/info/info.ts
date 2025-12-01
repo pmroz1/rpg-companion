@@ -17,6 +17,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { DND_CLASSES, DND_SUBCLASSES } from '@data/dictionaries';
 import { DND_BACKGROUNDS } from '@data/dictionaries/background.dictionary';
 import { DND_RACES } from '@data/dictionaries/races.dictionary';
+import { LevelPlate } from './level-plate/level-plate';
 
 export interface CharacterInfo {
   name: string;
@@ -30,72 +31,77 @@ export interface CharacterInfo {
 
 @Component({
   selector: 'sheet-info',
-  imports: [DndCard, FormsModule, SelectModule, InputTextModule, InputNumberModule],
-  template: ` <app-dnd-card title="Character Info">
-    <div class="info-grid">
-      <div class="field col-span-2">
-        <label for="name" class="field-label">Character Name</label>
-        <input
-          pInputText
-          id="name"
-          [ngModel]="characterName()"
-          (ngModelChange)="characterName.set($event)"
-        />
-      </div>
+  imports: [DndCard, FormsModule, SelectModule, InputTextModule, InputNumberModule, LevelPlate],
+  template: `
+    <div class="flex flex-row items-stretch gap-3 w-full">
+      <app-dnd-card title="Character Info" class="grow">
+        <div class="info-grid">
+          <div class="field col-span-2">
+            <label for="name" class="field-label">Character Name</label>
+            <input
+              pInputText
+              id="name"
+              [ngModel]="characterName()"
+              (ngModelChange)="characterName.set($event)"
+            />
+          </div>
 
-      <div class="field">
-        <label for="class-select" class="field-label">Class</label>
-        <p-select
-          id="class-select"
-          [options]="classOptions"
-          [ngModel]="class()"
-          optionLabel="name"
-          optionValue="id"
-          (ngModelChange)="onClassChange($event)"
-        />
-      </div>
+          <div class="field">
+            <label for="class-select" class="field-label">Class</label>
+            <p-select
+              id="class-select"
+              [options]="classOptions"
+              [ngModel]="class()"
+              optionLabel="name"
+              optionValue="id"
+              (ngModelChange)="onClassChange($event)"
+            />
+          </div>
 
-      <div class="field">
-        <label for="subclass" class="field-label">Subclass</label>
-        <p-select
-          id="subclass"
-          [options]="subclassOptions()"
-          [ngModel]="subclass()"
-          optionLabel="name"
-          optionValue="id"
-          (ngModelChange)="subclass.set($event)"
-          [disabled]="!class()"
-          placeholder="Select a subclass"
-        />
-      </div>
+          <div class="field">
+            <label for="subclass" class="field-label">Subclass</label>
+            <p-select
+              id="subclass"
+              [options]="subclassOptions()"
+              [ngModel]="subclass()"
+              optionLabel="name"
+              optionValue="id"
+              (ngModelChange)="subclass.set($event)"
+              [disabled]="!class()"
+              placeholder="Select a subclass"
+            />
+          </div>
 
-      <div class="field">
-        <label for="race" class="field-label">Race</label>
-        <p-select
-          id="race"
-          [options]="raceOptions"
-          [ngModel]="race()"
-          optionLabel="name"
-          optionValue="id"
-          (ngModelChange)="race.set($event)"
-          placeholder="Select a race"
-        />
-      </div>
+          <div class="field">
+            <label for="race" class="field-label">Race</label>
+            <p-select
+              id="race"
+              [options]="raceOptions"
+              [ngModel]="race()"
+              optionLabel="name"
+              optionValue="id"
+              (ngModelChange)="race.set($event)"
+              placeholder="Select a race"
+            />
+          </div>
 
-      <div class="field">
-        <label for="background" class="field-label">Background</label>
-        <p-select
-          id="background"
-          [options]="backgroundOptions"
-          [ngModel]="background()"
-          optionLabel="name"
-          optionValue="id"
-          (ngModelChange)="background.set($event)"
-          placeholder="Select a background"
-        />
-      </div>
+          <div class="field">
+            <label for="background" class="field-label">Background</label>
+            <p-select
+              id="background"
+              [options]="backgroundOptions"
+              [ngModel]="background()"
+              optionLabel="name"
+              optionValue="id"
+              (ngModelChange)="background.set($event)"
+              placeholder="Select a background"
+            />
+          </div>
+        </div>
+      </app-dnd-card>
+      <app-level-plate [(level)]="level" [(xp)]="xp" class="shrink-0 p-2" />
     </div>
-  </app-dnd-card>`,
+  `,
   styleUrls: ['./info.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

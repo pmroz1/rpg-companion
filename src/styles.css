@@ -1,6 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&display=swap');
 @import 'tailwindcss';
 @import 'tailwindcss-primeui';
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&display=swap');
 
 :root {
   --color-bg: #1a1410;

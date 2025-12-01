@@ -1,13 +1,6 @@
 @import 'tailwindcss';
 @import 'tailwindcss-primeui';
-
-@font-face {
-  font-family: 'Cinzel';
-  src: url('https://fonts.gstatic.com/s/cinzel/v23/8vIU7ww63mVu7gtR-kwKxNvkNOjw-tbnfY3lCQ.woff2')
-    format('woff2');
-  font-weight: 400 700;
-  font-display: swap;
-}
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&display=swap');
 
 :root {
   --color-bg: #1a1410;
@@ -65,8 +58,12 @@ h6 {
 }
 
 .dnd-card-header {
-  border-bottom: 2px solid var(--color-gold-dark);
+  /* border-bottom: 2px solid var(--color-gold-dark); */
   background: linear-gradient(90deg, transparent 0%, rgba(201, 162, 39, 0.1) 50%, transparent 100%);
+  font-family: var(--font-display);
+  color: var(--text-heading);
+  font-weight: 700;
+  letter-spacing: 0.05em;
 }
 
 .dnd-divider {

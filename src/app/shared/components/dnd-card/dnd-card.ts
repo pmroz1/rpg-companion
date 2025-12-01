@@ -5,14 +5,23 @@ import { Card } from 'primeng/card';
   selector: 'app-dnd-card',
   imports: [Card],
   template: `
-    <p-card [header]="header()" class="dnd-card">
+    <p-card class="dnd-box p-2 ml-1 mr-1 mb-2 mt-2">
+      <ng-template #header>
+        <div class="w-full h-8 text-2xl flex items-center justify-center">
+          <span class="dnd-card-header">{{ title() }}</span>
+        </div>
+      </ng-template>
       <div class="dnd-divider"></div>
-      <ng-content />
+      <div class="p-2"><ng-content /></div>
     </p-card>
   `,
-  styleUrls: ['./dnd-card.scss'],
+  styles: `
+    :host {
+      display: block;
+    }
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DndCard {
-  header = input<string | undefined>('');
+  title = input.required<string>();
 }

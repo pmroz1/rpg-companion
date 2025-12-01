@@ -58,7 +58,6 @@ h6 {
 }
 
 .dnd-card-header {
-  /* border-bottom: 2px solid var(--color-gold-dark); */
   background: linear-gradient(90deg, transparent 0%, rgba(201, 162, 39, 0.1) 50%, transparent 100%);
   font-family: var(--font-display);
   color: var(--text-heading);
@@ -128,17 +127,14 @@ h6 {
   color: var(--color-gold-light);
 }
 
-.dnd-input {
-  background: var(--color-bg);
-  border: 1px solid var(--color-border);
-  color: var(--text-body);
-  border-radius: 4px;
+.p-inputtext::placeholder,
+.p-textarea::placeholder {
+  color: var(--text-muted);
 }
 
-.dnd-input:focus {
-  border-color: var(--color-gold-dark);
-  box-shadow: 0 0 0 2px rgba(201, 162, 39, 0.2);
-  outline: none;
+.p-disabled,
+.p-component:disabled {
+  opacity: 0.5;
 }
 
 .gold-text {

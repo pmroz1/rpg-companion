@@ -3,7 +3,9 @@ import {
   Component,
   computed,
   effect,
+  Inject,
   inject,
+  Injector,
   signal,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
@@ -26,13 +28,15 @@ export interface CharacterInfo {
   selector: 'sheet-info',
   imports: [DndCard, SelectModule],
   template: ` <app-dnd-card title="Character Info">
-    <!-- <p-select [options]="[]"></p-select> -->
+    <!-- <p-select [options]="classTypes" [(ngModel)]="class()"></p-select> -->
   </app-dnd-card>`,
   styleUrls: ['./info.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Info {
   private readonly formService = inject(DynamicFormService);
+  private readonly injector = inject(Injector);
+  classTypes = Object.values(ClassType).map((value) => ({ label: value, value }));
 
   characterName = signal('');
   background = signal('');
@@ -65,9 +69,12 @@ export class Info {
   });
 
   ngOnInit() {
-    effect(() => {
-      this.control.setValue(this.characterInfo());
-    });
+    effect(
+      () => {
+        this.control.setValue(this.characterInfo());
+      },
+      { injector: this.injector },
+    );
 
     this.formService.addControl('characterInfo', this.control);
   }

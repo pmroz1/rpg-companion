@@ -1,4 +1,4 @@
-import { RaceType } from '@data/enums';
+import { RaceType, TraitType } from '@data/enums';
 import { DndRace } from '@data/models/dnd-race';
 
 export const DND_RACES: DndRace[] = [
@@ -8,6 +8,6 @@ export const DND_RACES: DndRace[] = [
     description: '...',
     size: 'Medium',
     speed: 30,
-    //   traits: [],
+    traits: [TraitType.None],
   },
 ];

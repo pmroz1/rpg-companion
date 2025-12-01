@@ -1,4 +1,4 @@
-import { RaceType } from '@data/enums';
+import { RaceType, TraitType } from '@data/enums';
 
 export interface DndRace {
   id: RaceType;
@@ -6,5 +6,5 @@ export interface DndRace {
   description?: string;
   size: string;
   speed: number;
-  //   traits: TraitType[];
+  traits: TraitType[];
 }

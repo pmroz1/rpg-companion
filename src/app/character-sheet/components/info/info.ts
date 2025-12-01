@@ -20,8 +20,8 @@ export interface CharacterInfo {
   name: string;
   background: string;
   race: string;
-  class: ClassType;
-  subclass: SubclassType;
+  class: ClassType | null;
+  subclass: SubclassType | null;
   level: number;
   xp: number;
 }
@@ -49,17 +49,21 @@ export interface CharacterInfo {
           [ngModel]="class()"
           optionLabel="name"
           optionValue="id"
-          (ngModelChange)="class.set($event)"
-        ></p-select>
+          (ngModelChange)="onClassChange($event)"
+        />
       </div>
 
       <div class="field">
         <label for="subclass" class="field-label">Subclass</label>
-        <input
-          pInputText
+        <p-select
           id="subclass"
+          [options]="subclassOptions()"
           [ngModel]="subclass()"
+          optionLabel="name"
+          optionValue="id"
           (ngModelChange)="subclass.set($event)"
+          [disabled]="!class()"
+          placeholder="Select a subclass"
         />
       </div>
     </div>
@@ -80,8 +84,8 @@ export class Info {
   characterName = signal('');
   background = signal('');
   race = signal('');
-  class = signal(ClassType.None);
-  subclass = signal(SubclassType.None);
+  class = signal<null | ClassType>(null);
+  subclass = signal<null | SubclassType>(null);
   level = signal(1);
   xp = signal(0);
 
@@ -101,8 +105,8 @@ export class Info {
     name: '',
     background: '',
     race: '',
-    class: ClassType.Barbarian,
-    subclass: SubclassType.Berserker,
+    class: ClassType.None,
+    subclass: SubclassType.None,
     level: 1,
     xp: 0,
   });
@@ -120,5 +124,10 @@ export class Info {
 
   ngOnDestroy() {
     this.formService.removeControl('characterInfo');
+  }
+
+  onClassChange(classType: ClassType | null): void {
+    this.subclass.set(null);
+    this.class.set(classType);
   }
 }

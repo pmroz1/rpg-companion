@@ -15,6 +15,8 @@ import { SelectModule } from 'primeng/select';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { DND_CLASSES, DND_SUBCLASSES } from '@data/dictionaries';
+import { DND_BACKGROUNDS } from '@data/dictionaries/background.dictionary';
+import { DND_RACES } from '@data/dictionaries/races.dictionary';
 
 export interface CharacterInfo {
   name: string;
@@ -66,6 +68,32 @@ export interface CharacterInfo {
           placeholder="Select a subclass"
         />
       </div>
+
+      <div class="field">
+        <label for="race" class="field-label">Race</label>
+        <p-select
+          id="race"
+          [options]="raceOptions"
+          [ngModel]="race()"
+          optionLabel="name"
+          optionValue="id"
+          (ngModelChange)="race.set($event)"
+          placeholder="Select a race"
+        />
+      </div>
+
+      <div class="field">
+        <label for="background" class="field-label">Background</label>
+        <p-select
+          id="background"
+          [options]="backgroundOptions"
+          [ngModel]="background()"
+          optionLabel="name"
+          optionValue="id"
+          (ngModelChange)="background.set($event)"
+          placeholder="Select a background"
+        />
+      </div>
     </div>
   </app-dnd-card>`,
   styleUrls: ['./info.scss'],
@@ -78,8 +106,11 @@ export class Info {
   classOptions = [...DND_CLASSES];
   subclassOptions = computed(() => {
     const currentClass = this.class();
-    return DND_SUBCLASSES.filter((s) => s.parentClass === currentClass);
+    return [...DND_SUBCLASSES.filter((s) => s.parentClass === currentClass)];
   });
+
+  backgroundOptions = [...DND_BACKGROUNDS];
+  raceOptions = [...DND_RACES];
 
   characterName = signal('');
   background = signal('');

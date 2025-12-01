@@ -18,7 +18,7 @@ import { FormControl, Validators } from '@angular/forms';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ArmorClass implements OnInit, OnDestroy {
-  private formService = inject(DynamicFormService);
+  private readonly formService = inject(DynamicFormService);
   control = new FormControl('', Validators.required);
 
   ngOnInit() {

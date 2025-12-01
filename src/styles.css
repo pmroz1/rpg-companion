@@ -86,6 +86,7 @@ h6 {
   border: 2px solid var(--color-border);
   border-radius: 4px;
   position: relative;
+  color: var(--text-body);
 }
 
 .dnd-box::before {

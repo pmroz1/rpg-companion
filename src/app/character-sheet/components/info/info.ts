@@ -142,7 +142,7 @@ export class Info {
     xp: 0,
   });
 
-  ngOnInit() {
+  ngOnInit(): void {
     effect(
       () => {
         this.control.setValue(this.characterInfo());
@@ -153,7 +153,7 @@ export class Info {
     this.formService.addControl('characterInfo', this.control);
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.formService.removeControl('characterInfo');
   }
 

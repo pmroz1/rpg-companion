@@ -1,0 +1,16 @@
+import { SpellType } from '@data/enums/spell.enum';
+import { SpellCantrip } from '@data/models/spell-cantrip.';
+
+export const DND_SPELLS_CANTRIPS: SpellCantrip[] = [
+  {
+    level: 0,
+    name: 'Fire Bolt',
+    description: 'A bolt of fire that deals damage to a target.',
+    castingTime: '1 action',
+    range: '120 feet',
+    concentration: false,
+    ritual: false,
+    requiredMaterial: false,
+    category: SpellType.Evocation,
+  },
+];

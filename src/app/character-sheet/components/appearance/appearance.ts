@@ -9,7 +9,7 @@ import { DividerModule } from 'primeng/divider';
   selector: 'app-appearance',
   imports: [CardModule, TextareaModule, ReactiveFormsModule, DividerModule],
   template: `<p-card class="dnd-box p-1 appearance-header" header="APPEARANCE">
-    <p-divider class="dnd-divider" />
+    <p-divider class="dnd-divider-horizontal" />
     <textarea
       pTextarea
       [formControl]="control"

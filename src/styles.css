@@ -65,10 +65,22 @@ h6 {
   letter-spacing: 0.05em;
 }
 
-.dnd-divider {
+.dnd-divider-horizontal {
   height: 2px;
   background: linear-gradient(
     90deg,
+    transparent 0%,
+    var(--color-gold-dark) 20%,
+    var(--color-gold) 50%,
+    var(--color-gold-dark) 80%,
+    transparent 100%
+  );
+}
+
+.dnd-divider-vertical {
+  width: 2px;
+  background: linear-gradient(
+    45deg,
     transparent 0%,
     var(--color-gold-dark) 20%,
     var(--color-gold) 50%,

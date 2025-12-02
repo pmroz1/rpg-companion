@@ -6,13 +6,15 @@ import { ArmorClass } from './components/armor-class/armor-class';
 import { Appearance } from './components/appearance/appearance';
 import { DndCard } from '@app/shared/components/dnd-card/dnd-card';
 import { Info } from './components/info/info';
+import { Proficiencies } from "./proficiencies/proficiencies";
 
 @Component({
   selector: 'app-character-sheet',
-  imports: [ReactiveFormsModule, JsonPipe, ArmorClass, Appearance, Info],
+  imports: [ReactiveFormsModule, JsonPipe, ArmorClass, Appearance, Info, Proficiencies],
   template: `<form [formGroup]="characterSheetForm.getFormGroup()">
     <app-armor-class></app-armor-class>
     <app-appearance></app-appearance>
+    <app-proficiencies></app-proficiencies>
     <sheet-info />
     <pre>{{ characterSheetForm.rawValue() | json }}</pre>
     <pre>{{ characterSheetForm.status() }}</pre>

@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  effect,
+  inject,
+  signal,
+  Injector,
+} from '@angular/core';
 import { CardModule } from 'primeng/card';
 import { DividerModule } from 'primeng/divider';
 import { FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -6,6 +14,10 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { DynamicFormService } from '@app/shared/services';
 import { ArmorProficiency } from '@data/enums/proficiency.enum';
 import { TitleCasePipe } from '@angular/common';
+import { DndCard } from '@app/shared/components/dnd-card/dnd-card';
+import { DND_WEAPONS } from '@data/dictionaries';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { DndWeapon } from '@data/models';
 @Component({
   selector: 'app-proficiencies',
   imports: [
@@ -13,38 +25,119 @@ import { TitleCasePipe } from '@angular/common';
     TitleCasePipe,
     CardModule,
     DividerModule,
+    MultiSelectModule,
     ReactiveFormsModule,
     CheckboxModule,
+    DndCard,
   ],
-  template: `<p-card class="dnd-box p-1 appearance-header" header="ARMOR TRAINING">
-    <p-divider class="dnd-divider" />
-    @for (armor of armorProficiencies; let i = $index; track i) {
-      <div class="flex items-center p-1">
-        <p-checkbox
-          [formControl]="control"
-          [inputId]="armor"
-          name="group"
-          [value]="armor"
-          checkboxIcon="pi-flag-fill"
-        />
-        <label class="pl-1"> {{ armor | titlecase }} </label>
+  template: `<app-dnd-card title="Proficiencies">
+    <div class="flex">
+      <div>
+        <label class="field-label">Armor Training</label>
+        <div class="p-2"></div>
+
+        <div class="flex flex-col">
+          @for (armor of armorProficiencies; let i = $index; track i) {
+            <div class="flex items-center p-1">
+              <p-checkbox
+                [inputId]="armor"
+                [name]="armor"
+                [value]="armor"
+                (onChange)="onTrainingCheckboxChange(armor)"
+              />
+              <label class="pl-1"> {{ armor | titlecase }} </label>
+            </div>
+          }
+        </div>
       </div>
-    }
-  </p-card>`,
+      <div class="dnd-divider-vertical mx-3.5 my-4 mt-8"></div>
+      <div>
+        <label class="field-label">Weapons</label>
+        <div class="p-1"></div>
+        <div class="flex flex-wrap gap-2">
+          <p-multiselect
+            [options]="weapons"
+            [(ngModel)]="weaponTypes"
+            optionLabel="name"
+            placeholder="Select weapons"
+            [maxSelectedLabels]="10"
+            class="w-full md:w-100"
+          />
+        </div>
+        <div class="flex flex-wrap gap-2">
+          @for (weapon of weapons; let i = $index; track i) {
+            <div class="flex items-center p-1">
+              <p-checkbox
+                [inputId]="weapon.id"
+                [name]="weapon.name"
+                [value]="weapon.name"
+                (onChange)="onWeaponCheckboxChange(weapon)"
+              />
+              <label class="pl-1"> {{ weapon.name | titlecase }} </label>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </app-dnd-card>`,
   styleUrl: './proficiencies.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Proficiencies {
   private readonly formService = inject(DynamicFormService);
+  private readonly injector = inject(Injector);
   armorProficiencies = Object.values(ArmorProficiency);
+  weapons = [...DND_WEAPONS];
   formModel: any[] = [];
-  control = new FormControl('', Validators.required);
+  armorTrainingTypes = signal<string[]>([]);
+  weaponTypes = signal<DndWeapon[]>([]);
+  toolTypes = signal<string[]>([]);
 
-  ngOnInit() {
-    this.formService.addControl('proficiencies', this.control);
+  control = new FormControl<ProficienciesInfo>({
+    armorTrainingTypes: [],
+    weapons: [],
+    tools: [],
+  });
+
+  proficienciesInfo = computed(
+    (): ProficienciesInfo => ({
+      armorTrainingTypes: this.armorTrainingTypes(),
+      weapons: this.weaponTypes(),
+      tools: this.toolTypes(),
+    }),
+  );
+  onWeaponCheckboxChange(weapon: DndWeapon) {
+    if (this.weaponTypes().includes(weapon)) {
+      this.weaponTypes.set(this.weaponTypes().filter((a) => a !== weapon));
+    } else {
+      this.weaponTypes.set([...this.weaponTypes(), weapon]);
+    }
+  }
+  onTrainingCheckboxChange(armor: string) {
+    if (this.armorTrainingTypes().includes(armor)) {
+      this.armorTrainingTypes.set(this.armorTrainingTypes().filter((a) => a !== armor));
+    } else {
+      this.armorTrainingTypes.set([...this.armorTrainingTypes(), armor]);
+    }
+  }
+  ngOnInit(): void {
+    effect(
+      () => {
+        this.control.setValue(this.proficienciesInfo());
+      },
+      { injector: this.injector },
+    );
+
+    this.formService.addControl('proficienciesInfo', this.control);
   }
 
   ngOnDestroy() {
-    this.formService.removeControl('proficiencies');
+    this.formService.removeControl('proficienciesInfo');
   }
+}
+
+export interface ProficienciesInfo {
+  armorTrainingTypes: string[];
+  weapons: DndWeapon[];
+  tools: string[];
 }

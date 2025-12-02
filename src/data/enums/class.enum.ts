@@ -11,4 +11,5 @@ export enum ClassType {
   Sorcerer = 'sorcerer',
   Warlock = 'warlock',
   Wizard = 'wizard',
+  None = '',
 }

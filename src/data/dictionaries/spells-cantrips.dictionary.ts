@@ -8,7 +8,7 @@ export const DND_SPELLS_CANTRIPS: SpellCantrip[] = [
     description: 'A bolt of fire that deals damage to a target.',
     castingTime: '1 action',
     range: '120 feet',
-    concentration: false,
+    concentration: true,
     ritual: false,
     requiredMaterial: false,
     category: SpellType.Evocation,

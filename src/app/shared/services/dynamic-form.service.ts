@@ -13,7 +13,7 @@ export class DynamicFormService {
     return this.form;
   }
 
-  addControl(name: string, control: FormControl) {
+  addControl(name: string, control: FormControl<unknown>) {
     this.form.addControl(name, control);
   }
 

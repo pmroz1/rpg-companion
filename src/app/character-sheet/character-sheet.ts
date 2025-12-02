@@ -10,7 +10,7 @@ import { Tabs } from './components/tabs/tabs';
 
 @Component({
   selector: 'app-character-sheet',
-  imports: [ReactiveFormsModule, JsonPipe, ArmorClass, Appearance, Info, Tabs],
+  imports: [ReactiveFormsModule, JsonPipe, Appearance, Info, Tabs],
   template: `<form [formGroup]="characterSheetForm.getFormGroup()">
     <sheet-tabs />
     <app-appearance></app-appearance>

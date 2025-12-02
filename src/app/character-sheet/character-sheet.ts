@@ -13,7 +13,6 @@ import { Tabs } from './components/tabs/tabs';
   imports: [ReactiveFormsModule, JsonPipe, ArmorClass, Appearance, Info, Tabs],
   template: `<form [formGroup]="characterSheetForm.getFormGroup()">
     <sheet-tabs />
-    <app-armor-class></app-armor-class>
     <app-appearance></app-appearance>
     <sheet-info />
     <pre>{{ characterSheetForm.rawValue() | json }}</pre>

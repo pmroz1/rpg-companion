@@ -24,7 +24,7 @@ import { NotesTab } from './views/notes/notes';
   ],
   template: `
     <app-dnd-card title="Character Sheet Tabs" [displayDivider]="false" [displayTitle]="false">
-      <p-tabs value="0" class="w-full" scrollable>
+      <p-tabs [value]="1" class="w-full" scrollable>
         <p-tablist>
           @for (item of tabs; track $index) {
             <p-tab [value]="$index" class="flex-1">

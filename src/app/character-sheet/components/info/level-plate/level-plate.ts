@@ -12,8 +12,6 @@ import { FormsModule } from '@angular/forms';
           class="level-input"
           [ngModel]="level()"
           (ngModelChange)="level.set($event)"
-          min="1"
-          max="20"
         />
         <div class="dnd-divider w-20"></div>
         <span class="level-label">LEVEL</span>

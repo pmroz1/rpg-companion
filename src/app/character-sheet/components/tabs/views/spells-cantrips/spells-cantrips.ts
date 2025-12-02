@@ -1,12 +1,14 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { DynamicFormService } from '@app/shared/services';
 import { DND_SPELLS_CANTRIPS } from '@data/dictionaries/spells-cantrips.dictionary';
 import { SpellCantrip } from '@data/models';
+import { Button } from 'primeng/button';
+import { CheckboxModule } from 'primeng/checkbox';
 import { TableModule } from 'primeng/table';
-import { Tooltip } from 'primeng/tooltip';
 @Component({
   selector: 'tab-spells-cantrips',
-  imports: [TableModule, Tooltip],
+  imports: [TableModule, CheckboxModule, FormsModule, Button],
   template: `<p-table
     [value]="spellsCantrips"
     class="w-full"
@@ -20,16 +22,28 @@ import { Tooltip } from 'primeng/tooltip';
       </tr>
     </ng-template>
     <ng-template let-spellCantrip pTemplate="body">
-      <tr pTooltip="{{ spellCantrip.description }}">
+      <tr>
         <td>{{ spellCantrip.level }}</td>
         <td>{{ spellCantrip.name }}</td>
         <td>{{ spellCantrip.category }}</td>
         <td>{{ spellCantrip.castingTime }}</td>
         <td>{{ spellCantrip.range }}</td>
-        <td>{{ spellCantrip.concentration ? 'Yes' : 'No' }}</td>
-        <td>{{ spellCantrip.ritual ? 'Yes' : 'No' }}</td>
-        <td>{{ spellCantrip.requiredMaterial ? 'Yes' : 'No' }}</td>
-        <td>{{ spellCantrip.description }}</td>
+        <td>
+          <p-checkbox [binary]="true" [(ngModel)]="spellCantrip.concentration" [disabled]="true" />
+        </td>
+        <td>
+          <p-checkbox [binary]="true" [(ngModel)]="spellCantrip.ritual" [disabled]="true" />
+        </td>
+        <td>
+          <p-checkbox
+            [binary]="true"
+            [(ngModel)]="spellCantrip.requiredMaterial"
+            [disabled]="true"
+          />
+        </td>
+        <td>
+          <p-button label="Description"></p-button>
+        </td>
       </tr>
     </ng-template>
 

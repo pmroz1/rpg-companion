@@ -1,17 +1,17 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { UpperCasePipe } from '@angular/common';
 import { TabsModule } from 'primeng/tabs';
 import { DndCard } from '@app/shared/components/dnd-card/dnd-card';
-
 @Component({
   selector: 'sheet-tabs',
-  imports: [TabsModule, DndCard],
+  imports: [TabsModule, DndCard, UpperCasePipe],
   template: `
     <app-dnd-card title="Character Sheet Tabs" [displayDivider]="false" [displayTitle]="false">
-      <p-tabs>
+      <p-tabs [value]="1" class="w-full" scrollable>
         <p-tablist>
           @for (item of tabs; track $index) {
-            <p-tab [value]="$index">
-              <span>{{ item.label }}</span>
+            <p-tab [value]="$index" class="flex-1">
+              <span>{{ item.label | uppercase }}</span>
             </p-tab>
           }
         </p-tablist>
@@ -23,14 +23,11 @@ import { DndCard } from '@app/shared/components/dnd-card/dnd-card';
 })
 export class Tabs {
   tabs = [
-    { label: 'Info', icon: 'pi pi-user' },
-    { label: 'Appearance', icon: 'pi pi-image' },
-    { label: 'Stats', icon: 'pi pi-chart-bar' },
-    { label: 'Abilities', icon: 'pi pi-star' },
-    { label: 'Inventory', icon: 'pi pi-briefcase' },
-    { label: 'Spells', icon: 'pi pi-book' },
-    { label: 'Features', icon: 'pi pi-cog' },
-    { label: 'Proficiencies', icon: 'pi pi-check' },
-    { label: 'Notes', icon: 'pi pi-pencil' },
+    { label: 'Actions' },
+    { label: 'Spells & Cantrips' },
+    { label: 'Inventory' },
+    { label: 'Features' },
+    { label: 'Traits' },
+    { label: 'Notes' },
   ];
 }

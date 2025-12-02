@@ -21,12 +21,11 @@ export interface SpellCantrip {
     class="w-full"
     [tableStyle]="{ 'min-width': '50rem' }"
   >
-    <ng-template #header>
+    <ng-template #header let-columns>
       <tr>
-        <th>Code</th>
-        <th>Name</th>
-        <th>Category</th>
-        <th>Quantity</th>
+        @for (col of headers; track $index) {
+          <th>{{ col }}</th>
+        }
       </tr>
     </ng-template>
   </p-table>`,
@@ -35,4 +34,15 @@ export interface SpellCantrip {
 })
 export class SpellsCantrips {
   spellsCantrips = [];
+  headers = [
+    'Level',
+    'Name',
+    'Category',
+    'Casting Time',
+    'Range',
+    'Concentration',
+    'Ritual',
+    'Material',
+    'Description',
+  ];
 }

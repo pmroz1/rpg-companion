@@ -1,17 +1,7 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { DynamicFormService } from '@app/shared/services';
+import { SpellCantrip } from '@data/models';
 import { TableModule } from 'primeng/table';
-
-export interface SpellCantrip {
-  level: number;
-  name: string;
-  category: string;
-  castingTime: string;
-  range: string;
-  concentration: boolean;
-  ritual: boolean;
-  requiredMaterial: boolean;
-  description: string;
-}
 
 @Component({
   selector: 'tab-spells-cantrips',
@@ -33,7 +23,9 @@ export interface SpellCantrip {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SpellsCantrips {
-  spellsCantrips = [];
+  private readonly formService = inject(DynamicFormService);
+
+  spellsCantrips: SpellCantrip[] = [];
   headers = [
     'Level',
     'Name',

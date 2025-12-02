@@ -4,12 +4,12 @@ import { DynamicFormService } from '@app/shared/services';
 import { CardModule } from 'primeng/card';
 import { TextareaModule } from 'primeng/textarea';
 import { DividerModule } from 'primeng/divider';
+import { DndCard } from '@app/shared/components/dnd-card/dnd-card';
 
 @Component({
   selector: 'app-appearance',
-  imports: [CardModule, TextareaModule, ReactiveFormsModule, DividerModule],
-  template: `<p-card class="dnd-box p-1 appearance-header" header="APPEARANCE">
-    <p-divider class="dnd-divider" />
+  imports: [CardModule, TextareaModule, ReactiveFormsModule, DividerModule, DndCard],
+  template: `<app-dnd-card title="Appearance">
     <textarea
       pTextarea
       [formControl]="control"
@@ -18,7 +18,7 @@ import { DividerModule } from 'primeng/divider';
       placeholder="Enter your appearance here.."
       fluid
     ></textarea>
-  </p-card>`,
+  </app-dnd-card>`,
   styleUrl: './appearance.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

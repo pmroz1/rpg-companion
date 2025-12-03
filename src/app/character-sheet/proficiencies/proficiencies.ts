@@ -17,8 +17,10 @@ import { TitleCasePipe } from '@angular/common';
 import { DndCard } from '@app/shared/components/dnd-card/dnd-card';
 import { ChipModule } from 'primeng/chip';
 import { MultiSelectModule } from 'primeng/multiselect';
-import { AddToolDialog } from './dialog';
+import { AddToolDialog } from './add-tool-dialog';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { DND_TOOLS } from '@data/dictionaries';
+import { DndTool } from '@data/models';
 @Component({
   selector: 'app-proficiencies',
   imports: [
@@ -73,9 +75,13 @@ import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
           <label class="field-label">Tools</label>
         </div>
         <div class="flex flex-row items-center w-full">
-          @for (weapon of weaponProficiencies; let i = $index; track i) {
+          @for (tool of toolTypes();track tool.id) {
             <div class="flex items-center">
-              <p-chip [label]="weapon | titlecase" />
+              <p-chip
+                [removable]="true"
+                (onRemove)="removeTool(tool)"
+                [label]="tool.name | titlecase"
+              />
             </div>
           }
           <div class="flex items-center">
@@ -94,10 +100,11 @@ export class Proficiencies {
   private readonly dialogService = inject(DialogService);
   armorProficiencies = Object.values(ArmorProficiency);
   weaponProficiencies = Object.values(WeaponProficiency);
+  tools = [...DND_TOOLS];
   formModel: any[] = [];
   armorTrainingTypes = signal<string[]>([]);
   weaponTypes = signal<string[]>([]);
-  toolTypes = signal<string[]>([]);
+  toolTypes = signal<DndTool[]>([]);
 
   control = new FormControl<ProficienciesInfo>({
     armorTrainingTypes: [],
@@ -116,12 +123,25 @@ export class Proficiencies {
 
   show() {
     this.ref = this.dialogService.open(AddToolDialog, {
-      header: 'Select a tool',
       width: '50%',
-      contentStyle: { overflow: 'auto' },
+      contentStyle: { overflow: 'auto', innerHeight: '750px' },
+      styleClass: 'dnd-box',
       baseZIndex: 5000,
       closable: true,
     });
+    this.ref?.onClose.subscribe((selectedTools: DndTool[]) => {
+      if (selectedTools && selectedTools.length > 0) {
+        const currentTools = this.toolTypes();
+        const newTools = selectedTools.filter(
+          (tool) => !currentTools.some((t) => t.name === tool.name),
+        );
+        this.toolTypes.set([...this.toolTypes(), ...newTools]);
+      }
+    });
+  }
+  
+  removeTool(tool: DndTool) {
+    this.toolTypes.set(this.toolTypes().filter((t) => t.id !== tool.id));
   }
   onWeaponCheckboxChange(weapon: string) {
     if (this.weaponTypes().includes(weapon)) {
@@ -156,5 +176,5 @@ export class Proficiencies {
 export interface ProficienciesInfo {
   armorTrainingTypes: string[];
   weapons: string[];
-  tools: string[];
+  tools: DndTool[];
 }

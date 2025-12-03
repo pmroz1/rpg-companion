@@ -9,15 +9,16 @@ import {
 } from '@angular/core';
 import { CardModule } from 'primeng/card';
 import { DividerModule } from 'primeng/divider';
-import { FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CheckboxModule } from 'primeng/checkbox';
 import { DynamicFormService } from '@app/shared/services';
-import { ArmorProficiency } from '@data/enums/proficiency.enum';
+import { ArmorProficiency, WeaponProficiency } from '@data/enums/proficiency.enum';
 import { TitleCasePipe } from '@angular/common';
 import { DndCard } from '@app/shared/components/dnd-card/dnd-card';
-import { DND_WEAPONS } from '@data/dictionaries';
+import { ChipModule } from 'primeng/chip';
 import { MultiSelectModule } from 'primeng/multiselect';
-import { DndWeapon } from '@data/models';
+import { AddToolDialog } from './dialog';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 @Component({
   selector: 'app-proficiencies',
   imports: [
@@ -29,53 +30,57 @@ import { DndWeapon } from '@data/models';
     ReactiveFormsModule,
     CheckboxModule,
     DndCard,
+    ChipModule,
   ],
+  providers: [DialogService],
   template: `<app-dnd-card title="Proficiencies">
-    <div class="flex">
-      <div>
+    <div class="flex flex-column">
+      <div class="flex flex-col gap-6 items-center w-full">
         <label class="field-label">Armor Training</label>
-        <div class="p-2"></div>
-
-        <div class="flex flex-col">
+        <div class="flex flex-row gap-6">
           @for (armor of armorProficiencies; let i = $index; track i) {
-            <div class="flex items-center p-1">
+            <div class="flex w-full items-center">
               <p-checkbox
                 [inputId]="armor"
                 [name]="armor"
                 [value]="armor"
                 (onChange)="onTrainingCheckboxChange(armor)"
               />
-              <label class="pl-1"> {{ armor | titlecase }} </label>
+              <label class="pl-2"> {{ armor | titlecase }} </label>
             </div>
           }
         </div>
-      </div>
-      <div class="dnd-divider-vertical mx-3.5 my-4 mt-8"></div>
-      <div>
-        <label class="field-label">Weapons</label>
-        <div class="p-1"></div>
-        <div class="flex flex-wrap gap-2">
-          <p-multiselect
-            [options]="weapons"
-            [(ngModel)]="weaponTypes"
-            optionLabel="name"
-            placeholder="Select weapons"
-            [maxSelectedLabels]="10"
-            class="w-full md:w-100"
-          />
+
+        <!-- Weapons Section -->
+
+        <div class="flex flex-col gap-2 items-center w-full">
+          <label class="field-label">Weapons</label>
+          <div class="flex flex-row gap-6">
+            @for (weapon of weaponProficiencies; let i = $index; track i) {
+              <div class="flex w-full items-center">
+                <p-checkbox
+                  [inputId]="weapon"
+                  [name]="weapon"
+                  [value]="weapon"
+                  (onChange)="onWeaponCheckboxChange(weapon)"
+                />
+                <label class="pl-2"> {{ weapon | titlecase }} </label>
+              </div>
+            }
+          </div>
         </div>
-        <div class="flex flex-wrap gap-2">
-          @for (weapon of weapons; let i = $index; track i) {
-            <div class="flex items-center p-1">
-              <p-checkbox
-                [inputId]="weapon.id"
-                [name]="weapon.name"
-                [value]="weapon.name"
-                (onChange)="onWeaponCheckboxChange(weapon)"
-              />
-              <label class="pl-1"> {{ weapon.name | titlecase }} </label>
+        <div class="flex flex-col gap-2 items-center w-full">
+          <label class="field-label">Tools</label>
+        </div>
+        <div class="flex flex-row items-center w-full">
+          @for (weapon of weaponProficiencies; let i = $index; track i) {
+            <div class="flex items-center">
+              <p-chip [label]="weapon | titlecase" />
             </div>
           }
+          <div class="flex items-center">
+            <p-chip label="Add tool" (click)="show()" class="add-tool-chip" />
+          </div>
         </div>
       </div>
     </div>
@@ -86,11 +91,12 @@ import { DndWeapon } from '@data/models';
 export class Proficiencies {
   private readonly formService = inject(DynamicFormService);
   private readonly injector = inject(Injector);
+  private readonly dialogService = inject(DialogService);
   armorProficiencies = Object.values(ArmorProficiency);
-  weapons = [...DND_WEAPONS];
+  weaponProficiencies = Object.values(WeaponProficiency);
   formModel: any[] = [];
   armorTrainingTypes = signal<string[]>([]);
-  weaponTypes = signal<DndWeapon[]>([]);
+  weaponTypes = signal<string[]>([]);
   toolTypes = signal<string[]>([]);
 
   control = new FormControl<ProficienciesInfo>({
@@ -106,7 +112,18 @@ export class Proficiencies {
       tools: this.toolTypes(),
     }),
   );
-  onWeaponCheckboxChange(weapon: DndWeapon) {
+  ref: DynamicDialogRef | undefined | null;
+
+  show() {
+    this.ref = this.dialogService.open(AddToolDialog, {
+      header: 'Select a tool',
+      width: '50%',
+      contentStyle: { overflow: 'auto' },
+      baseZIndex: 5000,
+      closable: true,
+    });
+  }
+  onWeaponCheckboxChange(weapon: string) {
     if (this.weaponTypes().includes(weapon)) {
       this.weaponTypes.set(this.weaponTypes().filter((a) => a !== weapon));
     } else {
@@ -138,6 +155,6 @@ export class Proficiencies {
 
 export interface ProficienciesInfo {
   armorTrainingTypes: string[];
-  weapons: DndWeapon[];
+  weapons: string[];
   tools: string[];
 }

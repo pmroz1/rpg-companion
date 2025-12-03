@@ -13,6 +13,10 @@ import { TableModule } from 'primeng/table';
     <p-table
       [value]="spellsCantrips"
       class="w-full"
+      stripedRows
+      [paginator]="true"
+      [rows]="8"
+      [globalFilterFields]="['spellCantrip.name', 'spellCantrip.category']"
       [tableStyle]="{ 'min-width': '50rem' }"
       class="sc-table"
     >
@@ -55,7 +59,7 @@ import { TableModule } from 'primeng/table';
 
       <ng-template pTemplate="footer">
         <div class="flex justify-end p-2">
-          <button pButton type="button" label="Add Spell/Cantrip" class="p-button-sm"></button>
+          <p-button label="Add Spell/Cantrip" class="p-button-sm"></p-button>
         </div>
       </ng-template>
     </p-table>

@@ -25,6 +25,8 @@
   --text-body: #d4c4a8;
   --text-muted: #9a866e;
 
+  --color-hover: rgba(201, 162, 39, 0.1);
+
   --font-display: 'Cinzel', 'Times New Roman', serif;
   --font-body: 'Segoe UI', system-ui, sans-serif;
 }

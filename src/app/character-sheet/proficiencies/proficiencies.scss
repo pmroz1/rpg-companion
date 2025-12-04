@@ -14,4 +14,14 @@
 .add-tool-chip {
 color: var(--color-parchment);
 cursor: pointer;
+  white-space: nowrap;
+  width: auto !important;
+  max-width: none;
 }
+
+
+::ng-deep .dnd-box .p-dialog-header {
+  padding-top: 5px !important;
+  padding-bottom: 0rem !important;
+}
+

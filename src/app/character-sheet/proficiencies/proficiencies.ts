@@ -71,22 +71,18 @@ import { DndTool } from '@data/models';
             }
           </div>
         </div>
-        <div class="flex flex-col gap-2 items-center w-full">
+        <div class="flex flex-col gap-5 items-center">
           <label class="field-label">Tools</label>
         </div>
-        <div class="flex flex-row items-center w-full">
-          @for (tool of toolTypes();track tool.id) {
-            <div class="flex items-center">
-              <p-chip
-                [removable]="true"
-                (onRemove)="removeTool(tool)"
-                [label]="tool.name | titlecase"
-              />
-            </div>
+        <div class="flex flex-row flex-wrap items-center">
+          <p-chip label="Add tool" (click)="show()" class="add-tool-chip" />
+          @for (tool of toolTypes(); track tool.id) {
+            <p-chip
+              [removable]="true"
+              (onRemove)="removeTool(tool)"
+              [label]="tool.name | titlecase"
+            />
           }
-          <div class="flex items-center">
-            <p-chip label="Add tool" (click)="show()" class="add-tool-chip" />
-          </div>
         </div>
       </div>
     </div>
@@ -123,11 +119,14 @@ export class Proficiencies {
 
   show() {
     this.ref = this.dialogService.open(AddToolDialog, {
-      width: '50%',
-      contentStyle: { overflow: 'auto', innerHeight: '750px' },
+      width: '500px',
+      height: 'auto',
+      contentStyle: {  },
       styleClass: 'dnd-box',
       baseZIndex: 5000,
-      closable: true,
+      data: {
+        existingTools: this.toolTypes(),
+      },
     });
     this.ref?.onClose.subscribe((selectedTools: DndTool[]) => {
       if (selectedTools && selectedTools.length > 0) {
@@ -139,7 +138,7 @@ export class Proficiencies {
       }
     });
   }
-  
+
   removeTool(tool: DndTool) {
     this.toolTypes.set(this.toolTypes().filter((t) => t.id !== tool.id));
   }

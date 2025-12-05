@@ -34,7 +34,6 @@ import { TitleCasePipe } from '@angular/common';
       </div>
     </app-dnd-card>
   `,
-  providers: [],
   imports: [MultiSelectModule, DndCard, Button, FormsModule, TitleCasePipe],
 })
 export class AddToolDialog {

@@ -1,14 +1,18 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnDestroy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { DndDialogComponent } from '@app/shared/components/dnd-dialog/dnd-dialog';
+import { DndDialogService } from '@app/shared/components/dnd-dialog/dnd-dialog.service';
 import { DynamicFormService } from '@app/shared/services';
 import { DND_SPELLS_CANTRIPS } from '@data/dictionaries/spells-cantrips.dictionary';
 import { SpellCantrip } from '@data/models';
-import { Button } from 'primeng/button';
+import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
+import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { TableModule } from 'primeng/table';
 @Component({
   selector: 'tab-spells-cantrips',
-  imports: [TableModule, CheckboxModule, FormsModule, Button],
+  imports: [TableModule, CheckboxModule, FormsModule, ButtonModule],
+
   template: `<div class="sc-container">
     <p-table
       [value]="spellsCantrips"
@@ -39,6 +43,7 @@ import { TableModule } from 'primeng/table';
               [binary]="true"
               [(ngModel)]="spellCantrip.concentration"
               [disabled]="true"
+              [binary]="true"
             />
           </td>
           <td>
@@ -52,7 +57,10 @@ import { TableModule } from 'primeng/table';
             />
           </td>
           <td>
-            <p-button label="Description"></p-button>
+            <p-button
+              label="Description"
+              (onClick)="showDialog(spellCantrip.name, spellCantrip.description)"
+            ></p-button>
           </td>
         </tr>
       </ng-template>
@@ -67,10 +75,17 @@ import { TableModule } from 'primeng/table';
   styleUrls: ['./spells-cantrips.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SpellsCantrips {
+export class SpellsCantrips implements OnDestroy {
   private readonly formService = inject(DynamicFormService);
   spellsCantrips: SpellCantrip[] = [...DND_SPELLS_CANTRIPS];
   knownSpellsCantrips: SpellCantrip[] = [];
+
+  dialogService = inject(DndDialogService);
+  ref: DynamicDialogRef | undefined | null;
+
+  showDialog(title: string, content: string) {
+    this.ref = this.dialogService.openSimple(title, content);
+  }
 
   headers = [
     'Level',
@@ -83,4 +98,8 @@ export class SpellsCantrips {
     'Material',
     'Description',
   ];
+
+  ngOnDestroy(): void {
+    this.ref?.close();
+  }
 }

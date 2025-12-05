@@ -12,7 +12,7 @@ export class DndDialogService {
     const ref = this.primengDialog.open(DndDialogComponent, {
       header: header,
       width: '50vw',
-      data: { contentText: content },
+      data: { body: content },
     });
     return ref;
   }

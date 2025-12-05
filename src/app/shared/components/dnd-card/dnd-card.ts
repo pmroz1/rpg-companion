@@ -11,7 +11,7 @@ import { Card } from 'primeng/card';
           <span class="dnd-card-header">{{ title() }}</span>
         </div>
       </ng-template>
-      <div class="dnd-divider"></div>
+      <div class="dnd-divider-horizontal"></div>
       <div class="p-2"><ng-content /></div>
     </p-card>
   `,

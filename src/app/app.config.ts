@@ -3,7 +3,7 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { providePrimeNG } from 'primeng/config';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import DndPreset from './dnd-preset';
+import DndPreset from './theme/dnd-preset';
 
 export const appConfig: ApplicationConfig = {
   providers: [

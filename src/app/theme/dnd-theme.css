@@ -10,7 +10,6 @@
 ::-webkit-scrollbar-thumb {
   background-color: var(--color-gold);
   border-radius: 20px;
-  /* border: 3px solid var(--color-gold); */
 }
 
 .dnd-card {
@@ -113,4 +112,25 @@
 
 .crimson-text {
   color: var(--color-crimson-light);
+}
+
+.p-dialog-header {
+  background: var(--color-bg-elevated);
+  border-bottom: 2px solid var(--color-border);
+  font-family: var(--font-display);
+  color: var(--text-parchment);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.p-dialog.p-component {
+  border: 5px solid var(--color-border-light);
+  border-radius: 5px;
+}
+
+.p-dialog .p-dialog-content {
+  background: var(--color-bg-card);
+  color: var(--text-body);
+  font-family: var(--font-display);
+  font-weight: 600;
 }

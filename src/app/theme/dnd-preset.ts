@@ -181,13 +181,6 @@ const DndPreset = definePreset(Aura, {
         borderRadius: '4px',
       },
     },
-    dialog: {
-      root: {
-        background: '#2e241c',
-        // borderBottomColor: '#4d3c2c',
-        borderColor: '#4d3c2c',
-      },
-    },
   },
 });
 

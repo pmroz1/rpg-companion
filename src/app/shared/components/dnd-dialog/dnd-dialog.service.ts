@@ -9,11 +9,10 @@ export class DndDialogService {
   primengDialog = inject(DialogService);
 
   openSimple(header: string, content: string): DynamicDialogRef<any> | null {
-    const ref = this.primengDialog.open(DndDialogComponent, {
+    return this.primengDialog.open(DndDialogComponent, {
       header: header,
       width: '50vw',
       data: { body: content },
     });
-    return ref;
   }
 }

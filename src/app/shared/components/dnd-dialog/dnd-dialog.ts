@@ -24,7 +24,6 @@ export class DndDialogComponent implements AfterViewInit {
   content = signal<string>('');
 
   ngAfterViewInit(): void {
-    console.log('DndDialogComponent config data:', this.config?.data);
     this.content.set(this.config?.data?.body || 'Dialog content goes here.');
   }
 

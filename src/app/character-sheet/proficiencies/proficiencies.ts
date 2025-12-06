@@ -97,7 +97,6 @@ export class Proficiencies {
   armorProficiencies = Object.values(ArmorProficiency);
   weaponProficiencies = Object.values(WeaponProficiency);
   tools = [...DND_TOOLS];
-  formModel: any[] = [];
   armorTrainingTypes = signal<string[]>([]);
   weaponTypes = signal<string[]>([]);
   toolTypes = signal<DndTool[]>([]);

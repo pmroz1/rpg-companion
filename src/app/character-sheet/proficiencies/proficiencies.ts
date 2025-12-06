@@ -6,7 +6,7 @@ import {
   inject,
   signal,
   Injector,
-} from '@angular/core';
+} from '@angular/core'; 
 import { CardModule } from 'primeng/card';
 import { DividerModule } from 'primeng/divider';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -17,10 +17,10 @@ import { TitleCasePipe } from '@angular/common';
 import { DndCard } from '@app/shared/components/dnd-card/dnd-card';
 import { ChipModule } from 'primeng/chip';
 import { MultiSelectModule } from 'primeng/multiselect';
-import { AddToolDialog } from './add-tool-dialog';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { DND_TOOLS } from '@data/dictionaries';
 import { DndTool } from '@data/models';
+import { DndDialogService } from '@app/shared/components/dnd-dialog/dnd-dialog.service';
 @Component({
   selector: 'app-proficiencies',
   imports: [
@@ -75,7 +75,6 @@ import { DndTool } from '@data/models';
           <label class="field-label">Tools</label>
         </div>
         <div class="flex flex-row flex-wrap items-center">
-          <p-chip label="Add tool" (click)="show()" class="add-tool-chip" />
           @for (tool of toolTypes(); track tool.id) {
             <p-chip
               [removable]="true"
@@ -83,7 +82,8 @@ import { DndTool } from '@data/models';
               [label]="tool.name | titlecase"
             />
           }
-        </div>
+          <p-chip label="Add tool" (click)="show()" class="add-tool-chip" />
+        </div> 
       </div>
     </div>
   </app-dnd-card>`,
@@ -93,7 +93,7 @@ import { DndTool } from '@data/models';
 export class Proficiencies {
   private readonly formService = inject(DynamicFormService);
   private readonly injector = inject(Injector);
-  private readonly dialogService = inject(DialogService);
+  private readonly dndDialogService = inject(DndDialogService);
   armorProficiencies = Object.values(ArmorProficiency);
   weaponProficiencies = Object.values(WeaponProficiency);
   tools = [...DND_TOOLS];
@@ -118,16 +118,11 @@ export class Proficiencies {
   ref: DynamicDialogRef | undefined | null;
 
   show() {
-    this.ref = this.dialogService.open(AddToolDialog, {
-      width: '500px',
-      height: 'auto',
-      contentStyle: {  },
-      styleClass: 'dnd-box',
-      baseZIndex: 5000,
-      data: {
-        existingTools: this.toolTypes(),
-      },
-    });
+    this.ref = this.dndDialogService.openMultiselect(
+      'Select tools',
+      ' ',
+      this.tools.filter((tool) => !this.toolTypes().includes(tool)),
+    );
     this.ref?.onClose.subscribe((selectedTools: DndTool[]) => {
       if (selectedTools && selectedTools.length > 0) {
         const currentTools = this.toolTypes();

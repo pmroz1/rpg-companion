@@ -161,7 +161,7 @@ export class Proficiencies {
     this.formService.addControl('proficienciesInfo', this.control);
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.formService.removeControl('proficienciesInfo');
   }
 }

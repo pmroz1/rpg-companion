@@ -1,12 +1,15 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  effect,
   inject,
+  Injector,
   NgZone,
   OnDestroy,
+  OnInit,
   signal,
 } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormControl, FormsModule } from '@angular/forms';
 import { DndDialogService } from '@app/shared/components/dnd-dialog/dnd-dialog.service';
 import { DynamicFormService } from '@app/shared/services';
 import { DND_SPELLS_CANTRIPS } from '@data/dictionaries/spells-cantrips.dictionary';
@@ -126,17 +129,30 @@ import { Popover, PopoverModule } from 'primeng/popover';
   styleUrls: ['./spells-cantrips.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SpellsCantrips implements OnDestroy {
+export class SpellsCantrips implements OnInit, OnDestroy {
   private readonly formService = inject(DynamicFormService);
   private readonly zone = inject(NgZone);
+  private readonly injector = inject(Injector);
 
   spellsCantrips = signal<SpellCantrip[]>([...DND_SPELLS_CANTRIPS]);
   knownSpellsCantrips = signal<SpellCantrip[]>([]);
   addSpellButtonText = 'Add Spell';
   selectedSpellName = signal<string | null>(null);
+  knownSpellsControl = new FormControl<SpellCantrip[]>([]);
 
   dialogService = inject(DndDialogService);
   ref: DynamicDialogRef | undefined | null;
+
+  ngOnInit(): void {
+    this.formService.addControl('knownSpells', this.knownSpellsControl);
+
+    effect(
+      () => {
+        this.knownSpellsControl.setValue(this.knownSpellsCantrips());
+      },
+      { injector: this.injector },
+    );
+  }
 
   onInfoClick(popover: Popover, spellCantrip: SpellCantrip, event: Event) {
     this.selectedSpellName.set(spellCantrip.name);
@@ -156,7 +172,7 @@ export class SpellsCantrips implements OnDestroy {
   showAddSpellDialog() {
     this.ref = this.dialogService.openPickList(
       'Add Spell',
-      'Spell adding functionality coming soon!',
+      'Select spells to add to your known spells list.',
       this.spellsCantrips(),
       this.knownSpellsCantrips(),
     );
@@ -173,9 +189,11 @@ export class SpellsCantrips implements OnDestroy {
   removeSpell(spellCantrip: SpellCantrip) {
     const updatedList = this.knownSpellsCantrips().filter((sc) => sc.name !== spellCantrip.name);
     this.knownSpellsCantrips.set(updatedList);
+    this.spellsCantrips.update((list) => [...list, spellCantrip]);
   }
 
   ngOnDestroy(): void {
+    this.formService.removeControl('knownSpells');
     this.ref?.close();
   }
 }

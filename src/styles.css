@@ -2,6 +2,7 @@
 @import 'tailwindcss';
 @import 'tailwindcss-primeui';
 @import 'primeicons/primeicons.css';
+@import './app/theme/dnd-theme.css';
 
 :root {
   --color-bg: #1a1410;
@@ -26,6 +27,8 @@
   --text-body: #d4c4a8;
   --text-muted: #9a866e;
 
+  --color-hover: rgba(201, 162, 39, 0.1);
+
   --font-display: 'Cinzel', 'Times New Roman', serif;
   --font-body: 'Segoe UI', system-ui, sans-serif;
 }
@@ -46,106 +49,4 @@ h6 {
   color: var(--text-heading);
   font-weight: 600;
   letter-spacing: 0.02em;
-}
-
-.dnd-card {
-  background: linear-gradient(145deg, var(--color-bg-card) 0%, var(--color-bg-elevated) 100%);
-  border: 1px solid var(--color-border);
-  border-radius: 8px;
-  box-shadow:
-    0 4px 6px -1px rgba(0, 0, 0, 0.3),
-    0 2px 4px -2px rgba(0, 0, 0, 0.2),
-    inset 0 1px 0 rgba(201, 162, 39, 0.1);
-}
-
-.dnd-card-header {
-  background: linear-gradient(90deg, transparent 0%, rgba(201, 162, 39, 0.1) 50%, transparent 100%);
-  font-family: var(--font-display);
-  color: var(--text-heading);
-  font-weight: 700;
-  letter-spacing: 0.05em;
-}
-
-.dnd-divider {
-  height: 2px;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    var(--color-gold-dark) 20%,
-    var(--color-gold) 50%,
-    var(--color-gold-dark) 80%,
-    transparent 100%
-  );
-}
-
-.dnd-box {
-  background: var(--color-bg-elevated);
-  border: 2px solid var(--color-border);
-  border-radius: 4px;
-  position: relative;
-  color: var(--text-body);
-}
-
-.dnd-box::before {
-  content: '';
-  position: absolute;
-  inset: 2px;
-  border: 1px solid var(--color-border-light);
-  border-radius: 2px;
-  pointer-events: none;
-}
-
-.p-button {
-  border-radius: 4px;
-  font-family: var(--font-display);
-  font-weight: 600;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-  font-size: 0.85rem;
-}
-
-.p-button-primary {
-  background: linear-gradient(180deg, var(--color-crimson-light) 0%, var(--color-crimson) 100%);
-  border: 1px solid var(--color-crimson-dark);
-  color: var(--color-parchment);
-  box-shadow:
-    0 2px 4px rgba(0, 0, 0, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-}
-
-.p-button-primary:hover {
-  background: linear-gradient(180deg, var(--color-crimson) 0%, var(--color-crimson-dark) 100%);
-}
-
-.p-button-secondary {
-  background: linear-gradient(180deg, var(--color-bg-card) 0%, var(--color-bg-elevated) 100%);
-  border: 1px solid var(--color-gold-dark);
-  color: var(--color-gold);
-}
-
-.p-button-secondary:hover {
-  border-color: var(--color-gold);
-  color: var(--color-gold-light);
-}
-
-.p-inputtext::placeholder,
-.p-textarea::placeholder {
-  color: var(--text-muted);
-}
-
-.p-disabled,
-.p-component:disabled {
-  opacity: 0.5;
-}
-
-.gold-text {
-  color: var(--color-gold);
-}
-
-.parchment-text {
-  color: var(--color-parchment);
-}
-
-.crimson-text {
-  color: var(--color-crimson-light);
 }

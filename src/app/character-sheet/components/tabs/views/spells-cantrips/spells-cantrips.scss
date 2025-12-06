@@ -25,6 +25,16 @@
       text-transform: uppercase;
       text-align: center;
     }
+
+    .p-datatable-thead > tr > th:first-child {
+      text-align: center;
+    }
+
+    .p-datatable-thead > tr > th > div {
+      justify-content: center;
+      width: 100%;
+    }
+
     .p-datatable-tbody > tr {
       border-bottom: 4px solid var(--color-gold);
       transition: all 0.2s ease;

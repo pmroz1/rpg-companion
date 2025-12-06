@@ -68,30 +68,6 @@
   font-size: 0.85rem;
 }
 
-.p-button-primary {
-  background: linear-gradient(180deg, var(--color-crimson-light) 0%, var(--color-crimson) 100%);
-  border: 1px solid var(--color-crimson-dark);
-  color: var(--color-parchment);
-  box-shadow:
-    0 2px 4px rgba(0, 0, 0, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-}
-
-.p-button-primary:hover {
-  background: linear-gradient(180deg, var(--color-crimson) 0%, var(--color-crimson-dark) 100%);
-}
-
-.p-button-secondary {
-  background: linear-gradient(180deg, var(--color-bg-card) 0%, var(--color-bg-elevated) 100%);
-  border: 1px solid var(--color-gold-dark);
-  color: var(--color-gold);
-}
-
-.p-button-secondary:hover {
-  border-color: var(--color-gold);
-  color: var(--color-gold-light);
-}
-
 .p-inputtext::placeholder,
 .p-textarea::placeholder {
   color: var(--text-muted);
@@ -133,4 +109,27 @@
   color: var(--text-body);
   font-family: var(--font-display);
   font-weight: 600;
+}
+
+.p-dialog-enter-active {
+  animation: demo-dialog-in 5000ms ease-out;
+}
+
+.p-dialog-leave-active {
+  animation: demo-dialog-out 3000ms ease-in;
+}
+
+@keyframes demo-dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10%) scale(1.1);
+    filter: blur(10px);
+  }
+}
+
+@keyframes demo-dialog-out {
+  to {
+    opacity: 0;
+    transform: translateY(200%) rotate(-90deg);
+  }
 }

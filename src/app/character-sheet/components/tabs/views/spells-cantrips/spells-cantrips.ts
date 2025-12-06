@@ -15,10 +15,10 @@ import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { TableModule } from 'primeng/table';
+import { Popover, PopoverModule } from 'primeng/popover';
 @Component({
   selector: 'tab-spells-cantrips',
-  imports: [TableModule, CheckboxModule, FormsModule, ButtonModule],
-
+  imports: [TableModule, CheckboxModule, FormsModule, ButtonModule, PopoverModule],
   template: `<div class="sc-container">
     <p-table
       [value]="knownSpellsCantrips()"
@@ -64,11 +64,11 @@ import { TableModule } from 'primeng/table';
           <th>concentration</th>
           <th>ritual</th>
           <th>material</th>
-          <th>description</th>
+          <th>actions</th>
         </tr>
       </ng-template>
       <ng-template let-spellCantrip pTemplate="body">
-        <tr>
+        <tr [class.sc-row-active]="selectedSpellName() === spellCantrip.name">
           <td>{{ spellCantrip.level }}</td>
           <td>{{ spellCantrip.name }}</td>
           <td>{{ spellCantrip.category }}</td>
@@ -94,9 +94,24 @@ import { TableModule } from 'primeng/table';
           </td>
           <td>
             <p-button
-              icon="pi pi-align-center"
-              (onClick)="showSpellDescription(spellCantrip.name, spellCantrip.description)"
+              icon="pi pi-info-circle"
+              (onClick)="onInfoClick(op, spellCantrip, $event)"
             ></p-button>
+
+            <p-popover #op (onHide)="clearSelection(spellCantrip.name)">
+              <div class="flex flex-column gap-2">
+                <p-button
+                  label="View Description"
+                  icon="pi pi-eye"
+                  (onClick)="showSpellDescription(spellCantrip.name, spellCantrip.description)"
+                ></p-button>
+                <p-button
+                  label="Remove Spell"
+                  icon="pi pi-trash"
+                  (onClick)="removeSpell(spellCantrip)"
+                ></p-button>
+              </div>
+            </p-popover>
           </td>
         </tr>
       </ng-template>
@@ -114,12 +129,25 @@ import { TableModule } from 'primeng/table';
 export class SpellsCantrips implements OnDestroy {
   private readonly formService = inject(DynamicFormService);
   private readonly zone = inject(NgZone);
+
   spellsCantrips = signal<SpellCantrip[]>([...DND_SPELLS_CANTRIPS]);
   knownSpellsCantrips = signal<SpellCantrip[]>([]);
   addSpellButtonText = 'Add Spell';
+  selectedSpellName = signal<string | null>(null);
 
   dialogService = inject(DndDialogService);
   ref: DynamicDialogRef | undefined | null;
+
+  onInfoClick(popover: Popover, spellCantrip: SpellCantrip, event: Event) {
+    this.selectedSpellName.set(spellCantrip.name);
+    popover.toggle(event);
+  }
+
+  clearSelection(name: string) {
+    if (this.selectedSpellName() === name) {
+      this.selectedSpellName.set(null);
+    }
+  }
 
   showSpellDescription(title: string, displayText: string) {
     this.ref = this.dialogService.openSimple(title, displayText);
@@ -142,17 +170,10 @@ export class SpellsCantrips implements OnDestroy {
     });
   }
 
-  headers = [
-    'Level',
-    'Name',
-    'Category',
-    'Casting Time',
-    'Range',
-    'Concentration',
-    'Ritual',
-    'Material',
-    'Description',
-  ];
+  removeSpell(spellCantrip: SpellCantrip) {
+    const updatedList = this.knownSpellsCantrips().filter((sc) => sc.name !== spellCantrip.name);
+    this.knownSpellsCantrips.set(updatedList);
+  }
 
   ngOnDestroy(): void {
     this.ref?.close();

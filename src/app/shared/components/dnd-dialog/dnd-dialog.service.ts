@@ -12,15 +12,27 @@ export class DndDialogService {
     return this.primengDialog.open(DndDialogComponent, {
       header: header,
       width: '50vw',
+      closeOnEscape: true,
       data: { body: content },
     });
   }
 
-  openSelect(header: string, content: string, options: any[]): DynamicDialogRef<any> | null {
+  openPickList(
+    header: string,
+    content: string,
+    allOptions: any[],
+    pickedOptions: any[] = [],
+  ): DynamicDialogRef<any> | null {
     return this.primengDialog.open(DndDialogComponent, {
       header: header,
-      width: '50vw',
-      data: { body: content, options: options },
+      width: '80vw',
+      closeOnEscape: true,
+      data: {
+        body: content,
+        dialogType: 'picklist',
+        allOptions: allOptions,
+        pickedOptions: pickedOptions,
+      },
     });
   }
 }

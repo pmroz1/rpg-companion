@@ -15,7 +15,7 @@ export const DND_SPELLS_CANTRIPS: SpellCantrip[] = [
   },
   {
     level: 0,
-    name: 'Fire Bolt',
+    name: 'Fire Bolt 1',
     description: 'A bolt of fire that deals damage to a target.',
     castingTime: '1 action',
     range: '120 feet',
@@ -26,7 +26,7 @@ export const DND_SPELLS_CANTRIPS: SpellCantrip[] = [
   },
   {
     level: 0,
-    name: 'Fire Bolt',
+    name: 'Fire Bolt 2',
     description: 'A bolt of fire that deals damage to a target.',
     castingTime: '1 action',
     range: '120 feet',
@@ -37,7 +37,7 @@ export const DND_SPELLS_CANTRIPS: SpellCantrip[] = [
   },
   {
     level: 0,
-    name: 'Fire Bolt',
+    name: 'Fire Bolt 3',
     description: 'A bolt of fire that deals damage to a target.',
     castingTime: '1 action',
     range: '120 feet',
@@ -48,7 +48,7 @@ export const DND_SPELLS_CANTRIPS: SpellCantrip[] = [
   },
   {
     level: 0,
-    name: 'Fire Bolt',
+    name: 'Fire Bolt 4',
     description: 'A bolt of fire that deals damage to a target.',
     castingTime: '1 action',
     range: '120 feet',
@@ -59,7 +59,7 @@ export const DND_SPELLS_CANTRIPS: SpellCantrip[] = [
   },
   {
     level: 0,
-    name: 'Fire Bolt',
+    name: 'Fire Bolt 5',
     description: 'A bolt of fire that deals damage to a target.',
     castingTime: '1 action',
     range: '120 feet',
@@ -70,7 +70,7 @@ export const DND_SPELLS_CANTRIPS: SpellCantrip[] = [
   },
   {
     level: 0,
-    name: 'Fire Bolt',
+    name: 'Fire Bolt 6',
     description: 'A bolt of fire that deals damage to a target.',
     castingTime: '1 action',
     range: '120 feet',
@@ -81,7 +81,7 @@ export const DND_SPELLS_CANTRIPS: SpellCantrip[] = [
   },
   {
     level: 0,
-    name: 'Fire Bolt',
+    name: 'Fire Bolt 7',
     description: 'A bolt of fire that deals damage to a target.',
     castingTime: '1 action',
     range: '120 feet',
@@ -92,7 +92,7 @@ export const DND_SPELLS_CANTRIPS: SpellCantrip[] = [
   },
   {
     level: 0,
-    name: 'Fire Bolt',
+    name: 'Fire Bolt 8',
     description: 'A bolt of fire that deals damage to a target.',
     castingTime: '1 action',
     range: '120 feet',
@@ -103,7 +103,7 @@ export const DND_SPELLS_CANTRIPS: SpellCantrip[] = [
   },
   {
     level: 0,
-    name: 'Fire Bolt',
+    name: 'Fire Bolt 9',
     description: 'A bolt of fire that deals damage to a target.',
     castingTime: '1 action',
     range: '120 feet',
@@ -114,7 +114,7 @@ export const DND_SPELLS_CANTRIPS: SpellCantrip[] = [
   },
   {
     level: 0,
-    name: 'Fire Bolt',
+    name: 'Fire Bolt 10',
     description: 'A bolt of fire that deals damage to a target.',
     castingTime: '1 action',
     range: '120 feet',
@@ -125,7 +125,7 @@ export const DND_SPELLS_CANTRIPS: SpellCantrip[] = [
   },
   {
     level: 0,
-    name: 'Fire Bolt',
+    name: 'Fire Bolt 11',
     description: 'A bolt of fire that deals damage to a target.',
     castingTime: '1 action',
     range: '120 feet',
@@ -136,7 +136,7 @@ export const DND_SPELLS_CANTRIPS: SpellCantrip[] = [
   },
   {
     level: 0,
-    name: 'Fire Bolt',
+    name: 'Fire Bolt 12',
     description: 'A bolt of fire that deals damage to a target.',
     castingTime: '1 action',
     range: '120 feet',
@@ -147,7 +147,7 @@ export const DND_SPELLS_CANTRIPS: SpellCantrip[] = [
   },
   {
     level: 0,
-    name: 'Fire Bolt',
+    name: 'Fire Bolt 13',
     description: 'A bolt of fire that deals damage to a target.',
     castingTime: '1 action',
     range: '120 feet',
@@ -158,7 +158,7 @@ export const DND_SPELLS_CANTRIPS: SpellCantrip[] = [
   },
   {
     level: 0,
-    name: 'Fire Bolt',
+    name: 'Fire Bolt 14',
     description: 'A bolt of fire that deals damage to a target.',
     castingTime: '1 action',
     range: '120 feet',
@@ -169,7 +169,7 @@ export const DND_SPELLS_CANTRIPS: SpellCantrip[] = [
   },
   {
     level: 0,
-    name: 'Fire Bolt',
+    name: 'Fire Bolt 15',
     description: 'A bolt of fire that deals damage to a target.',
     castingTime: '1 action',
     range: '120 feet',
@@ -180,7 +180,7 @@ export const DND_SPELLS_CANTRIPS: SpellCantrip[] = [
   },
   {
     level: 0,
-    name: 'Fire Bolt',
+    name: 'Fire Bolt 16',
     description: 'A bolt of fire that deals damage to a target.',
     castingTime: '1 action',
     range: '120 feet',
@@ -191,7 +191,7 @@ export const DND_SPELLS_CANTRIPS: SpellCantrip[] = [
   },
   {
     level: 0,
-    name: 'Fire Bolt',
+    name: 'Fire Bolt 17',
     description: 'A bolt of fire that deals damage to a target.',
     castingTime: '1 action',
     range: '120 feet',
@@ -202,7 +202,7 @@ export const DND_SPELLS_CANTRIPS: SpellCantrip[] = [
   },
   {
     level: 0,
-    name: 'Fire Bolt',
+    name: 'Fire Bolt 18',
     description: 'A bolt of fire that deals damage to a target.',
     castingTime: '1 action',
     range: '120 feet',

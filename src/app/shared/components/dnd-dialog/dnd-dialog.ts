@@ -1,19 +1,33 @@
 import { AfterViewInit, Component, inject, input, signal } from '@angular/core';
 import { DynamicDialogRef, DynamicDialogConfig } from 'primeng/dynamicdialog';
 import { Button } from 'primeng/button';
-export type DndDialogType = 'simple' | 'selection';
+import { PickListModule } from 'primeng/picklist';
+
+export type DndDialogType = 'simple' | 'picklist';
 
 @Component({
   selector: '<app-dnd-dynamic-dialog>',
+  imports: [Button, PickListModule],
   template: `
     <div>
       <div class="p-4 text-lg">{{ content() }}</div>
-      @if (options.length !== 0) {
-        select here xdd
+      @switch (dialogType()) {
+        @case ('picklist') {
+          <p-pickList
+            [source]="allOptions()"
+            [target]="pickedOptions()"
+            filterBy="name"
+          ></p-pickList>
+          <div class="py-4 flex justify-end">
+            <p-button label="save" (click)="close()"></p-button>
+          </div>
+        }
+        @default {
+          <div class="px-4 flex justify-end">
+            <p-button label="save" (click)="close()"></p-button>
+          </div>
+        }
       }
-      <div class="px-4 flex justify-end">
-        <p-button label="Ok" (click)="close()"></p-button>
-      </div>
     </div>
   `,
   styles: `
@@ -21,20 +35,32 @@ export type DndDialogType = 'simple' | 'selection';
       display: block;
     }
   `,
-  imports: [Button],
 })
 export class DndDialogComponent implements AfterViewInit {
   ref = inject(DynamicDialogRef);
   config = inject(DynamicDialogConfig);
-  options = this.config?.data?.options || [];
-
+  options = signal<any[]>([]);
+  dialogType = signal<DndDialogType>('simple');
   content = signal<string>('');
+  allOptions = signal<any[]>([]);
+  pickedOptions = signal<any[]>([]);
 
   ngAfterViewInit(): void {
-    this.content.set(this.config?.data?.body || 'Dialog content goes here.');
+    this.dialogType.set(this.config.data?.dialogType || 'simple');
+    this.content.set(this.config.data?.body || 'Dialog content goes here.');
+    this.allOptions.set(this.config.data?.allOptions || []);
+    this.pickedOptions.set(this.config.data?.pickedOptions || []);
+  }
+
+  cancel() {
+    this.ref.close();
   }
 
   close() {
-    this.ref.close();
+    if (this.dialogType() === 'picklist') {
+      this.ref.close([...this.pickedOptions()]);
+    } else {
+      this.ref.close();
+    }
   }
 }

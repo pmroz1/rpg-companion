@@ -1,6 +1,12 @@
-import { ChangeDetectionStrategy, Component, inject, OnDestroy } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  NgZone,
+  OnDestroy,
+  signal,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { DndDialogComponent } from '@app/shared/components/dnd-dialog/dnd-dialog';
 import { DndDialogService } from '@app/shared/components/dnd-dialog/dnd-dialog.service';
 import { DynamicFormService } from '@app/shared/services';
 import { DND_SPELLS_CANTRIPS } from '@data/dictionaries/spells-cantrips.dictionary';
@@ -15,7 +21,7 @@ import { TableModule } from 'primeng/table';
 
   template: `<div class="sc-container">
     <p-table
-      [value]="spellsCantrips"
+      [value]="knownSpellsCantrips()"
       class="w-full"
       stripedRows
       [paginator]="true"
@@ -77,23 +83,33 @@ import { TableModule } from 'primeng/table';
 })
 export class SpellsCantrips implements OnDestroy {
   private readonly formService = inject(DynamicFormService);
-  spellsCantrips: SpellCantrip[] = [...DND_SPELLS_CANTRIPS];
-  knownSpellsCantrips: SpellCantrip[] = [];
+  private readonly zone = inject(NgZone);
+  spellsCantrips = signal<SpellCantrip[]>([...DND_SPELLS_CANTRIPS]);
+  knownSpellsCantrips = signal<SpellCantrip[]>([]);
   addSpellButtonText = 'Add Spell';
 
   dialogService = inject(DndDialogService);
   ref: DynamicDialogRef | undefined | null;
 
-  showSpellDescription(title: string, content: string) {
-    this.ref = this.dialogService.openSimple(title, content);
+  showSpellDescription(title: string, displayText: string) {
+    this.ref = this.dialogService.openSimple(title, displayText);
   }
 
   showAddSpellDialog() {
-    this.ref = this.dialogService.openSelect(
+    this.ref = this.dialogService.openPickList(
       'Add Spell',
       'Spell adding functionality coming soon!',
-      this.spellsCantrips,
+      this.spellsCantrips(),
+      this.knownSpellsCantrips(),
     );
+
+    this.ref?.onClose.subscribe((pickedSpellsCantrips: SpellCantrip[]) => {
+      if (pickedSpellsCantrips) {
+        this.zone.run(() => {
+          this.knownSpellsCantrips.set(pickedSpellsCantrips);
+        });
+      }
+    });
   }
 
   headers = [

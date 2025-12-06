@@ -6,4 +6,4 @@ export * from './dnd-skills';
 export * from './dnd-subclass';
 export * from './dnd-tool';
 export * from './dnd-weapon';
-export * from './spell-cantrip.';
+export * from './spell-cantrip';

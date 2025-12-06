@@ -30,7 +30,7 @@ import { Popover, PopoverModule } from 'primeng/popover';
       [rows]="8"
       class="sc-table"
     >
-      <ng-template pTemplate="header" sortField="level" [sortOrder]="-1" let-columns>
+      <ng-template pTemplate="header" sortField="level" [sortOrder]="-1">
         <tr>
           <th pSortableColumn="level">
             <div class="flex items-center gap-2">
@@ -82,7 +82,6 @@ import { Popover, PopoverModule } from 'primeng/popover';
               [binary]="true"
               [(ngModel)]="spellCantrip.concentration"
               [disabled]="true"
-              [binary]="true"
             />
           </td>
           <td>

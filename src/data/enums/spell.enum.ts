@@ -1,4 +1,4 @@
-export enum SpellType {
+export enum SpellCategory {
   Spell = 'Spell',
   Cantrip = 'Cantrip',
   Evocation = 'Evocation',

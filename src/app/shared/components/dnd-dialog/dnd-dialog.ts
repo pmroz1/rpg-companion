@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, inject, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { DynamicDialogRef, DynamicDialogConfig } from 'primeng/dynamicdialog';
 import { Button } from 'primeng/button';
 import { PickListModule } from 'primeng/picklist';
@@ -6,7 +6,7 @@ import { PickListModule } from 'primeng/picklist';
 export type DndDialogType = 'simple' | 'picklist';
 
 @Component({
-  selector: '<app-dnd-dynamic-dialog>',
+  selector: 'app-dnd-dynamic-dialog',
   imports: [Button, PickListModule],
   template: `
     <div>
@@ -43,7 +43,7 @@ export type DndDialogType = 'simple' | 'picklist';
     }
   `,
 })
-export class DndDialogComponent implements AfterViewInit {
+export class DndDialogComponent implements OnInit {
   ref = inject(DynamicDialogRef);
   config = inject(DynamicDialogConfig);
   options = signal<any[]>([]);
@@ -52,7 +52,7 @@ export class DndDialogComponent implements AfterViewInit {
   allOptions = signal<any[]>([]);
   pickedOptions = signal<any[]>([]);
 
-  ngAfterViewInit(): void {
+  ngOnInit(): void {
     this.dialogType.set(this.config.data?.dialogType || 'simple');
     this.content.set(this.config.data?.body || 'Dialog content goes here.');
     this.allOptions.set(this.config.data?.allOptions || []);

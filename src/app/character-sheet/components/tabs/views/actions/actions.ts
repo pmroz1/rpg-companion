@@ -1,6 +1,4 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { DndCard } from '@app/shared/components/dnd-card/dnd-card';
-
 @Component({
   selector: 'tab-actions',
   imports: [],

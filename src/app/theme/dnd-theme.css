@@ -1,4 +1,3 @@
-/* scrollbar styles */
 ::-webkit-scrollbar {
   overflow: scroll;
 }
@@ -109,27 +108,4 @@
   color: var(--text-body);
   font-family: var(--font-display);
   font-weight: 600;
-}
-
-.p-dialog-enter-active {
-  animation: demo-dialog-in 5000ms ease-out;
-}
-
-.p-dialog-leave-active {
-  animation: demo-dialog-out 3000ms ease-in;
-}
-
-@keyframes demo-dialog-in {
-  from {
-    opacity: 0;
-    transform: translateY(-10%) scale(1.1);
-    filter: blur(10px);
-  }
-}
-
-@keyframes demo-dialog-out {
-  to {
-    opacity: 0;
-    transform: translateY(200%) rotate(-90deg);
-  }
 }

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, inject, input, signal } from '@angular/core';
+import { AfterViewInit, Component, inject, signal } from '@angular/core';
 import { DynamicDialogRef, DynamicDialogConfig } from 'primeng/dynamicdialog';
 import { Button } from 'primeng/button';
 import { PickListModule } from 'primeng/picklist';
@@ -18,13 +18,20 @@ export type DndDialogType = 'simple' | 'picklist';
             [target]="pickedOptions()"
             filterBy="name"
           ></p-pickList>
+
           <div class="py-4 flex justify-end">
+            <p-button
+              severity="secondary"
+              class="pr-2"
+              label="cancel"
+              (click)="cancel()"
+            ></p-button>
             <p-button label="save" (click)="close()"></p-button>
           </div>
         }
         @default {
           <div class="px-4 flex justify-end">
-            <p-button label="save" (click)="close()"></p-button>
+            <p-button label="close" (click)="close()"></p-button>
           </div>
         }
       }

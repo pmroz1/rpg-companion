@@ -46,7 +46,6 @@ export type DndDialogType = 'simple' | 'picklist';
 export class DndDialogComponent implements OnInit {
   ref = inject(DynamicDialogRef);
   config = inject(DynamicDialogConfig);
-  options = signal<any[]>([]);
   dialogType = signal<DndDialogType>('simple');
   content = signal<string>('');
   allOptions = signal<any[]>([]);

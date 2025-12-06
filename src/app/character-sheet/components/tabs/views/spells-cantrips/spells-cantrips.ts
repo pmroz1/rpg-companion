@@ -22,19 +22,49 @@ import { TableModule } from 'primeng/table';
   template: `<div class="sc-container">
     <p-table
       [value]="knownSpellsCantrips()"
-      class="w-full"
       stripedRows
       [paginator]="true"
       [rows]="8"
-      [globalFilterFields]="['spellCantrip.name', 'spellCantrip.category']"
-      [tableStyle]="{ 'min-width': '30rem' }"
       class="sc-table"
     >
-      <ng-template #header let-columns>
+      <ng-template pTemplate="header" sortField="level" [sortOrder]="-1" let-columns>
         <tr>
-          @for (col of headers; track $index) {
-            <th>{{ col }}</th>
-          }
+          <th pSortableColumn="level">
+            <div class="flex items-center gap-2">
+              level
+              <p-sortIcon field="level" />
+            </div>
+          </th>
+
+          <th pSortableColumn="name">
+            <div class="flex items-center gap-2">
+              name
+              <p-sortIcon field="name" />
+            </div>
+          </th>
+          <th pSortableColumn="category">
+            <div class="flex items-center gap-2">
+              category
+              <p-sortIcon field="category" />
+            </div>
+          </th>
+
+          <th pSortableColumn="castingTime">
+            <div class="flex items-center gap-2">
+              casting time
+              <p-sortIcon field="castingTime" />
+            </div>
+          </th>
+          <th pSortableColumn="range">
+            <div class="flex items-center gap-2">
+              range
+              <p-sortIcon field="range" />
+            </div>
+          </th>
+          <th>concentration</th>
+          <th>ritual</th>
+          <th>material</th>
+          <th>description</th>
         </tr>
       </ng-template>
       <ng-template let-spellCantrip pTemplate="body">

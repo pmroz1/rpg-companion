@@ -46,15 +46,7 @@
         font-size: 0.9rem;
         color: var(--color-parchment);
         vertical-align: middle;
-
-        &:nth-child(2) {
-          font-family: var(--font-display);
-          color: var(--color-parchment);
-          font-weight: 500;
-        }
       }
-    }
-    .p-datatable-tfoot {
     }
   }
 }

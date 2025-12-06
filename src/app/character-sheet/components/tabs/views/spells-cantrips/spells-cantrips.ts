@@ -15,13 +15,13 @@ import { TableModule } from 'primeng/table';
 
   template: `<div class="sc-container">
     <p-table
-      [value]="spellsCantrips"
+      [value]="knownSpellsCantrips"
       class="w-full"
       stripedRows
       [paginator]="true"
       [rows]="8"
       [globalFilterFields]="['spellCantrip.name', 'spellCantrip.category']"
-      [tableStyle]="{ 'min-width': '50rem' }"
+      [tableStyle]="{ 'min-width': '50rem', maxWidth: '100rem' }"
       class="sc-table"
     >
       <ng-template #header let-columns>
@@ -58,16 +58,16 @@ import { TableModule } from 'primeng/table';
           </td>
           <td>
             <p-button
-              label="Description"
+              icon="pi pi-align-center"
               (onClick)="showDialog(spellCantrip.name, spellCantrip.description)"
             ></p-button>
           </td>
         </tr>
       </ng-template>
 
-      <ng-template pTemplate="footer">
-        <div class="flex justify-end p-2">
-          <p-button label="Add Spell/Cantrip" class="p-button-sm"></p-button>
+      <ng-template pTemplate="footer" class="flex justify-end ">
+        <div class="p-2 table-footer">
+          <p-button label="{{ addSpellButtonText }}"></p-button>
         </div>
       </ng-template>
     </p-table>
@@ -79,6 +79,7 @@ export class SpellsCantrips implements OnDestroy {
   private readonly formService = inject(DynamicFormService);
   spellsCantrips: SpellCantrip[] = [...DND_SPELLS_CANTRIPS];
   knownSpellsCantrips: SpellCantrip[] = [];
+  addSpellButtonText = 'Add Spell';
 
   dialogService = inject(DndDialogService);
   ref: DynamicDialogRef | undefined | null;

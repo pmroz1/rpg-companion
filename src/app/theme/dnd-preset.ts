@@ -136,11 +136,7 @@ const DndPreset = definePreset(Aura, {
       },
     },
     inputnumber: {
-      root: {
-        // background: '#1a1410', //@FIXME @TODO: fix background issue with inputnumber
-        // borderColor: '#4d3c2c',
-        // color: '#d4c4a8',
-      },
+      root: {},
       button: {
         background: '#2e241c',
         hoverBackground: '#3d3024',
@@ -157,7 +153,7 @@ const DndPreset = definePreset(Aura, {
         borderColor: '#4d3c2c',
         hoverBorderColor: '#5c4a38',
         focusBorderColor: '#c9a227',
-        color: '#d4c4a8',
+        color: '#ec990aff',
         placeholderColor: '#9a866e',
       },
     },
@@ -177,8 +173,20 @@ const DndPreset = definePreset(Aura, {
       },
     },
     button: {
-      root: {
-        borderRadius: '4px',
+      colorScheme: {
+        light: {
+          root: {
+            primary: {
+              background: 'linear-gradient(180deg, #a62951 0%, #8b1e3f 100%)',
+              color: '#f5e6c8',
+              hoverBackground: 'linear-gradient(180deg, #b83362 0%, #9c2548 100%)',
+              activeBackground: 'linear-gradient(180deg, #952448 0%, #7a1836 100%)',
+              borderColor: 'transparent',
+              hoverBorderColor: 'transparent',
+              activeBorderColor: 'transparent',
+            },
+          },
+        },
       },
     },
   },

@@ -15,7 +15,7 @@ import { FormsModule } from '@angular/forms';
           min="1"
           max="20"
         />
-        <div class="dnd-divider w-20"></div>
+        <div class="dnd-divider-horizontal w-20"></div>
         <span class="level-label">LEVEL</span>
       </div>
       <div class="xp-section">
@@ -26,7 +26,7 @@ import { FormsModule } from '@angular/forms';
           (ngModelChange)="onXpChange($event)"
           min="0"
         />
-        <div class="dnd-divider w-20"></div>
+        <div class="dnd-divider-horizontal w-20"></div>
         <span class="xp-label">XP</span>
       </div>
     </div>

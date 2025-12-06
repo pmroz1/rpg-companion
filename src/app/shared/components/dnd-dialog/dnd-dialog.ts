@@ -2,12 +2,14 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { DynamicDialogRef, DynamicDialogConfig } from 'primeng/dynamicdialog';
 import { Button } from 'primeng/button';
 import { PickListModule } from 'primeng/picklist';
-
-export type DndDialogType = 'simple' | 'picklist';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { TitleCasePipe } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+export type DndDialogType = 'simple' | 'picklist' | 'multiselect';
 
 @Component({
   selector: 'app-dnd-dynamic-dialog',
-  imports: [Button, PickListModule],
+  imports: [Button, PickListModule, MultiSelectModule, TitleCasePipe, FormsModule ],
   template: `
     <div>
       <div class="p-4 text-lg">{{ content() }}</div>
@@ -20,6 +22,36 @@ export type DndDialogType = 'simple' | 'picklist';
           ></p-pickList>
 
           <div class="py-4 flex justify-end">
+            <p-button
+              severity="secondary"
+              class="pr-2"
+              label="cancel"
+              (click)="cancel()"
+            ></p-button>
+            <p-button label="save" (click)="close()"></p-button>
+          </div>
+        }
+        @case ('multiselect') {
+          <div class="h-75">
+            <div class="flex justify-center">
+              <p-multiselect
+                [options]="allOptions()"
+                [(ngModel)]="pickedOptions"
+                optionLabel="name"
+                placeholder="Select tools"
+                [maxSelectedLabels]="5"
+                class="w-full md:w-80"
+              >
+                <ng-template let-tool pTemplate="item">
+                  {{ tool.name | titlecase }}
+                </ng-template>
+                <ng-template let-tool pTemplate="selectedItem">
+                  {{ tool.name | titlecase }}
+                </ng-template>
+              </p-multiselect>
+            </div>
+          </div>
+          <div class="flex justify-end">
             <p-button
               severity="secondary"
               class="pr-2"
@@ -63,9 +95,9 @@ export class DndDialogComponent implements OnInit {
   }
 
   close() {
-    if (this.dialogType() === 'picklist') {
+    if (this.dialogType() === 'picklist' || this.dialogType() === 'multiselect') {
       this.ref.close([...this.pickedOptions()]);
-    } else {
+    } else { 
       this.ref.close();
     }
   }

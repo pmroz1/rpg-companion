@@ -7,13 +7,15 @@ import { Appearance } from './components/appearance/appearance';
 import { DndCard } from '@app/shared/components/dnd-card/dnd-card';
 import { Info } from './components/info/info';
 import { Tabs } from './components/tabs/tabs';
+import { Proficiencies } from './proficiencies/proficiencies';
 
 @Component({
   selector: 'app-character-sheet',
-  imports: [ReactiveFormsModule, JsonPipe, Appearance, Info, Tabs],
+  imports: [ReactiveFormsModule, JsonPipe, Appearance, Info, Tabs, Proficiencies],
   template: `<form [formGroup]="characterSheetForm.getFormGroup()">
     <sheet-tabs />
     <app-appearance></app-appearance>
+    <app-proficiencies></app-proficiencies>
     <sheet-info />
     <pre>{{ characterSheetForm.rawValue() | json }}</pre>
     <pre>{{ characterSheetForm.status() }}</pre>

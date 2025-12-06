@@ -15,13 +15,13 @@ import { TableModule } from 'primeng/table';
 
   template: `<div class="sc-container">
     <p-table
-      [value]="knownSpellsCantrips"
+      [value]="spellsCantrips"
       class="w-full"
       stripedRows
       [paginator]="true"
       [rows]="8"
       [globalFilterFields]="['spellCantrip.name', 'spellCantrip.category']"
-      [tableStyle]="{ 'min-width': '50rem', maxWidth: '100rem' }"
+      [tableStyle]="{ 'min-width': '30rem' }"
       class="sc-table"
     >
       <ng-template #header let-columns>
@@ -59,7 +59,7 @@ import { TableModule } from 'primeng/table';
           <td>
             <p-button
               icon="pi pi-align-center"
-              (onClick)="showDialog(spellCantrip.name, spellCantrip.description)"
+              (onClick)="showSpellDescription(spellCantrip.name, spellCantrip.description)"
             ></p-button>
           </td>
         </tr>
@@ -67,7 +67,7 @@ import { TableModule } from 'primeng/table';
 
       <ng-template pTemplate="footer" class="flex justify-end ">
         <div class="p-2 table-footer">
-          <p-button label="{{ addSpellButtonText }}"></p-button>
+          <p-button label="{{ addSpellButtonText }}" (onClick)="showAddSpellDialog()"></p-button>
         </div>
       </ng-template>
     </p-table>
@@ -84,8 +84,16 @@ export class SpellsCantrips implements OnDestroy {
   dialogService = inject(DndDialogService);
   ref: DynamicDialogRef | undefined | null;
 
-  showDialog(title: string, content: string) {
+  showSpellDescription(title: string, content: string) {
     this.ref = this.dialogService.openSimple(title, content);
+  }
+
+  showAddSpellDialog() {
+    this.ref = this.dialogService.openSelect(
+      'Add Spell',
+      'Spell adding functionality coming soon!',
+      this.spellsCantrips,
+    );
   }
 
   headers = [

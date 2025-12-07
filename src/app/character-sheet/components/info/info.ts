@@ -33,8 +33,8 @@ export interface CharacterInfo {
   selector: 'sheet-info',
   imports: [DndCard, FormsModule, SelectModule, InputTextModule, InputNumberModule, LevelPlate],
   template: `
-    <div class="flex flex-row items-stretch gap-3 w-full">
-      <app-dnd-card title="Character Info" class="grow">
+    <div class="info-shell">
+      <app-dnd-card title="Character Info" class="info-card">
         <div class="info-grid">
           <div class="field col-span-2">
             <label for="name" class="field-label">Character Name</label>
@@ -99,7 +99,7 @@ export interface CharacterInfo {
           </div>
         </div>
       </app-dnd-card>
-      <app-level-plate [(level)]="level" [(xp)]="xp" class="shrink-0 p-2" />
+      <app-level-plate [(level)]="level" [(xp)]="xp" class="level-plate" />
     </div>
   `,
   styleUrls: ['./info.scss'],

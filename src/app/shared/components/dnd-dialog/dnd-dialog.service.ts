@@ -4,7 +4,7 @@ import { DndDialogComponent } from './dnd-dialog';
 
 @Injectable({
   providedIn: 'root',
-}) 
+})
 export class DndDialogService {
   primengDialog = inject(DialogService);
 
@@ -39,7 +39,7 @@ export class DndDialogService {
   openMultiselect(
     header: string,
     content: string,
-    allOptions: any[], 
+    allOptions: any[],
   ): DynamicDialogRef<any> | null {
     return this.primengDialog.open(DndDialogComponent, {
       header: header,

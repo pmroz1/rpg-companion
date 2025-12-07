@@ -5,7 +5,7 @@ import { PickListModule } from 'primeng/picklist';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { TitleCasePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { DragDrop, DragDropModule } from '@angular/cdk/drag-drop';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 export type DndDialogType = 'simple' | 'picklist' | 'multiselect';
 
 @Component({

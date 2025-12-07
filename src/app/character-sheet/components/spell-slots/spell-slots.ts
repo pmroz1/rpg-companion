@@ -1,7 +1,6 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  computed,
   effect,
   inject,
   Injector,
@@ -11,37 +10,63 @@ import {
 } from '@angular/core';
 import { DndCard } from '@app/shared/components/dnd-card/dnd-card';
 import { CheckboxModule } from 'primeng/checkbox';
-import { FormControl } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { DynamicFormService } from '@app/shared/services';
-import { JsonPipe } from '@angular/common';
+import { TableModule } from 'primeng/table';
 export interface SpellSlotInfo {
   level: number;
-  count: number;
+  total: number;
+  extended: number;
 }
 @Component({
   selector: 'app-spell-slots',
-  imports: [DndCard, CheckboxModule],
+  imports: [DndCard, CheckboxModule, TableModule, ReactiveFormsModule],
   template: `<app-dnd-card title="Spell slots">
-    <div class="grid grid-cols-3 gap-4">
-      @for (column of kurwa; track $index) {
-        <div class="flex flex-col gap-2">
-          @for (row of column; track row.level) {
-            <div class="flex flex-row items-center gap-3">
-              <p>Level {{ row.level }}:</p>
+    <div class="grid grid-cols-3">
+      @for (column of spellDefaultConfig; track $index) {
+        <p-table [value]="column" size="small">
+          <ng-template pTemplate="header">
+            <tr>
+              <th>Level</th>
+              <th>Total</th>
+              <th>Extended</th>
+            </tr>
+          </ng-template>
 
-              @for (i of [].constructor(row.count); track $index) {
-                <p-checkbox
-                  [value]="'level-' + row.level + '-' + $index"
-                  [inputId]="'level-' + row.level + '-' + $index"
-                  [name]="'level-' + row.level + '-' + $index"
-                  binary="true"
-                  (onChange)="onCheckboxLevelChange(row.level, $event)"
-                  checkboxIcon="pi pi-circle-fill"
+          <ng-template pTemplate="body" let-row>
+            <tr>
+              <td>Lvl {{ row.level }}</td>
+
+              <td>
+                <input
+                  [value]="0"
+                  type="number"
+                  min="0"
+                  max="10"
+                  (input)="onInputChange($event, row.level - 1)"
+                  class="w-full"
                 />
-              }
-            </div>
-          }
-        </div>
+              </td>
+
+              <td>
+                <div class="flex flex-row gap-1">
+                  @for (i of [].constructor(row.count); track $index) {
+                    <p-checkbox
+                      [binary]="true"
+                      [disabled]="
+                        ($index > 0 && !isCheckboxChecked(row.level, $index - 1)) ||
+                        isCheckboxChecked(row.level, $index + 1)
+                      "
+                      (onChange)="onCheckboxChange(row.level, $index, $event.checked)"
+                      [inputId]="'level-' + row.level + '-' + $index"
+                      checkboxIcon="pi pi-circle-fill"
+                    />
+                  }
+                </div>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
       }
     </div>
   </app-dnd-card>`,
@@ -51,7 +76,8 @@ export interface SpellSlotInfo {
 export class SpellSlots implements OnInit, OnDestroy {
   private readonly injector = inject(Injector);
   private readonly formService = inject(DynamicFormService);
-  kurwa = [
+
+  spellDefaultConfig = [
     [
       { level: 1, count: 4 },
       { level: 2, count: 3 },
@@ -68,32 +94,56 @@ export class SpellSlots implements OnInit, OnDestroy {
       { level: 9, count: 1 },
     ],
   ];
+
   spellSlots = signal<SpellSlotInfo[]>(
-    Array.from({ length: 9 }, (_, i) => ({ level: i + 1, count: 0 })),
+    Array.from({ length: 9 }, (_, i) => ({ level: i + 1, extended: 0, total: 0 })),
   );
 
   control = new FormControl<SpellSlotInfo[]>([]);
-  onCheckboxLevelChange(level: number, event: any) {
-    var index = level - 1;
-    event.checked ? this.increaseSpellSlot(index) : this.decreaseSpellSlot(index);
-    this.control.setValue(this.spellSlots());
+
+  getColumnData(column: { level: number; count: number }[]) {
+    return column;
   }
-  decreaseSpellSlot(index: number) {
-    const currentCount = this.spellSlots()[index].count;
-    if (currentCount > 0) {
-      const updatedSlots = [...this.spellSlots()];
-      updatedSlots[index] = { ...updatedSlots[index], count: currentCount - 1 };
-      this.spellSlots.set(updatedSlots);
+
+  isCheckboxChecked(level: number, checkboxIndex: number): boolean {
+    const index = level - 1;
+    return this.spellSlots()[index].extended > checkboxIndex;
+  }
+
+  onInputChange(event: Event, index: number) {
+    const input = event.target as HTMLInputElement;
+    const parsed = Number(input.value);
+    if (parsed < 0 || parsed > 10) {
+      input.value = '0';
+      return;
     }
-  }
-  increaseSpellSlot(index: number) {
     const updatedSlots = [...this.spellSlots()];
-    updatedSlots[index] = {
-      level: updatedSlots[index].level,
-      count: updatedSlots[index].count + 1,
-    };
+    updatedSlots[index] = { ...updatedSlots[index], total: parsed };
     this.spellSlots.set(updatedSlots);
+    this.updateControl();
   }
+
+  onCheckboxChange(level: number, checkboxIndex: number, checked: boolean) {
+    const index = level - 1;
+    const updatedSlots = [...this.spellSlots()];
+
+    if (checked) {
+      updatedSlots[index] = {
+        ...updatedSlots[index],
+        extended: checkboxIndex + 1,
+      };
+    } else {
+      updatedSlots[index] = {
+        ...updatedSlots[index],
+        extended: checkboxIndex,
+      };
+    }
+
+    this.spellSlots.set(updatedSlots);
+    this.updateControl();
+  }
+
+  private updateControl = () => this.control.setValue(this.spellSlots());
 
   ngOnInit(): void {
     effect(

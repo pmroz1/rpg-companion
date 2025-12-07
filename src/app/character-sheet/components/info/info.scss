@@ -1,5 +1,26 @@
 :host {
   display: block;
+  height: 100%;
+}
+
+.info-shell {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  height: 100%;
+  align-items: stretch;
+}
+
+.info-card {
+  flex: 1 1 auto;
+  min-height: 100%;
+}
+
+.level-plate {
+  flex: 0 0 160px;
+  height: 100%;
+  display: flex;
+  align-self: stretch;
 }
 
 .info-grid {

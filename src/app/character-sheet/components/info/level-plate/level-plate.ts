@@ -10,23 +10,17 @@ import { FormsModule } from '@angular/forms';
         <input
           type="number"
           class="level-input"
-          [ngModel]="level()"
-          (ngModelChange)="onLevelChange($event)"
+          [value]="level()"
+          (input)="onLevelInput($event)"
           min="1"
           max="20"
         />
-        <div class="dnd-divider-horizontal w-20"></div>
+        <div class="dnd-divider w-20"></div>
         <span class="level-label">LEVEL</span>
       </div>
       <div class="xp-section">
-        <input
-          type="number"
-          class="xp-input"
-          [ngModel]="xp()"
-          (ngModelChange)="onXpChange($event)"
-          min="0"
-        />
-        <div class="dnd-divider-horizontal w-20"></div>
+        <input type="number" class="xp-input" [value]="xp()" (input)="onXpInput($event)" min="0" />
+        <div class="dnd-divider w-20"></div>
         <span class="xp-label">XP</span>
       </div>
     </div>
@@ -37,16 +31,28 @@ import { FormsModule } from '@angular/forms';
 export class LevelPlate {
   level = model(1);
   xp = model(0);
+  maxLevel = 20;
+  minLevel = 1;
+  minXp = 0;
+  maxXp = 999999;
 
-  onLevelChange(value: string | number) {
-    const parsed = Number(value);
-    const clamped = Number.isFinite(parsed) ? Math.min(20, Math.max(1, parsed)) : 1;
+  onLevelInput(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const parsed = Number(input.value);
+    const clamped = Number.isFinite(parsed)
+      ? Math.min(this.maxLevel, Math.max(this.minLevel, parsed))
+      : this.minLevel;
     this.level.set(clamped);
+    input.value = String(clamped);
   }
 
-  onXpChange(value: string | number) {
-    const parsed = Number(value);
-    const clamped = Number.isFinite(parsed) ? Math.max(0, parsed) : 0;
+  onXpInput(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const parsed = Number(input.value);
+    const clamped = Number.isFinite(parsed)
+      ? Math.max(this.minXp, Math.min(this.maxXp, parsed))
+      : this.minXp;
     this.xp.set(clamped);
+    input.value = String(clamped);
   }
 }

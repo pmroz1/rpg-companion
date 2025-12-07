@@ -189,6 +189,34 @@ const DndPreset = definePreset(Aura, {
         },
       },
     },
+    chip: {
+      root: {
+        borderRadius: '12px',
+        paddingX: '1rem',
+        paddingY: '0.25rem',
+        gap: '0.35rem',
+      },
+      icon: {
+        size: '1rem',
+      },
+      colorScheme: {
+        light: {
+          root: {
+            background: '#2e241c',
+            color: '#d4c4a8',
+            borderRadius: '12px',
+          },
+          icon: {
+            color: '#c9a227',
+            size: '1rem',
+          },
+          removeIcon: {
+            color: '#9a866e',
+            size: '1rem',
+          },
+        },
+      },
+    },
   },
 });
 

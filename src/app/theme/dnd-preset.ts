@@ -207,7 +207,6 @@ const DndPreset = definePreset(Aura, {
           },
           icon: {
             color: '#c9a227',
-            size: '1rem',
           },
           removeIcon: {
             color: '#9a866e',

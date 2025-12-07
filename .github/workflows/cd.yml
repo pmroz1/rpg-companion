@@ -1,12 +1,16 @@
 name: Angular CD Pipeline
 on:
   push:
-    branches:
-      - master
+    branches: [master]
+  workflow_run:
+    workflows: ['Angular CI Pipeline']
+    types: [completed]
+    branches: [master]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     permissions:
       contents: read
       pages: write
@@ -29,9 +33,7 @@ jobs:
         with:
           node-version: '22.x'
       - name: Install dependencies
-        run: npm install --legacy-peer-deps
-      # here add tests later (if needed)
-      # @FIXME remove --legacy-peer-deps when all dependencies are compatible wit angular 21
+        run: npm install
       - name: Format code
         run: npm run format
       - name: Build project

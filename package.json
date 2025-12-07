@@ -25,6 +25,7 @@
   "packageManager": "npm@10.9.2",
   "dependencies": {
     "@angular/animations": "^21.0.1",
+    "@angular/cdk": "^21.0.2",
     "@angular/common": "^21.0.0",
     "@angular/compiler": "^21.0.0",
     "@angular/core": "^21.0.0",
@@ -34,7 +35,8 @@
     "@primeuix/themes": "^2.0.1",
     "@tailwindcss/postcss": "^4.1.17",
     "postcss": "^8.5.6",
-    "primeng": "^20.3.0",
+    "primeicons": "^7.0.0",
+    "primeng": "^21.0.1",
     "rxjs": "~7.8.0",
     "tailwindcss": "^4.1.17",
     "tailwindcss-primeui": "^0.6.1",

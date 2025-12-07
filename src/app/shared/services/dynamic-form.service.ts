@@ -1,5 +1,5 @@
 import { computed, Injectable } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { Form, FormControl, FormGroup } from '@angular/forms';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { startWith } from 'rxjs';
 
@@ -11,6 +11,14 @@ export class DynamicFormService {
 
   getFormGroup(): FormGroup {
     return this.form;
+  }
+
+  addControl(name: string, control: FormControl<unknown>) {
+    this.form.addControl(name, control);
+  }
+
+  removeControl(name: string) {
+    this.form.removeControl(name);
   }
 
   value = toSignal(this.form.valueChanges.pipe(startWith(this.form.value)));

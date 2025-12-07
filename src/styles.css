@@ -1,37 +1,52 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&display=swap');
 @import 'tailwindcss';
 @import 'tailwindcss-primeui';
+@import 'primeicons/primeicons.css';
+@import './app/theme/dnd-theme.css';
 
 :root {
-  --color-bg: #0a1a2f;
-  --color-bg-soft: #12395a;
-  --color-primary: #1f5c8a;
+  --color-bg: #1a1410;
+  --color-bg-elevated: #241c16;
+  --color-bg-card: #2e241c;
+  --color-border: #4d3c2c;
+  --color-border-light: #5c4a38;
 
-  --color-accent: #ff7a1a;
-  --color-accent-dark: #db5a00;
+  --color-gold: #c9a227;
+  --color-gold-light: #d4b33a;
+  --color-gold-dark: #996515;
 
-  --color-neutral: #c4c9d1;
-  --color-paper: #f2ece4;
+  --color-crimson: #8b1e3f;
+  --color-crimson-light: #a62951;
+  --color-crimson-dark: #6b1730;
 
-  --text-light: #f2ece4;
-  --text-normal: #c4c9d1;
-  --text-muted: #9aa2ae;
+  --color-parchment: #f5e6c8;
+  --color-parchment-dark: #e8d4a8;
+  --color-ink: #2c1810;
+
+  --text-heading: #f5e6c8;
+  --text-body: #d4c4a8;
+  --text-muted: #9a866e;
+
+  --color-hover: rgba(201, 162, 39, 0.1);
+
+  --font-display: 'Cinzel', 'Times New Roman', serif;
+  --font-body: 'Segoe UI', system-ui, sans-serif;
 }
 
 body {
   background: var(--color-bg);
-  color: var(--text-normal);
+  color: var(--text-body);
+  font-family: var(--font-body);
 }
 
-.p-button {
-  border-radius: 9999px;
-}
-
-.p-button.p-button-primary {
-  background: var(--color-accent);
-  border-color: var(--color-accent-dark);
-  color: #0a1a2f;
-}
-
-.p-button.p-button-primary:hover {
-  background: var(--color-accent-dark);
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-display);
+  color: var(--text-heading);
+  font-weight: 600;
+  letter-spacing: 0.02em;
 }

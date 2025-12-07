@@ -1,12 +1,17 @@
-<div class="min-h-screen bg-[var(--color-bg)] text-[var(--text-normal)]">
-  <header class="bg-[var(--color-bg-soft)] border-b border-[var(--color-neutral)] px-6 py-4">
-    <h1 class="text-2xl font-bold" style="color: var(--color-accent)">D&D 5e Companion</h1>
+<div class="min-h-screen">
+  <header
+    class="bg-[var(--color-bg-elevated)] border-b-2 border-[var(--color-gold-dark)] px-6 py-4"
+  >
+    <div class="flex items-center gap-3">
+      <h1 class="text-2xl gold-text tracking-wide">D&D 5e Companion</h1>
+      <div class="ml-auto">
+        <button pButton routerLink="/character-sheet" [disabled]="false">character sheet</button>
+        <button pButton class="ml-5 mr-auto" routerLink="/menu" [disabled]="true">
+          map editor
+          <span class="ml-2 text-sm italic">(coming soon)</span>
+        </button>
+      </div>
+    </div>
   </header>
-
-  <p-button
-    label="Create Character"
-    styleClass="mt-4 ml-6 px-4 py-2 bg-[var(--color-accent)] hover:bg-[var(--color-accent-dark)] text-[var(--text-light)] font-semibold border-none"
-  ></p-button>
+  <main class="p-6"><router-outlet name="main" /><router-outlet /></main>
 </div>
-
-<router-outlet></router-outlet>

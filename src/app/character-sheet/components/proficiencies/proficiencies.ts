@@ -6,7 +6,7 @@ import {
   inject,
   signal,
   Injector,
-} from '@angular/core'; 
+} from '@angular/core';
 import { CardModule } from 'primeng/card';
 import { DividerModule } from 'primeng/divider';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -53,8 +53,6 @@ import { DndDialogService } from '@app/shared/components/dnd-dialog/dnd-dialog.s
           }
         </div>
 
-        <!-- Weapons Section -->
-
         <div class="flex flex-col gap-2 items-center w-full">
           <label class="field-label">Weapons</label>
           <div class="flex flex-row gap-6">
@@ -83,7 +81,7 @@ import { DndDialogService } from '@app/shared/components/dnd-dialog/dnd-dialog.s
             />
           }
           <p-chip label="Add tool" (click)="show()" class="add-tool-chip" />
-        </div> 
+        </div>
       </div>
     </div>
   </app-dnd-card>`,

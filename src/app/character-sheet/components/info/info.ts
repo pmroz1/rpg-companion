@@ -99,7 +99,7 @@ export interface CharacterInfo {
           </div>
         </div>
       </app-dnd-card>
-      <app-level-plate [(level)]="level" [(xp)]="xp" class="level-plate " />
+      <app-level-plate [(level)]="level" [(xp)]="xp" class="level-plate" />
     </div>
   `,
   styleUrls: ['./info.scss'],

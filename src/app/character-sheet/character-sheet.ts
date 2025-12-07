@@ -8,23 +8,26 @@ import { DndCard } from '@app/shared/components/dnd-card/dnd-card';
 import { Info } from './components/info/info';
 import { Tabs } from './components/tabs/tabs';
 import { Proficiencies } from './components/proficiencies/proficiencies';
-import { ArmorClass } from './components';
 
 @Component({
   selector: 'app-character-sheet',
-  imports: [ReactiveFormsModule, Appearance, Info, Tabs, Proficiencies, DndCard],
+  imports: [ReactiveFormsModule, Appearance, Info, Tabs, Proficiencies, DndCard, JsonPipe],
   template: `<form [formGroup]="characterSheetForm.getFormGroup()" class="sheet-grid">
-    <sheet-info class="span-6" />
-    <app-dnd-card title="armor class" class="span-3 placeholder" />
-    <app-dnd-card title="hitpoints" class="span-3 placeholder" />
-    <app-dnd-card title="abilities" class="span-4 placeholder rows-span-6" />
+    <sheet-info class="span-5 row-span-2" />
+    <app-dnd-card title="armor class" class="span-2 placeholder" />
+    <app-dnd-card title="hitpoints" class="span-5 placeholder" />
+    <app-dnd-card title="Defense Notes" class="span-7" />
+
+    <app-dnd-card title="abilities" class="span-4 row-span-2" />
+    <app-dnd-card title="spellcasting ability" class="span-4" />
+    <app-dnd-card title="spell slots" class="span-4" />
     <sheet-tabs class="span-8" />
     <app-proficiencies class="span-4" />
     <app-appearance class="span-4" />
-
-    <app-dnd-card title="placeholder" class="span-6 placeholder" />
-    <app-dnd-card title="placeholder" class="span-6 placeholder" />
-    <app-dnd-card title="placeholder" class="span-6 placeholder" />
+    <app-dnd-card title="equipment" class="span-4 placeholder" />
+    <app-dnd-card title="Character Sheet Form Value" class="span-12">{{
+      characterSheetForm.getFormGroup().value | json
+    }}</app-dnd-card>
   </form>`,
   styleUrls: ['./character-sheet.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

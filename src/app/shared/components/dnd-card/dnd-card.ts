@@ -17,13 +17,32 @@ import { Card } from 'primeng/card';
         <div class="dnd-divider"></div>
       }
 
-      <div class="p-2 m-0"><ng-content /></div>
+      <div class="p-2 m-0 dnd-card-content"><ng-content /></div>
     </p-card>
   `,
   styles: `
     :host {
       display: block;
-      align-items: stretch;
+      height: 100%;
+    }
+
+    :host ::ng-deep .p-card {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    :host ::ng-deep .p-card-body,
+    :host ::ng-deep .p-card-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .dnd-card-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
     }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

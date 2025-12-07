@@ -3,6 +3,7 @@ export * from './armor-class/armor-class';
 export * from './info/info';
 export * from './info/level-plate/level-plate';
 export * from './proficiencies/proficiencies';
+export * from './spell-slots/spell-slots';
 export * from './tabs/tabs';
 export * from './tabs/views/actions/actions';
 export * from './tabs/views/features/features';

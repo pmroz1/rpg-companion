@@ -12,7 +12,7 @@ import { SpellSlots } from "./components/spell-slots/spell-slots";
 
 @Component({
   selector: 'app-character-sheet',
-  imports: [ReactiveFormsModule, Appearance, Info, Tabs, Proficiencies, DndCard, JsonPipe],
+  imports: [ReactiveFormsModule, Appearance, Info, Tabs, Proficiencies, DndCard, JsonPipe, SpellSlots],
   template: `<form [formGroup]="characterSheetForm.getFormGroup()" class="sheet-grid">
     <sheet-info class="span-5 row-span-2" />
     <app-dnd-card title="armor class" class="span-2" />
@@ -21,7 +21,7 @@ import { SpellSlots } from "./components/spell-slots/spell-slots";
 
     <app-dnd-card title="abilities" class="span-4 row-span-2" />
     <app-dnd-card title="spellcasting ability" class="span-4" />
-    <app-dnd-card title="spell slots" class="span-4" />
+    <app-spell-slots title="spell slots" class="span-4" />
     <sheet-tabs class="span-8" />
     <app-proficiencies class="span-4" />
     <app-appearance class="span-4" />

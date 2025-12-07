@@ -10,11 +10,10 @@ import {
   signal,
 } from '@angular/core';
 import { DndCard } from '@app/shared/components/dnd-card/dnd-card';
-import { CheckboxChangeEvent, CheckboxModule } from 'primeng/checkbox';
+import { CheckboxModule } from 'primeng/checkbox';
 import { FormControl } from '@angular/forms';
 import { DynamicFormService } from '@app/shared/services';
 import { JsonPipe } from '@angular/common';
-import { count } from 'rxjs';
 export interface SpellSlotInfo {
   level: number;
   count: number;
@@ -44,7 +43,6 @@ export interface SpellSlotInfo {
           }
         </div>
       }
-      {{ spellSlots() | json }}
     </div>
   </app-dnd-card>`,
   styleUrl: './spell-slots.scss',

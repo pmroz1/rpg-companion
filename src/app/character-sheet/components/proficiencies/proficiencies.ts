@@ -78,9 +78,10 @@ import { DndDialogService } from '@app/shared/components/dnd-dialog/dnd-dialog.s
               [removable]="true"
               (onRemove)="removeTool(tool)"
               [label]="tool.name | titlecase"
+              class="mr-2 mb-2 br-2 cursor-pointer"
             />
           }
-          <p-chip label="Add tool" (click)="show()" class="add-tool-chip" />
+          <p-chip label="Add tool" (click)="show()" class="add-tool-chip mb-2" />
         </div>
       </div>
     </div>

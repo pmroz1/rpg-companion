@@ -202,7 +202,7 @@ const DndPreset = definePreset(Aura, {
       colorScheme: {
         light: {
           root: {
-            background: '#2e241c',
+            background: '#362b23ff',
             color: '#d4c4a8',
             borderRadius: '12px',
           },

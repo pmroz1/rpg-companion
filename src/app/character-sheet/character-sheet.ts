@@ -8,21 +8,30 @@ import { DndCard } from '@app/shared/components/dnd-card/dnd-card';
 import { Info } from './components/info/info';
 import { Tabs } from './components/tabs/tabs';
 import { Proficiencies } from './components/proficiencies/proficiencies';
-import { SpellSlots } from "./components/spell-slots/spell-slots";
+import { SpellSlots } from './components/spell-slots/spell-slots';
 
 @Component({
   selector: 'app-character-sheet',
-  imports: [ReactiveFormsModule, Appearance, Info, Tabs, Proficiencies, DndCard, JsonPipe, SpellSlots],
+  imports: [
+    ReactiveFormsModule,
+    Appearance,
+    Info,
+    Tabs,
+    Proficiencies,
+    DndCard,
+    JsonPipe,
+    SpellSlots,
+  ],
   template: `<form [formGroup]="characterSheetForm.getFormGroup()" class="sheet-grid">
     <sheet-info class="span-5 row-span-2" />
     <app-dnd-card title="armor class" class="span-2" />
     <app-dnd-card title="hitpoints" class="span-5" />
     <app-dnd-card title="initiative | speed | size | passive perception" class="span-7" />
 
-    <app-dnd-card title="abilities" class="span-4 row-span-2" />
+    <app-dnd-card title="abilities" class="span-3 row-span-2" />
     <app-dnd-card title="spellcasting ability" class="span-4" />
-    <app-spell-slots title="spell slots" class="span-4" />
-    <sheet-tabs class="span-8" />
+    <app-spell-slots title="spell slots" class="span-5" />
+    <sheet-tabs class="span-9" />
     <app-proficiencies class="span-4" />
     <app-appearance class="span-4" />
     <app-dnd-card title="equipment" class="span-4" />

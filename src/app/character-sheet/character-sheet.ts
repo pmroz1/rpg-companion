@@ -7,7 +7,7 @@ import { Appearance } from './components/appearance/appearance';
 import { DndCard } from '@app/shared/components/dnd-card/dnd-card';
 import { Info } from './components/info/info';
 import { Tabs } from './components/tabs/tabs';
-import { Proficiencies } from './proficiencies/proficiencies';
+import { Proficiencies } from './components/proficiencies/proficiencies';
 
 @Component({
   selector: 'app-character-sheet',

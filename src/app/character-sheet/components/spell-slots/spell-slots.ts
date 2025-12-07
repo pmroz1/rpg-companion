@@ -20,7 +20,7 @@ export interface SpellSlotInfo {
 }
 @Component({
   selector: 'app-spell-slots',
-  imports: [DndCard, CheckboxModule, JsonPipe],
+  imports: [DndCard, CheckboxModule],
   template: `<app-dnd-card title="Spell slots">
     <div class="grid grid-cols-3 gap-4">
       @for (column of kurwa; track $index) {

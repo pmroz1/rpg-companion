@@ -77,7 +77,8 @@ export class SpellSlots implements OnInit, OnDestroy {
   control = new FormControl<SpellSlotInfo[]>([]);
   onCheckboxLevelChange(level: number, event: any) {
     var index = level - 1;
-    event.checked ? this.decreaseSpellSlot(index) : this.increaseSpellSlot(index);
+    event.checked ? this.increaseSpellSlot(index) :this.decreaseSpellSlot(index); 
+    this.control.setValue(this.spellSlots());
   }
   decreaseSpellSlot(index: number) {
     const currentCount = this.spellSlots()[index].count;

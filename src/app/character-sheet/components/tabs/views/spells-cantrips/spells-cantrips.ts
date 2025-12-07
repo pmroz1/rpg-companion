@@ -30,7 +30,7 @@ import { Popover, PopoverModule } from 'primeng/popover';
       [rows]="8"
       class="sc-table"
     >
-      <ng-template pTemplate="header" sortField="level" [sortOrder]="-1">
+      <ng-template pTemplate="header" sortField="level">
         <tr>
           <th pSortableColumn="level">
             <div class="flex items-center gap-2">

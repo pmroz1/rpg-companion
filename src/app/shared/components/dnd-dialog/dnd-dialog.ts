@@ -5,17 +5,19 @@ import { PickListModule } from 'primeng/picklist';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { TitleCasePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { DragDrop, DragDropModule } from '@angular/cdk/drag-drop';
 export type DndDialogType = 'simple' | 'picklist' | 'multiselect';
 
 @Component({
   selector: 'app-dnd-dynamic-dialog',
-  imports: [Button, PickListModule, MultiSelectModule, TitleCasePipe, FormsModule ],
+  imports: [Button, PickListModule, MultiSelectModule, TitleCasePipe, FormsModule, DragDropModule],
   template: `
     <div>
       <div class="p-4 text-lg">{{ content() }}</div>
       @switch (dialogType()) {
         @case ('picklist') {
           <p-pickList
+            [dragdrop]="true"
             [source]="allOptions()"
             [target]="pickedOptions()"
             filterBy="name"
@@ -97,7 +99,7 @@ export class DndDialogComponent implements OnInit {
   close() {
     if (this.dialogType() === 'picklist' || this.dialogType() === 'multiselect') {
       this.ref.close([...this.pickedOptions()]);
-    } else { 
+    } else {
       this.ref.close();
     }
   }

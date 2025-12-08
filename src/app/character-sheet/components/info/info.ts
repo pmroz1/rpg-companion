@@ -55,6 +55,7 @@ export interface CharacterInfo {
               optionLabel="name"
               optionValue="id"
               (ngModelChange)="onClassChange($event)"
+              placeholder="Select a class"
             />
           </div>
 

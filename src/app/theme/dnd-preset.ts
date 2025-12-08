@@ -153,7 +153,7 @@ const DndPreset = definePreset(Aura, {
         borderColor: '#4d3c2c',
         hoverBorderColor: '#5c4a38',
         focusBorderColor: '#c9a227',
-        color: '#ec990aff',
+        color: '#d4c4a8',
         placeholderColor: '#9a866e',
       },
     },

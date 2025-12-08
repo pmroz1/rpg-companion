@@ -14,11 +14,11 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { DynamicFormService } from '@app/shared/services';
 import { TableModule } from 'primeng/table';
 import { FormsModule } from '@angular/forms';
-import { ButtonModule } from "primeng/button";
+import { ButtonModule } from 'primeng/button';
 export interface SpellSlotInfo {
   level: number;
   total: number;
-  extended: number;
+  expanded: number;
 }
 @Component({
   selector: 'app-spell-slots',
@@ -31,11 +31,11 @@ export interface SpellSlotInfo {
             <tr>
               <th>Level</th>
               <th>Total</th>
-              <th>Extended</th>
+              <th>Expanded</th>
             </tr>
           </ng-template>
 
-          <ng-template pTemplate="body" let-row>
+          <ng-template pTemplate="body" let-row let-column>
             <tr>
               <td>Lvl {{ row.level }}</td>
 
@@ -44,8 +44,8 @@ export interface SpellSlotInfo {
                   [value]="this.spellSlots()[row.level - 1].total"
                   type="number"
                   min="0"
-                  [max]="row.extended"
-                  (input)="onInputChange($event, row.level - 1)"
+                  [max]="column.count"
+                  (input)="onInputChange($event, row.level - 1, column.count)"
                   class="w-full"
                 />
               </td>
@@ -57,9 +57,11 @@ export interface SpellSlotInfo {
                       [binary]="true"
                       [disabled]="
                         ($index > 0 && !isCheckboxChecked(row.level, $index - 1)) ||
-                        isCheckboxChecked(row.level, $index + 1)
+                        isCheckboxChecked(row.level, $index + 1) ||
+                        this.spellSlots()[row.level - 1].total < $index + 1 ||
+                        this.spellSlots()[row.level - 1].total == 0
                       "
-                      [ngModel]="$index < this.spellSlots()[row.level - 1].extended"
+                      [ngModel]="$index < this.spellSlots()[row.level - 1].expanded"
                       (onChange)="onCheckboxChange(row.level, $index, $event.checked)"
                       [inputId]="'level-' + row.level + '-' + $index"
                       checkboxIcon="pi pi-circle-fill"
@@ -72,7 +74,9 @@ export interface SpellSlotInfo {
         </p-table>
       }
     </div>
-    <p-button (click)="reset()" class="py-5 h-1">Reset</p-button>
+    <div class="mt-5 flex flex-row items-right">
+      <p-button class="mr-1 ml-auto" (click)="reset()">Reset</p-button>
+    </div>
   </app-dnd-card>`,
   styleUrl: './spell-slots.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -99,11 +103,15 @@ export class SpellSlots implements OnInit, OnDestroy {
   ];
 
   spellSlots = signal<SpellSlotInfo[]>(
-    Array.from({ length: 9 }, (_, i) => ({ level: i + 1, extended: 0, total: 0 })),
+    Array.from({ length: 9 }, (_, i) => ({ level: i + 1, expanded: 0, total: 0 })),
   );
   reset() {
     this.spellSlots.set(
-      Array.from({ length: 9 }, (_, i) => ({ level: i + 1, extended: 0, total: 0 })),
+      Array.from({ length: 9 }, (_, i) => ({
+        level: i + 1,
+        expanded: 0,
+        total: this.spellSlots()[i].total,
+      })),
     );
     this.updateControl();
   }
@@ -115,18 +123,22 @@ export class SpellSlots implements OnInit, OnDestroy {
 
   isCheckboxChecked(level: number, checkboxIndex: number): boolean {
     const index = level - 1;
-    return this.spellSlots()[index].extended > checkboxIndex;
+    return this.spellSlots()[index].expanded > checkboxIndex;
   }
 
-  onInputChange(event: Event, index: number) {
+  onInputChange(event: Event, index: number, maxCount: number) {
     const input = event.target as HTMLInputElement;
-    const parsed = Number(input.value);
-    if (parsed < 0 || parsed > 10) {
-      input.value = '0';
-      return;
+    var parsed = Number(input.value);
+    if (parsed > maxCount) {
+      input.value = maxCount.toString();
+      parsed = maxCount;
     }
     const updatedSlots = [...this.spellSlots()];
-    updatedSlots[index] = { ...updatedSlots[index], total: parsed };
+    updatedSlots[index] = {
+      ...updatedSlots[index],
+      total: parsed,
+      expanded: Math.min(updatedSlots[index].expanded, parsed),
+    };
     this.spellSlots.set(updatedSlots);
     this.updateControl();
   }
@@ -138,12 +150,12 @@ export class SpellSlots implements OnInit, OnDestroy {
     if (checked) {
       updatedSlots[index] = {
         ...updatedSlots[index],
-        extended: checkboxIndex + 1,
+        expanded: checkboxIndex + 1,
       };
     } else {
       updatedSlots[index] = {
         ...updatedSlots[index],
-        extended: checkboxIndex,
+        expanded: checkboxIndex,
       };
     }
 

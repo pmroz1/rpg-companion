@@ -54,6 +54,7 @@ export interface SpellSlotInfo {
                 <div class="flex flex-row gap-1">
                   @for (i of [].constructor(row.count); track $index) {
                     <p-checkbox
+                      class="mr-0.5"
                       [binary]="true"
                       [disabled]="
                         ($index > 0 && !isCheckboxChecked(row.level, $index - 1)) ||

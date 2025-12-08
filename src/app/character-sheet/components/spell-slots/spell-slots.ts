@@ -13,6 +13,8 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { DynamicFormService } from '@app/shared/services';
 import { TableModule } from 'primeng/table';
+import { FormsModule } from '@angular/forms';
+import { ButtonModule } from "primeng/button";
 export interface SpellSlotInfo {
   level: number;
   total: number;
@@ -20,7 +22,7 @@ export interface SpellSlotInfo {
 }
 @Component({
   selector: 'app-spell-slots',
-  imports: [DndCard, CheckboxModule, TableModule, ReactiveFormsModule],
+  imports: [DndCard, CheckboxModule, TableModule, ReactiveFormsModule, FormsModule, ButtonModule],
   template: `<app-dnd-card title="Spell slots">
     <div class="grid grid-cols-3">
       @for (column of spellDefaultConfig; track $index) {
@@ -39,10 +41,10 @@ export interface SpellSlotInfo {
 
               <td>
                 <input
-                  [value]="0"
+                  [value]="this.spellSlots()[row.level - 1].total"
                   type="number"
                   min="0"
-                  max="10"
+                  [max]="row.extended"
                   (input)="onInputChange($event, row.level - 1)"
                   class="w-full"
                 />
@@ -57,6 +59,7 @@ export interface SpellSlotInfo {
                         ($index > 0 && !isCheckboxChecked(row.level, $index - 1)) ||
                         isCheckboxChecked(row.level, $index + 1)
                       "
+                      [ngModel]="$index < this.spellSlots()[row.level - 1].extended"
                       (onChange)="onCheckboxChange(row.level, $index, $event.checked)"
                       [inputId]="'level-' + row.level + '-' + $index"
                       checkboxIcon="pi pi-circle-fill"
@@ -69,6 +72,7 @@ export interface SpellSlotInfo {
         </p-table>
       }
     </div>
+    <p-button (click)="reset()" class="py-5 h-1">Reset</p-button>
   </app-dnd-card>`,
   styleUrl: './spell-slots.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -76,7 +80,6 @@ export interface SpellSlotInfo {
 export class SpellSlots implements OnInit, OnDestroy {
   private readonly injector = inject(Injector);
   private readonly formService = inject(DynamicFormService);
-
   spellDefaultConfig = [
     [
       { level: 1, count: 4 },
@@ -98,7 +101,12 @@ export class SpellSlots implements OnInit, OnDestroy {
   spellSlots = signal<SpellSlotInfo[]>(
     Array.from({ length: 9 }, (_, i) => ({ level: i + 1, extended: 0, total: 0 })),
   );
-
+  reset() {
+    this.spellSlots.set(
+      Array.from({ length: 9 }, (_, i) => ({ level: i + 1, extended: 0, total: 0 })),
+    );
+    this.updateControl();
+  }
   control = new FormControl<SpellSlotInfo[]>([]);
 
   getColumnData(column: { level: number; count: number }[]) {

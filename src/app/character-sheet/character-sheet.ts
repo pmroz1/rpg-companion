@@ -11,6 +11,7 @@ import { SpellSlots } from './components/spell-slots/spell-slots';
 import { ArmorClass } from './components';
 import { Proficiencies } from './components/proficiencies/proficiencies';
 import { DndInput } from '@app/shared/components/dnd-input/dnd-input';
+import { DndCheckbox } from '@app/shared/components/dnd-checkbox/dnd-checkbox';
 
 @Component({
   selector: 'app-character-sheet',
@@ -25,20 +26,37 @@ import { DndInput } from '@app/shared/components/dnd-input/dnd-input';
     SpellSlots,
     ArmorClass,
     DndInput,
+    DndCheckbox,
   ],
   template: `<form [formGroup]="characterSheetForm.getFormGroup()" class="sheet-grid">
     <app-info class="span-5 row-span-2" />
     <app-armor-class class="span-1 row-span-2" />
     <app-dnd-card title="hitpoints" class="span-6 row-span-2" />
 
-    <app-dnd-card title="proficiency bonus" class="span-2" />
-    <app-dnd-card title="initiative" class="span-2" />
+    <app-dnd-card title="proficiency bonus" class="span-2">
+      <app-dnd-input controlName="proficiencyBonus"></app-dnd-input>
+    </app-dnd-card>
+
+    <app-dnd-card title="initiative" class="span-2">
+      <app-dnd-input controlName="initiative"></app-dnd-input>
+    </app-dnd-card>
+
     <app-dnd-card title="speed" class="span-2">
       <app-dnd-input controlName="speed"></app-dnd-input
     ></app-dnd-card>
-    <app-dnd-card title="size" class="span-2" />
-    <app-dnd-card title="passive perception" class="span-2" />
-    <app-dnd-card title="inspiration" class="span-2" />
+
+    <app-dnd-card title="size" class="span-2">
+      <app-dnd-input controlName="size"></app-dnd-input>
+    </app-dnd-card>
+
+    <app-dnd-card title="passive perception" class="span-2">
+      <app-dnd-input controlName="passivePerception"></app-dnd-input>
+    </app-dnd-card>
+
+    <app-dnd-card title="inspiration" class="span-2">
+      <app-dnd-checkbox controlName="inspiration" label="heroic inspiration"></app-dnd-checkbox>
+    </app-dnd-card>
+
     <app-dnd-card title="abilities" class="span-3 row-span-2" />
 
     <app-dnd-card title="spellcasting ability" class="span-4" />

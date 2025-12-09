@@ -12,16 +12,17 @@ import {
 import { FormControl, FormsModule } from '@angular/forms';
 import { DynamicFormService } from '@app/shared/services';
 import { InputNumber } from 'primeng/inputnumber';
+import { ɵɵDir } from '@angular/cdk/scrolling';
 
 @Component({
   selector: 'app-dnd-input',
-  imports: [InputNumber, FormsModule],
+  imports: [InputNumber, FormsModule, ɵɵDir],
   template: `<p-inputNumber
     [mode]="'decimal'"
     [min]="0"
     [max]="9999"
     [useGrouping]="false"
-    [ngModel]="value()"
+    [(ngModel)]="value"
   ></p-inputNumber>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

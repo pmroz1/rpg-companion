@@ -8,7 +8,7 @@ import { DndDialogComponent } from './dnd-dialog';
 export class DndDialogService {
   primengDialog = inject(DialogService);
 
-  openSimple(header: string, content: string): DynamicDialogRef<any> | null {
+  openSimple(header: string, content: string): DynamicDialogRef<DndDialogComponent> | null {
     return this.primengDialog.open(DndDialogComponent, {
       header: header,
       width: '50vw',
@@ -20,9 +20,9 @@ export class DndDialogService {
   openPickList(
     header: string,
     content: string,
-    allOptions: any[],
-    pickedOptions: any[] = [],
-  ): DynamicDialogRef<any> | null {
+    allOptions: unknown[],
+    pickedOptions: unknown[] = [],
+  ): DynamicDialogRef<DndDialogComponent> | null {
     return this.primengDialog.open(DndDialogComponent, {
       header: header,
       width: '80vw',
@@ -39,8 +39,8 @@ export class DndDialogService {
   openMultiselect(
     header: string,
     content: string,
-    allOptions: any[],
-  ): DynamicDialogRef<any> | null {
+    allOptions: unknown[],
+  ): DynamicDialogRef<DndDialogComponent> | null {
     return this.primengDialog.open(DndDialogComponent, {
       header: header,
       width: '30vw',

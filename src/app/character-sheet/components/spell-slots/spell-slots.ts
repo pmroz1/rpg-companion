@@ -60,7 +60,7 @@ export interface SpellSlotInfo {
                         ($index > 0 && !isCheckboxChecked(row.level, $index - 1)) ||
                         isCheckboxChecked(row.level, $index + 1) ||
                         this.spellSlots()[row.level - 1].total < $index + 1 ||
-                        this.spellSlots()[row.level - 1].total == 0
+                        this.spellSlots()[row.level - 1].total === 0
                       "
                       [ngModel]="$index < this.spellSlots()[row.level - 1].expanded"
                       (onChange)="onCheckboxChange(row.level, $index, $event.checked)"
@@ -85,6 +85,9 @@ export interface SpellSlotInfo {
 export class SpellSlots implements OnInit, OnDestroy {
   private readonly injector = inject(Injector);
   private readonly formService = inject(DynamicFormService);
+  private readonly control = new FormControl<SpellSlotInfo[]>([]);
+  private updateControl = () => this.control.setValue(this.spellSlots());
+
   spellDefaultConfig = [
     [
       { level: 1, count: 4 },
@@ -106,6 +109,18 @@ export class SpellSlots implements OnInit, OnDestroy {
   spellSlots = signal<SpellSlotInfo[]>(
     Array.from({ length: 9 }, (_, i) => ({ level: i + 1, expanded: 0, total: 0 })),
   );
+
+  ngOnInit(): void {
+    effect(
+      () => {
+        this.control.setValue(this.spellSlots());
+      },
+      { injector: this.injector },
+    );
+
+    this.formService.addControl('spellSlots', this.control);
+  }
+
   reset() {
     this.spellSlots.set(
       Array.from({ length: 9 }, (_, i) => ({
@@ -116,7 +131,6 @@ export class SpellSlots implements OnInit, OnDestroy {
     );
     this.updateControl();
   }
-  control = new FormControl<SpellSlotInfo[]>([]);
 
   getColumnData(column: { level: number; count: number }[]) {
     return column;
@@ -162,19 +176,6 @@ export class SpellSlots implements OnInit, OnDestroy {
 
     this.spellSlots.set(updatedSlots);
     this.updateControl();
-  }
-
-  private updateControl = () => this.control.setValue(this.spellSlots());
-
-  ngOnInit(): void {
-    effect(
-      () => {
-        this.control.setValue(this.spellSlots());
-      },
-      { injector: this.injector },
-    );
-
-    this.formService.addControl('spellSlots', this.control);
   }
 
   ngOnDestroy(): void {

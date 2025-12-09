@@ -5,10 +5,10 @@ import { Checkbox } from 'primeng/checkbox';
 @Component({
   selector: 'app-dnd-checkbox',
   imports: [Checkbox, FormsModule],
-  template: `<label class="dnd-checkbox">
+  template: `<span class="dnd-checkbox">
     <p-checkbox binary="true" [(ngModel)]="checked"></p-checkbox>
     <span>{{ label() }}</span>
-  </label>`,
+  </span>`,
   styles: `
     :host {
       display: block;

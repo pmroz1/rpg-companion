@@ -3,7 +3,7 @@
 @import 'tailwindcss-primeui';
 @import 'primeicons/primeicons.css';
 @import './app/theme/dnd-theme.css';
-@import './app/theme/dnd-pallete.css';
+@import './app/theme/dnd-palette.css';
 
 body {
   background: var(--color-bg);

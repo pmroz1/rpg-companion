@@ -5,7 +5,15 @@ import { Checkbox } from 'primeng/checkbox';
 @Component({
   selector: 'app-dnd-checkbox',
   imports: [Checkbox, FormsModule],
-  template: `<span class="dnd-checkbox">
+  template: `<span
+    class="dnd-checkbox select-none"
+    (click)="toggleChecked()"
+    tabindex="0"
+    role="checkbox"
+    [attr.aria-checked]="checked()"
+    (keydown.enter)="toggleChecked()"
+    (keydown.space)="toggleChecked(); $event.preventDefault()"
+  >
     <p-checkbox binary="true" [(ngModel)]="checked"></p-checkbox>
     <span>{{ label() }}</span>
   </span>`,
@@ -26,6 +34,7 @@ import { Checkbox } from 'primeng/checkbox';
       border-radius: 6px;
       padding: 0.5rem;
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+      cursor: pointer;
     }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -33,4 +42,8 @@ import { Checkbox } from 'primeng/checkbox';
 export class DndCheckbox {
   checked = model<boolean>(false);
   label = input.required<string>();
+
+  toggleChecked() {
+    this.checked.set(!this.checked());
+  }
 }

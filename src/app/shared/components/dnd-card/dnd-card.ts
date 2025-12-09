@@ -9,7 +9,7 @@ import { Card } from 'primeng/card';
       @if (displayTitle()) {
         <ng-template #header>
           <div class="dnd-divider"></div>
-          <div class="w-full h-auto text-2xl flex items-center justify-center">
+          <div class="w-full h-auto text-2xl flex items-center justify-center select-none">
             <span class="dnd-card-header w-full">{{ title() }}</span>
           </div>
           @if (displayDivider()) {

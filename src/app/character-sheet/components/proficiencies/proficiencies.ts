@@ -23,6 +23,7 @@ import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { DND_TOOLS } from '@data/dictionaries';
 import { DndTool } from '@data/models';
 import { DndDialogService } from '@app/shared/components/dnd-dialog/dnd-dialog.service';
+import { DndCheckbox } from '@app/shared/components/dnd-checkbox/dnd-checkbox';
 
 export interface ProficienciesInfo {
   armorTrainingTypes: string[];
@@ -42,6 +43,7 @@ export interface ProficienciesInfo {
     CheckboxModule,
     DndCard,
     ChipModule,
+    DndCheckbox,
   ],
   providers: [DialogService],
   template: `<app-dnd-card title="Proficiencies">
@@ -51,13 +53,11 @@ export interface ProficienciesInfo {
         <div class="flex flex-row gap-6">
           @for (armor of armorProficiencies; let i = $index; track i) {
             <div class="flex w-full items-center">
-              <p-checkbox
-                [inputId]="armor"
-                [name]="armor"
-                [value]="armor"
-                (onChange)="onTrainingCheckboxChange(armor)"
-              />
-              <span class="pl-2"> {{ armor | titlecase }} </span>
+              <app-dnd-checkbox
+                class="flex w-full items-center"
+                (click)="onTrainingCheckboxChange(armor)"
+                label="{{ armor | titlecase }} "
+              ></app-dnd-checkbox>
             </div>
           }
         </div>
@@ -67,13 +67,11 @@ export interface ProficienciesInfo {
           <div class="flex flex-row gap-6">
             @for (weapon of weaponProficiencies; let i = $index; track i) {
               <div class="flex w-full items-center">
-                <p-checkbox
-                  [inputId]="weapon"
-                  [name]="weapon"
-                  [value]="weapon"
-                  (onChange)="onWeaponCheckboxChange(weapon)"
-                />
-                <span class="pl-2"> {{ weapon | titlecase }} </span>
+                <app-dnd-checkbox
+                  class="h-100screen mt-2 mb-auto"
+                  (click)="onWeaponCheckboxChange(weapon)"
+                  label="{{ weapon | titlecase }}"
+                ></app-dnd-checkbox>
               </div>
             }
           </div>
@@ -107,6 +105,8 @@ export class Proficiencies implements OnInit, OnDestroy {
     weapons: [],
     tools: [],
   });
+
+  fn = this.onWeaponCheckboxChange;
 
   ref: DynamicDialogRef | undefined | null;
 
@@ -159,6 +159,7 @@ export class Proficiencies implements OnInit, OnDestroy {
   }
 
   onWeaponCheckboxChange(weapon: string) {
+    console.log(weapon);
     if (this.weaponTypes().includes(weapon)) {
       this.weaponTypes.set(this.weaponTypes().filter((a) => a !== weapon));
     } else {

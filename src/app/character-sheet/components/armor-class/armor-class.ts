@@ -15,7 +15,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { InputNumber } from 'primeng/inputnumber';
 import { DndCheckbox } from '@app/shared/components/dnd-checkbox/dnd-checkbox';
 @Component({
-  selector: 'sheet-armor-class',
+  selector: 'app-armor-class',
   imports: [FormsModule, InputNumber, DndCheckbox],
   template: `
     <div

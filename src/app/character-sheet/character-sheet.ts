@@ -9,6 +9,7 @@ import { Info } from './components/info/info';
 import { Tabs } from './components/tabs/tabs';
 import { Proficiencies } from './components/proficiencies/proficiencies';
 import { SpellSlots } from './components/spell-slots/spell-slots';
+import { Hitpoints } from './components/hitpoints/hitpoints';
 
 @Component({
   selector: 'app-character-sheet',
@@ -21,11 +22,12 @@ import { SpellSlots } from './components/spell-slots/spell-slots';
     DndCard,
     JsonPipe,
     SpellSlots,
+    Hitpoints,
   ],
   template: `<form [formGroup]="characterSheetForm.getFormGroup()" class="sheet-grid">
     <sheet-info class="span-5 row-span-2" />
     <app-dnd-card title="armor class" class="span-2 row-span-2" />
-    <app-dnd-card title="hitpoints" class="span-5 row-span-2" />
+    <app-hitpoints title="hitpoints hitdice " class="span-5 row-span-2" />
 
     <app-dnd-card title="proficiency bonus" class="span-2" />
     <app-dnd-card title="initiative" class="span-2" />

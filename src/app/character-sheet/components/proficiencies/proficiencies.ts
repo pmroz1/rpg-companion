@@ -157,7 +157,6 @@ export class Proficiencies implements OnInit, OnDestroy {
   }
 
   onWeaponCheckboxChange(weapon: string) {
-    console.log(weapon);
     if (this.weaponTypes().includes(weapon)) {
       this.weaponTypes.set(this.weaponTypes().filter((a) => a !== weapon));
     } else {

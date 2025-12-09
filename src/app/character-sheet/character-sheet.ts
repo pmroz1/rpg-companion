@@ -25,8 +25,8 @@ import { ArmorClass } from './components';
     ArmorClass,
   ],
   template: `<form [formGroup]="characterSheetForm.getFormGroup()" class="sheet-grid">
-    <sheet-info class="span-5 row-span-2" />
-    <sheet-armor-class class="span-1 row-span-2" />
+    <app-info class="span-5 row-span-2" />
+    <app-armor-class class="span-1 row-span-2" />
     <app-dnd-card title="hitpoints" class="span-6 row-span-2" />
 
     <app-dnd-card title="proficiency bonus" class="span-2" />

@@ -6,6 +6,8 @@ import {
   inject,
   Injector,
   signal,
+  OnInit,
+  OnDestroy,
 } from '@angular/core';
 import { FormControl, FormsModule } from '@angular/forms';
 import { DndCard } from '@app/shared/components/dnd-card/dnd-card';
@@ -30,7 +32,7 @@ export interface CharacterInfo {
 }
 
 @Component({
-  selector: 'sheet-info',
+  selector: 'app-info',
   imports: [DndCard, FormsModule, SelectModule, InputTextModule, InputNumberModule, LevelPlate],
   template: `
     <div class="info-shell">
@@ -106,7 +108,7 @@ export interface CharacterInfo {
   styleUrls: ['./info.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Info {
+export class Info implements OnInit, OnDestroy {
   private readonly formService = inject(DynamicFormService);
   private readonly injector = inject(Injector);
 

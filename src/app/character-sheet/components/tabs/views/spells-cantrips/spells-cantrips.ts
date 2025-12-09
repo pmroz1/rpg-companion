@@ -20,7 +20,7 @@ import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { TableModule } from 'primeng/table';
 import { Popover, PopoverModule } from 'primeng/popover';
 @Component({
-  selector: 'tab-spells-cantrips',
+  selector: 'app-spells-cantrips',
   imports: [TableModule, CheckboxModule, FormsModule, ButtonModule, PopoverModule],
   template: `<div class="sc-container">
     <p-table

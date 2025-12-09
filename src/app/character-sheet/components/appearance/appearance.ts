@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DynamicFormService } from '@app/shared/services';
 import { CardModule } from 'primeng/card';
@@ -22,7 +22,7 @@ import { DndCard } from '@app/shared/components/dnd-card/dnd-card';
   styleUrl: './appearance.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Appearance {
+export class Appearance implements OnInit, OnDestroy {
   private readonly formService = inject(DynamicFormService);
 
   control = new FormControl('', Validators.required);

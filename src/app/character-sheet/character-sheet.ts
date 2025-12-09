@@ -39,7 +39,7 @@ import { ArmorClass } from './components';
 
     <app-dnd-card title="spellcasting ability" class="span-4" />
     <app-spell-slots title="spell slots" class="span-5" />
-    <sheet-tabs class="span-9" />
+    <app-tabs class="span-9" />
     <app-proficiencies class="span-4" />
     <app-appearance class="span-4" />
     <app-dnd-card title="equipment" class="span-4" />

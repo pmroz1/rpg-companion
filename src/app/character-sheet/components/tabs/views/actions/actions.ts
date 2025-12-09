@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 @Component({
-  selector: 'tab-actions',
+  selector: 'app-actions',
   imports: [],
   template: `
     <div class="p-4">

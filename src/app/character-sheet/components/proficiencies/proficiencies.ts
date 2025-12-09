@@ -106,8 +106,6 @@ export class Proficiencies implements OnInit, OnDestroy {
     tools: [],
   });
 
-  fn = this.onWeaponCheckboxChange;
-
   ref: DynamicDialogRef | undefined | null;
 
   armorProficiencies = Object.values(ArmorProficiency);

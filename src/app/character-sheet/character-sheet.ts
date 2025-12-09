@@ -7,9 +7,10 @@ import { Appearance } from './components/appearance/appearance';
 import { DndCard } from '@app/shared/components/dnd-card/dnd-card';
 import { Info } from './components/info/info';
 import { Tabs } from './components/tabs/tabs';
-import { Proficiencies } from './components/proficiencies/proficiencies';
 import { SpellSlots } from './components/spell-slots/spell-slots';
 import { ArmorClass } from './components';
+import { Proficiencies } from './components/proficiencies/proficiencies';
+import { DndInput } from '@app/shared/components/dnd-input/dnd-input';
 
 @Component({
   selector: 'app-character-sheet',
@@ -23,6 +24,7 @@ import { ArmorClass } from './components';
     JsonPipe,
     SpellSlots,
     ArmorClass,
+    DndInput,
   ],
   template: `<form [formGroup]="characterSheetForm.getFormGroup()" class="sheet-grid">
     <app-info class="span-5 row-span-2" />
@@ -31,7 +33,9 @@ import { ArmorClass } from './components';
 
     <app-dnd-card title="proficiency bonus" class="span-2" />
     <app-dnd-card title="initiative" class="span-2" />
-    <app-dnd-card title="speed" class="span-2" />
+    <app-dnd-card title="speed" class="span-2">
+      <app-dnd-input controlName="speed"></app-dnd-input
+    ></app-dnd-card>
     <app-dnd-card title="size" class="span-2" />
     <app-dnd-card title="passive perception" class="span-2" />
     <app-dnd-card title="inspiration" class="span-2" />

@@ -32,11 +32,18 @@ import { DndCheckbox } from '@app/shared/components/dnd-checkbox/dnd-checkbox';
           class="shield-shape"
         />
       </svg>
-      <p-inputNumber [(ngModel)]="armorClass" class="ac-input"></p-inputNumber>
+      <p-inputNumber
+        class="ac-input"
+        [ngModel]="effectiveArmorClass()"
+        (ngModelChange)="armorClass.set($event)"
+        [min]="0"
+        [max]="30"
+      ></p-inputNumber>
+
       <app-dnd-checkbox
         class="h-100screen mt-2 mb-auto"
         [(checked)]="hasShield"
-        label="Shield"
+        label="Shield (+2)"
       ></app-dnd-checkbox>
     </div>
   `,
@@ -46,13 +53,12 @@ import { DndCheckbox } from '@app/shared/components/dnd-checkbox/dnd-checkbox';
 export class ArmorClass implements OnInit, OnDestroy {
   private readonly formService = inject(DynamicFormService);
   private readonly injector = inject(Injector);
-  control = new FormControl('', Validators.required);
-  armorClass = signal(15);
+  private readonly control = new FormControl('', Validators.required);
+
+  armorClass = signal(10);
   hasShield = signal(false);
 
-  effectiveArmorClass = computed(() => {
-    return this.armorClass() + (this.hasShield() ? 2 : 0);
-  });
+  effectiveArmorClass = computed(() => this.armorClass() + (this.hasShield() ? 2 : 0));
 
   ngOnInit() {
     effect(

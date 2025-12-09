@@ -22,8 +22,8 @@
       "@shared/*": ["app/shared/*"],
       "@character-sheet/*": ["app/character-sheet/*"],
       "@maps/*": ["app/maps/*"],
-      "@theme/*": ["theme/*"],
-      "@data/*": ["data/*"]
+      "@data/*": ["data/*"],
+      "@theme/*": ["theme/*"]
     }
   },
   "angularCompilerOptions": {

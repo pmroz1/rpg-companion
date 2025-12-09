@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input, model, Signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, model } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Checkbox } from 'primeng/checkbox';
 
@@ -6,7 +6,7 @@ import { Checkbox } from 'primeng/checkbox';
   selector: 'app-dnd-checkbox',
   imports: [Checkbox, FormsModule],
   template: `<label class="dnd-checkbox">
-    <p-checkbox binary="true" [(ngModel)]="checked" inputId="shieldToggle"></p-checkbox>
+    <p-checkbox binary="true" [(ngModel)]="checked"></p-checkbox>
     <span>{{ label() }}</span>
   </label>`,
   styles: `

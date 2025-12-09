@@ -1,0 +1,8 @@
+:host {
+  display: block;
+}
+
+canvas {
+  border: 1px solid var(--color-parchment);
+  background-image: url(../../assets/grid5.svg);
+}

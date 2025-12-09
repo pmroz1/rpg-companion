@@ -1,5 +1,5 @@
 import { computed, Injectable } from '@angular/core';
-import { Form, FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { startWith } from 'rxjs';
 
@@ -7,7 +7,7 @@ import { startWith } from 'rxjs';
   providedIn: 'root',
 })
 export class DynamicFormService {
-  private form = new FormGroup({});
+  private readonly form = new FormGroup({});
 
   getFormGroup(): FormGroup {
     return this.form;

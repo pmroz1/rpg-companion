@@ -143,7 +143,7 @@ export class SpellSlots implements OnInit, OnDestroy {
 
   onInputChange(event: Event, index: number, maxCount: number) {
     const input = event.target as HTMLInputElement;
-    var parsed = Number(input.value);
+    let parsed = Number(input.value);
     if (parsed > maxCount) {
       input.value = maxCount.toString();
       parsed = maxCount;

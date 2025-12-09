@@ -33,7 +33,11 @@ import { DndCheckbox } from '@app/shared/components/dnd-checkbox/dnd-checkbox';
         />
       </svg>
       <p-inputNumber [(ngModel)]="armorClass" class="ac-input"></p-inputNumber>
-      <app-dnd-checkbox [(checked)]="hasShield" label="Shield"></app-dnd-checkbox>
+      <app-dnd-checkbox
+        class="h-100vh mt-2 mb-auto"
+        [(checked)]="hasShield"
+        label="Shield"
+      ></app-dnd-checkbox>
     </div>
   `,
   styles: `
@@ -94,6 +98,7 @@ export class ArmorClass implements OnInit, OnDestroy {
   control = new FormControl('', Validators.required);
   armorClass = signal(15);
   hasShield = signal(false);
+
   effectiveArmorClass = computed(() => {
     return this.armorClass() + (this.hasShield() ? 2 : 0);
   });
@@ -105,6 +110,7 @@ export class ArmorClass implements OnInit, OnDestroy {
       },
       { injector: this.injector },
     );
+
     this.formService.addControl('armorClass', this.control);
   }
 

@@ -6,7 +6,6 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { NgComponentOutlet, TitleCasePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { fullscreenMap } from './fullscreen.map';
 
 export type DndDialogType = 'simple' | 'picklist' | 'multiselect' | 'fullscreen';
 
@@ -101,14 +100,19 @@ export class DndDialogComponent implements OnInit {
   content = signal<string>('');
   allOptions = signal<unknown[]>([]);
   pickedOptions = signal<unknown[]>([]);
-  fullscreenMap = fullscreenMap;
-  fullscreenComponent = computed(() => this.fullscreenMap.get(this.content()) ?? null);
+  fullscreenComponent = signal<any>(null);
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.dialogType.set(this.config.data?.dialogType || 'simple');
     this.content.set(this.config.data?.body || 'Dialog content goes here.');
     this.allOptions.set(this.config.data?.allOptions || []);
     this.pickedOptions.set(this.config.data?.pickedOptions || []);
+
+    if (this.dialogType() === 'fullscreen') {
+      const { fullscreenMap } = await import('@app/character-sheet/fullscreen.config');
+      const config = fullscreenMap.get(this.content());
+      this.fullscreenComponent.set(config?.component ?? null);
+    }
   }
 
   cancel() {

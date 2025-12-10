@@ -149,6 +149,6 @@ export class CharacterSheet implements OnInit {
   }
 
   onExplain() {
-    // TODO: Implement explain functionality
+    // @TODO @FIXME: Implement explain functionality
   }
 }

@@ -49,7 +49,7 @@ export class Abilities implements OnInit, OnDestroy {
     },
     constitution: {
       name: 'Constitution',
-      score: 12,
+      score: 8,
       modifier: 0,
       savingThrowProficient: false,
       proficient: false,

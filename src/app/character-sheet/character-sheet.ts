@@ -48,11 +48,32 @@ import { MenuItem, MenuItemCommandEvent } from 'primeng/api';
       <app-dnd-card title="inspiration" class="span-2" />
       <app-dnd-card title="abilities" class="span-3 row-span-2" />
 
-      <app-dnd-card title="spellcasting ability" class="span-4" />
-      <app-spell-slots title="spell slots" class="span-5" />
-      <app-tabs class="span-9" />
-      <app-proficiencies class="span-4" />
-      <app-appearance class="span-4" />
+      <app-dnd-card
+        title="spellcasting ability"
+        class="span-4"
+        (contextmenu)="onContextMenu($event, 'app-dnd-card-spellcasting-ability')"
+      />
+
+      <app-spell-slots
+        title="spell slots"
+        class="span-5"
+        (contextmenu)="onContextMenu($event, 'app-spell-slots')"
+      />
+
+      <app-tabs class="span-9" (contextmenu)="onContextMenu($event, 'app-tabs')" />
+
+      <app-proficiencies
+        class="span-4"
+        (contextmenu)="onContextMenu($event, 'app-proficiencies')"
+      />
+
+      <app-appearance
+        class="span-4"
+        (contextmenu)="onContextMenu($event, 'app-appearance')"
+        class="span-4"
+        (contextmenu)="onContextMenu($event, 'app-appearance')"
+      />
+
       <app-dnd-card title="equipment" class="span-4" />
       <app-dnd-card title="Character Sheet Form Value" class="span-12">{{
         form.value | json
@@ -68,7 +89,6 @@ export class CharacterSheet {
   readonly form = this.characterSheetForm.getFormGroup();
 
   @ViewChild('contextMenu') contextMenu: ContextMenu | undefined;
-
   contextTarget?: string;
 
   items: MenuItem[] = [
@@ -77,7 +97,7 @@ export class CharacterSheet {
       icon: 'pi pi-expand',
       command: (event: MenuItemCommandEvent) => this.onOpenFullscreen(event, this.contextTarget),
     },
-    { label: 'Explain', icon: 'pi pi-question', command: () => console.log('explain') },
+    { label: 'Explain', icon: 'pi pi-question', command: () => console.log('explain') }, // TODO: implement
   ];
 
   onContextMenu(event: MouseEvent, item: string) {
@@ -86,14 +106,9 @@ export class CharacterSheet {
   }
 
   onOpenFullscreen(event: MenuItemCommandEvent, target?: string) {
-    const menuItem = event.item;
-    console.log('menu item used to open:', menuItem);
-
     if (target) {
       console.log('would open component for target:', target);
-      console.log(typeof Info);
-
-      // this.dialogService.openFullscreen(`Fullscreen: ${target}`, );
+      this.dialogService.openFullscreen(`Fullscreen: ${target}`, target);
     }
   }
 }

@@ -1,20 +1,33 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { DynamicDialogRef, DynamicDialogConfig } from 'primeng/dynamicdialog';
 import { Button } from 'primeng/button';
 import { PickListModule } from 'primeng/picklist';
 import { MultiSelectModule } from 'primeng/multiselect';
-import { TitleCasePipe } from '@angular/common';
+import { NgComponentOutlet, TitleCasePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { fullscreenMap } from './fullscreen.map';
 
 export type DndDialogType = 'simple' | 'picklist' | 'multiselect' | 'fullscreen';
 
 @Component({
   selector: 'app-dnd-dynamic-dialog',
-  imports: [Button, PickListModule, MultiSelectModule, TitleCasePipe, FormsModule, DragDropModule],
+  imports: [
+    Button,
+    PickListModule,
+    MultiSelectModule,
+    TitleCasePipe,
+    NgComponentOutlet,
+    FormsModule,
+    DragDropModule,
+  ],
   template: `
     <div>
-      <div class="p-4 text-lg">{{ content() }}</div>
+      <div class="p-4 text-lg">
+        @if (dialogType() !== 'fullscreen') {
+          {{ content() }}
+        }
+      </div>
       @switch (dialogType()) {
         @case ('picklist') {
           <p-pickList
@@ -64,7 +77,9 @@ export type DndDialogType = 'simple' | 'picklist' | 'multiselect' | 'fullscreen'
             <p-button label="save" (click)="close()"></p-button>
           </div>
         }
-        @case ('fullscreen') {}
+        @case ('fullscreen') {
+          <ng-container *ngComponentOutlet="fullscreenComponent()"></ng-container>
+        }
         @default {
           <div class="px-4 flex justify-end">
             <p-button label="close" (click)="close()"></p-button>
@@ -86,6 +101,8 @@ export class DndDialogComponent implements OnInit {
   content = signal<string>('');
   allOptions = signal<unknown[]>([]);
   pickedOptions = signal<unknown[]>([]);
+  fullscreenMap = fullscreenMap;
+  fullscreenComponent = computed(() => this.fullscreenMap.get(this.content()) ?? null);
 
   ngOnInit(): void {
     this.dialogType.set(this.config.data?.dialogType || 'simple');

@@ -13,7 +13,7 @@ import { ArmorClass } from './components';
 import { ContextMenu } from 'primeng/contextmenu';
 import { DndDialogService } from '@app/shared/components/dnd-dialog/dnd-dialog.service';
 import { MenuItem } from 'primeng/api';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { fullscreenMap } from './fullscreen.config';
 
 @Component({
@@ -76,14 +76,13 @@ import { fullscreenMap } from './fullscreen.config';
         form.value | json
       }}</app-dnd-card>
     </form>
-    <p-contextmenu #contextMenu [target]="grid" [model]="items" />`,
+    <p-contextmenu #contextMenu [model]="items"></p-contextmenu>`,
   styleUrls: ['./character-sheet.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CharacterSheet implements OnInit {
   private readonly dialogService = inject(DndDialogService);
   private readonly characterSheetForm = inject(DynamicFormService);
-  private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   readonly form = this.characterSheetForm.getFormGroup();
 
@@ -94,6 +93,7 @@ export class CharacterSheet implements OnInit {
 
   getMenuItems(target: string): MenuItem[] {
     const config = fullscreenMap.get(target);
+    if (!config) return [];
     const items: MenuItem[] = [];
 
     if (config?.enableFullscreen) {
@@ -136,8 +136,8 @@ export class CharacterSheet implements OnInit {
     this.contextTarget = item;
     this.items = this.getMenuItems(item);
     if (this.items && this.items.length > 0) {
-      this.contextMenu?.show(event);
       event.preventDefault();
+      this.contextMenu?.show(event);
     } else {
       this.contextMenu?.hide?.();
     }

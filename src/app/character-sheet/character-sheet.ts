@@ -137,7 +137,7 @@ export class CharacterSheet implements OnInit, OnDestroy {
       if (component && fullscreenMap.has(component)) {
         setTimeout(() => {
           this.dialogService.openFullscreen(`Fullscreen: ${component}`, component, false);
-        });
+        }, 0);
       }
     });
   }
@@ -162,11 +162,9 @@ export class CharacterSheet implements OnInit, OnDestroy {
       const url = `${window.location.origin}/character-sheet/fullscreen/${encodeURIComponent(target)}`;
       navigator.clipboard
         .writeText(url)
-        .then(() => {
-          window.alert('URL copied to clipboard!');
-        })
+        .then(() => null)
         .catch(() => {
-          window.alert('Failed to copy URL to clipboard. Please try again.');
+          console.log('Failed to copy URL to clipboard. Please try again.');
         });
     }
   }

@@ -1,7 +1,7 @@
-import { AbilityType, SkillType } from '../enums';
+import { AbilityType, Skill } from '../enums';
 
 export interface DndSkill {
-  id: SkillType;
+  id: Skill;
   name: string;
   associatedAbility: AbilityType;
 }

@@ -67,7 +67,7 @@ export interface HitpointsInputs {
               type="number"
               placeholder="0"
               min="0"
-              [(ngModel)]="hitpointsInputs().hitpointsMax"
+              (ngModel)="hitpointsInputs().hitpointsMax"
               class="w-15"
               style="background-color: #1a1410;"
             />

@@ -14,7 +14,7 @@ export interface ComponentConfig {
 
 export const fullscreenMap = new Map<string, ComponentConfig>([
   ['app-info', { component: Info, enableFullscreen: true, enableExplain: true }],
-  ['app-armor-class', { component: ArmorClass, enableFullscreen: true, enableExplain: false }],
+  ['app-armor-class', { component: ArmorClass, enableFullscreen: false, enableExplain: false }],
   ['app-proficiencies', { component: Proficiencies, enableFullscreen: true, enableExplain: true }],
   ['app-spell-slots', { component: SpellSlots, enableFullscreen: true, enableExplain: false }],
   ['app-appearance', { component: Appearance, enableFullscreen: true, enableExplain: true }],

@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit, ViewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnInit,
+  OnDestroy,
+  ViewChild,
+} from '@angular/core';
 import { JsonPipe } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DynamicFormService } from '@shared/services/dynamic-form.service';
@@ -14,6 +21,8 @@ import { ContextMenu } from 'primeng/contextmenu';
 import { DndDialogService } from '@app/shared/components/dnd-dialog/dnd-dialog.service';
 import { MenuItem } from 'primeng/api';
 import { ActivatedRoute } from '@angular/router';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { fullscreenMap } from './fullscreen.config';
 
 @Component({
@@ -30,7 +39,7 @@ import { fullscreenMap } from './fullscreen.config';
     ArmorClass,
     ContextMenu,
   ],
-  template: `<form [formGroup]="form" class="sheet-grid" #grid>
+  template: `<form [formGroup]="form" class="sheet-grid">
       <app-info class="span-5 row-span-2" (contextmenu)="onContextMenu($event, 'app-info')" />
       <app-armor-class
         class="span-1 row-span-2"
@@ -80,7 +89,8 @@ import { fullscreenMap } from './fullscreen.config';
   styleUrls: ['./character-sheet.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CharacterSheet implements OnInit {
+export class CharacterSheet implements OnInit, OnDestroy {
+  private readonly destroy$ = new Subject<void>();
   private readonly dialogService = inject(DndDialogService);
   private readonly characterSheetForm = inject(DynamicFormService);
   private readonly route = inject(ActivatedRoute);
@@ -96,7 +106,7 @@ export class CharacterSheet implements OnInit {
     if (!config) return [];
     const items: MenuItem[] = [];
 
-    if (config?.enableFullscreen) {
+    if (config.enableFullscreen) {
       items.push({
         label: 'Open fullscreen',
         icon: 'pi pi-expand',
@@ -110,7 +120,7 @@ export class CharacterSheet implements OnInit {
       });
     }
 
-    if (config?.enableExplain) {
+    if (config.enableExplain) {
       items.push({
         label: 'Explain',
         icon: 'pi pi-question',
@@ -122,9 +132,9 @@ export class CharacterSheet implements OnInit {
   }
 
   ngOnInit() {
-    this.route.paramMap.subscribe((params) => {
+    this.route.paramMap.pipe(takeUntil(this.destroy$)).subscribe((params) => {
       const component = params.get('component');
-      if (component) {
+      if (component && fullscreenMap.has(component)) {
         setTimeout(() => {
           this.dialogService.openFullscreen(`Fullscreen: ${component}`, component, false);
         });
@@ -150,11 +160,23 @@ export class CharacterSheet implements OnInit {
   onCopyUrl(target?: string) {
     if (target) {
       const url = `${window.location.origin}/character-sheet/fullscreen/${encodeURIComponent(target)}`;
-      navigator.clipboard.writeText(url);
+      navigator.clipboard
+        .writeText(url)
+        .then(() => {
+          window.alert('URL copied to clipboard!');
+        })
+        .catch(() => {
+          window.alert('Failed to copy URL to clipboard. Please try again.');
+        });
     }
   }
 
   onExplain() {
     // @TODO @FIXME: Implement explain functionality
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

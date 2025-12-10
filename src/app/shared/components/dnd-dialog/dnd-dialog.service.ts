@@ -1,5 +1,5 @@
 import { inject, Injectable, Injector, ApplicationRef } from '@angular/core';
-import { DOCUMENT } from '@angular/common';
+import { DOCUMENT, Location } from '@angular/common';
 import { DialogService, DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { DndDialogComponent } from './dnd-dialog';
 import { Router } from '@angular/router';
@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 export class DndDialogService {
   private primengDialog = inject(DialogService);
   private router = inject(Router);
+  private location = inject(Location);
   private appRef = inject(ApplicationRef);
   private injector = inject(Injector);
   private document = inject(DOCUMENT);
@@ -117,7 +118,7 @@ export class DndDialogService {
       ref.onDestroy.subscribe(() => {
         this.isFullscreenOpen = false;
         if (updateUrl) {
-          this.router.navigate(['/character-sheet']);
+          this.location.replaceState('/character-sheet');
         }
       });
     }

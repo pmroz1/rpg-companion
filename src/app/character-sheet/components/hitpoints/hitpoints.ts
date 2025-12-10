@@ -89,7 +89,7 @@ export interface HitpointsInputs {
             <span for="max" class="block mb-1">Max</span>
             <p-input-number
               pInputText
-              id="max"
+              id="hitDiceMax"
               type="number"
               placeholder="0"
               [(ngModel)]="hitpointsInputs().hitDiceMax"

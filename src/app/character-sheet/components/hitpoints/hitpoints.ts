@@ -94,10 +94,10 @@ export interface HitpointsInputs {
           </div>
 
           <div class="row-2">
-            <label for="max" class="block mb-1">Max</label>
+            <label for="hitDiceMax" class="block mb-1">Max</label>
             <input
               pInputText
-              id="max"
+              id="hitDiceMax"
               type="number"
               placeholder="0"
               min="0"

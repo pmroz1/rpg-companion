@@ -6,9 +6,11 @@ import { Card } from 'primeng/card';
   imports: [Card],
   template: `
     <p-card class="dnd-box p-2 ml-1 mr-1 mb-2 mt-2" [style.minHeight]="minHeight()">
-      @if (displayTitle()) {
+      @if (!hideHeader()) {
         <ng-template #header>
-          <div class="dnd-divider"></div>
+          @if (displayDivider()) {
+            <div class="dnd-divider"></div>
+          }
           <div class="w-full h-auto text-2xl flex items-center justify-center select-none">
             <span class="dnd-card-header w-full">{{ title() }}</span>
           </div>
@@ -26,7 +28,7 @@ import { Card } from 'primeng/card';
 })
 export class DndCard {
   title = input.required<string>();
-  displayTitle = input<boolean>(true);
+  hideHeader = input<boolean>(false);
   displayDivider = input<boolean>(true);
   minHeight = input<string | null>(null);
 }

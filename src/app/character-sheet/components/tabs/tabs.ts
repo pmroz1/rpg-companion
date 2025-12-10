@@ -26,7 +26,7 @@ import { NotesTab } from './views/notes/notes';
     <app-dnd-card
       title="Character Sheet Tabs"
       [displayDivider]="false"
-      [displayTitle]="false"
+      [hideHeader]="true"
       minHeight="50rem"
     >
       <p-tabs [value]="1" class="w-full" scrollable>

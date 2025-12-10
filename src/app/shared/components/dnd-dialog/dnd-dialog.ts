@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, Type } from '@angular/core';
 import { DynamicDialogRef, DynamicDialogConfig } from 'primeng/dynamicdialog';
 import { Button } from 'primeng/button';
 import { PickListModule } from 'primeng/picklist';
@@ -100,7 +100,7 @@ export class DndDialogComponent implements OnInit {
   content = signal<string>('');
   allOptions = signal<unknown[]>([]);
   pickedOptions = signal<unknown[]>([]);
-  fullscreenComponent = signal<any>(null);
+  fullscreenComponent = signal<Type<unknown> | null>(null);
 
   async ngOnInit(): Promise<void> {
     this.dialogType.set(this.config.data?.dialogType || 'simple');

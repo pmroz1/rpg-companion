@@ -196,10 +196,10 @@ export class Hitpoints implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.formService.addControl('spellSlots', this.control);
+    this.formService.addControl('hitpoints', this.control);
   }
 
   ngOnDestroy(): void {
-    this.formService.removeControl('spellSlots');
+    this.formService.removeControl('hitpoints');
   }
 }

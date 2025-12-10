@@ -10,6 +10,7 @@ import { Tabs } from './components/tabs/tabs';
 import { Proficiencies } from './components/proficiencies/proficiencies';
 import { SpellSlots } from './components/spell-slots/spell-slots';
 import { ArmorClass } from './components';
+import { Hitpoints } from './components/hitpoints/hitpoints';
 
 @Component({
   selector: 'app-character-sheet',
@@ -23,11 +24,12 @@ import { ArmorClass } from './components';
     JsonPipe,
     SpellSlots,
     ArmorClass,
+    Hitpoints,
   ],
   template: `<form [formGroup]="characterSheetForm.getFormGroup()" class="sheet-grid">
     <app-info class="span-5 row-span-2" />
     <app-armor-class class="span-1 row-span-2" />
-    <app-dnd-card title="hitpoints" class="span-6 row-span-2" />
+    <app-hitpoints title="hitpoints" class="span-6 row-span-2" />
 
     <app-dnd-card title="proficiency bonus" class="span-2" />
     <app-dnd-card title="initiative" class="span-2" />

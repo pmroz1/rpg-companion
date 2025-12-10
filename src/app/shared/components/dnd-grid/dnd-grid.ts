@@ -28,8 +28,10 @@ class DndGridCell {
   }
 
   mapColSpanAndRowSpanToClasses(colspan: number, rowspan: number): string {
-    const colspanStr = colspan < 1 ? '1' : colspan > 12 ? '12' : colspan.toString();
-    const rowspanStr = rowspan < 1 ? '1' : rowspan > 12 ? '12' : rowspan.toString();
+    const intColspan = Math.floor(colspan);
+    const intRowspan = Math.floor(rowspan);
+    const colspanStr = intColspan < 1 ? '1' : intColspan > 12 ? '12' : intColspan.toString();
+    const rowspanStr = intRowspan < 1 ? '1' : intRowspan > 12 ? '12' : intRowspan.toString();
     return `dnd-grid-col-span-${colspanStr} dnd-grid-row-span-${rowspanStr}`;
   }
 }

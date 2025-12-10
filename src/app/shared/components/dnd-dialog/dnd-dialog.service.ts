@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { Component, inject, Injectable } from '@angular/core';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { DndDialogComponent } from './dnd-dialog';
 
@@ -49,6 +49,23 @@ export class DndDialogService {
         body: content,
         dialogType: 'multiselect',
         allOptions: allOptions,
+      },
+    });
+  }
+
+  openFullscreen(
+    header: string,
+    component: Component,
+  ): DynamicDialogRef<DndDialogComponent> | null {
+    return this.primengDialog.open(DndDialogComponent, {
+      header: header,
+      width: '100vw',
+      height: '100vh',
+      maximizable: true,
+      closeOnEscape: true,
+      data: {
+        dialogType: 'fullscreen',
+        component: component,
       },
     });
   }

@@ -7,7 +7,7 @@ import { ChangeDetectionStrategy, Component, HostBinding, input } from '@angular
   styleUrls: ['./dnd-grid.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-class DndGrid {
+export class DndGrid {
   @HostBinding('class.dnd-grid') hostClass = true;
 }
 
@@ -18,7 +18,7 @@ class DndGrid {
   styleUrls: ['./dnd-grid.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-class DndGridCell {
+export class DndGridCell {
   colspan = input<number>(12);
   rowspan = input<number>(1);
 
@@ -35,5 +35,3 @@ class DndGridCell {
     return `dnd-grid-col-span-${colspanStr} dnd-grid-row-span-${rowspanStr}`;
   }
 }
-
-export { DndGrid, DndGridCell };

@@ -12,6 +12,7 @@ import { DynamicFormService } from '@shared/services/dynamic-form.service';
 
 import { Appearance } from './components/appearance/appearance';
 import { DndCard } from '@app/shared/components/dnd-card/dnd-card';
+import { DndGrid, DndGridCell } from '@app/shared/components/dnd-grid/dnd-grid';
 import { Info } from './components/info/info';
 import { TabsComponent } from './components/tabs/tabs';
 import { Proficiencies } from './components/proficiencies/proficiencies';
@@ -34,56 +35,75 @@ import { fullscreenMap } from './fullscreen.config';
     TabsComponent,
     Proficiencies,
     DndCard,
+    DndGrid,
+    DndGridCell,
     JsonPipe,
     SpellSlots,
     ArmorClass,
     ContextMenu,
   ],
-  template: `<form [formGroup]="form" class="sheet-grid">
-      <app-info class="span-5 row-span-2" (contextmenu)="onContextMenu($event, 'app-info')" />
-      <app-armor-class
-        class="span-1 row-span-2"
-        (contextmenu)="onContextMenu($event, 'app-armor-class')"
-      />
-      <app-dnd-card
-        title="hitpoints"
-        class="span-6 row-span-2"
-        (contextmenu)="onContextMenu($event, 'hitpoints')"
-      />
+  template: `<form [formGroup]="form">
+      <app-dnd-grid>
+        <app-dnd-grid-cell [colspan]="5" [rowspan]="2">
+          <app-info (contextmenu)="onContextMenu($event, 'app-info')" />
+        </app-dnd-grid-cell>
+        <app-dnd-grid-cell [colspan]="1" [rowspan]="2">
+          <app-armor-class (contextmenu)="onContextMenu($event, 'app-armor-class')" />
+        </app-dnd-grid-cell>
+        <app-dnd-grid-cell [colspan]="6" [rowspan]="2">
+          <app-dnd-card title="hitpoints" />
+        </app-dnd-grid-cell>
 
-      <app-dnd-card title="proficiency bonus" class="span-2" />
-      <app-dnd-card title="initiative" class="span-2" />
-      <app-dnd-card title="speed" class="span-2" />
-      <app-dnd-card title="size" class="span-2" />
-      <app-dnd-card title="passive perception" class="span-2" />
-      <app-dnd-card title="inspiration" class="span-2" />
-      <app-dnd-card title="abilities" class="span-3 row-span-2" />
+        <app-dnd-grid-cell [colspan]="2">
+          <app-dnd-card title="proficiency bonus" />
+        </app-dnd-grid-cell>
+        <app-dnd-grid-cell [colspan]="2">
+          <app-dnd-card title="initiative" />
+        </app-dnd-grid-cell>
+        <app-dnd-grid-cell [colspan]="2">
+          <app-dnd-card title="speed" />
+        </app-dnd-grid-cell>
+        <app-dnd-grid-cell [colspan]="2">
+          <app-dnd-card title="size" />
+        </app-dnd-grid-cell>
+        <app-dnd-grid-cell [colspan]="2">
+          <app-dnd-card title="passive perception" />
+        </app-dnd-grid-cell>
+        <app-dnd-grid-cell [colspan]="2">
+          <app-dnd-card title="inspiration" />
+        </app-dnd-grid-cell>
+        <app-dnd-grid-cell [colspan]="3" [rowspan]="2">
+          <app-dnd-card title="abilities" />
+        </app-dnd-grid-cell>
 
-      <app-dnd-card
-        title="spellcasting ability"
-        class="span-4"
-        (contextmenu)="onContextMenu($event, 'app-dnd-card-spellcasting-ability')"
-      />
+        <app-dnd-grid-cell [colspan]="4">
+          <app-dnd-card title="spellcasting ability" />
+        </app-dnd-grid-cell>
+        <app-dnd-grid-cell [colspan]="5">
+          <app-spell-slots
+            title="spell slots"
+            (contextmenu)="onContextMenu($event, 'app-spell-slots')"
+          />
+        </app-dnd-grid-cell>
+        <app-dnd-grid-cell [colspan]="9">
+          <app-tabs (contextmenu)="onContextMenu($event, 'app-tabs')" />
+        </app-dnd-grid-cell>
 
-      <app-spell-slots
-        title="spell slots"
-        class="span-5"
-        (contextmenu)="onContextMenu($event, 'app-spell-slots')"
-      />
+        <app-dnd-grid-cell [colspan]="4">
+          <app-proficiencies (contextmenu)="onContextMenu($event, 'app-proficiencies')" />
+        </app-dnd-grid-cell>
 
-      <app-tabs class="span-9" (contextmenu)="onContextMenu($event, 'app-tabs')" />
+        <app-dnd-grid-cell [colspan]="4">
+          <app-appearance (contextmenu)="onContextMenu($event, 'app-appearance')" />
+        </app-dnd-grid-cell>
 
-      <app-proficiencies
-        class="span-4"
-        (contextmenu)="onContextMenu($event, 'app-proficiencies')"
-      />
-
-      <app-appearance class="span-4" (contextmenu)="onContextMenu($event, 'app-appearance')" />
-
-      <app-dnd-card title="equipment" class="span-4" />
-      <app-dnd-card title="Character Sheet Form Value" class="span-12">{{
-        form.value | json
-      }}</app-dnd-card>
+        <app-dnd-grid-cell [colspan]="4">
+          <app-dnd-card title="equipment" />
+        </app-dnd-grid-cell>
+        <app-dnd-grid-cell [colspan]="12">
+          <app-dnd-card title="Character Sheet Form Value">{{ form.value | json }}</app-dnd-card>
+        </app-dnd-grid-cell>
+      </app-dnd-grid>
     </form>
     <p-contextmenu #contextMenu [model]="items"></p-contextmenu>`,
   styleUrls: ['./character-sheet.scss'],

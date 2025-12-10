@@ -82,8 +82,8 @@ export class DndDialogComponent implements OnInit {
   config = inject(DynamicDialogConfig);
   dialogType = signal<DndDialogType>('simple');
   content = signal<string>('');
-  allOptions = signal<any[]>([]);
-  pickedOptions = signal<any[]>([]);
+  allOptions = signal<unknown[]>([]);
+  pickedOptions = signal<unknown[]>([]);
 
   ngOnInit(): void {
     this.dialogType.set(this.config.data?.dialogType || 'simple');

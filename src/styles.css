@@ -3,35 +3,7 @@
 @import 'tailwindcss-primeui';
 @import 'primeicons/primeicons.css';
 @import './app/theme/dnd-theme.css';
-
-:root {
-  --color-bg: #1a1410;
-  --color-bg-elevated: #241c16;
-  --color-bg-card: #2e241c;
-  --color-border: #4d3c2c;
-  --color-border-light: #5c4a38;
-
-  --color-gold: #c9a227;
-  --color-gold-light: #d4b33a;
-  --color-gold-dark: #996515;
-
-  --color-crimson: #8b1e3f;
-  --color-crimson-light: #a62951;
-  --color-crimson-dark: #6b1730;
-
-  --color-parchment: #f5e6c8;
-  --color-parchment-dark: #e8d4a8;
-  --color-ink: #2c1810;
-
-  --text-heading: #f5e6c8;
-  --text-body: #d4c4a8;
-  --text-muted: #9a866e;
-
-  --color-hover: rgba(201, 162, 39, 0.1);
-
-  --font-display: 'Cinzel', 'Times New Roman', serif;
-  --font-body: 'Segoe UI', system-ui, sans-serif;
-}
+@import './app/theme/dnd-palette.css';
 
 body {
   background: var(--color-bg);

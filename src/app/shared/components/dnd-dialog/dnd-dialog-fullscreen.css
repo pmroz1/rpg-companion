@@ -1,0 +1,15 @@
+.p-dialog-maximized .p-dialog-mask {
+  pointer-events: none !important;
+}
+
+.p-dialog-maximized .p-dialog {
+  pointer-events: auto !important;
+}
+
+.p-dynamic-dialog:not(.p-dialog-maximized) {
+  z-index: 10000 !important;
+}
+
+.p-dynamic-dialog:not(.p-dialog-maximized) .p-dialog-mask {
+  z-index: 9999 !important;
+}

@@ -1,0 +1,32 @@
+:host {
+  display: block;
+}
+.spellcasting-grid {
+  display: grid;
+  height: 100%;
+  /* grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); */
+  /* gap: 1rem; */
+}
+
+.field {
+  width: 100%;
+  display: flex;
+  gap: 0.5rem;
+  &.row-gap {
+    flex-direction: row;
+  }
+  &.col-gap {
+    flex-direction: column;
+  }
+}
+
+.field-label {
+  font-size: 0.875rem;
+  color: var(--color-gold);
+  font-weight: 500;
+  &.number {
+    margin: auto;
+    width: 100%;
+    text-align: end;
+  }
+}

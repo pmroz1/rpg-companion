@@ -10,6 +10,7 @@ import { Tabs } from './components/tabs/tabs';
 import { Proficiencies } from './components/proficiencies/proficiencies';
 import { SpellSlots } from './components/spell-slots/spell-slots';
 import { ArmorClass } from './components';
+import { SpellcastingAbility } from './components/spellcasting-ability/spellcasting-ability';
 
 @Component({
   selector: 'app-character-sheet',
@@ -23,6 +24,7 @@ import { ArmorClass } from './components';
     JsonPipe,
     SpellSlots,
     ArmorClass,
+    SpellcastingAbility,
   ],
   template: `<form [formGroup]="characterSheetForm.getFormGroup()" class="sheet-grid">
     <app-info class="span-5 row-span-2" />
@@ -37,8 +39,8 @@ import { ArmorClass } from './components';
     <app-dnd-card title="inspiration" class="span-2" />
     <app-dnd-card title="abilities" class="span-3 row-span-2" />
 
-    <app-dnd-card title="spellcasting ability" class="span-4" />
-    <app-spell-slots title="spell slots" class="span-5" />
+    <app-spellcasting-ability title="spellcasting ability" class="span-3" />
+    <app-spell-slots title="spell slots" class="span-6" />
     <app-tabs class="span-9" />
     <app-proficiencies class="span-4" />
     <app-appearance class="span-4" />

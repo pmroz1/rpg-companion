@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, ViewChild } from '@angular/core';
 import { JsonPipe } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DynamicFormService } from '@shared/services/dynamic-form.service';
@@ -6,13 +6,15 @@ import { DynamicFormService } from '@shared/services/dynamic-form.service';
 import { Appearance } from './components/appearance/appearance';
 import { DndCard } from '@app/shared/components/dnd-card/dnd-card';
 import { Info } from './components/info/info';
-import { Tabs } from './components/tabs/tabs';
+import { TabsComponent } from './components/tabs/tabs';
 import { Proficiencies } from './components/proficiencies/proficiencies';
 import { SpellSlots } from './components/spell-slots/spell-slots';
 import { ArmorClass } from './components';
 import { ContextMenu } from 'primeng/contextmenu';
 import { DndDialogService } from '@app/shared/components/dnd-dialog/dnd-dialog.service';
-import { MenuItem, MenuItemCommandEvent } from 'primeng/api';
+import { MenuItem } from 'primeng/api';
+import { ActivatedRoute, Router } from '@angular/router';
+import { fullscreenMap } from './fullscreen.config';
 
 @Component({
   selector: 'app-character-sheet',
@@ -20,7 +22,7 @@ import { MenuItem, MenuItemCommandEvent } from 'primeng/api';
     ReactiveFormsModule,
     Appearance,
     Info,
-    Tabs,
+    TabsComponent,
     Proficiencies,
     DndCard,
     JsonPipe,
@@ -67,12 +69,7 @@ import { MenuItem, MenuItemCommandEvent } from 'primeng/api';
         (contextmenu)="onContextMenu($event, 'app-proficiencies')"
       />
 
-      <app-appearance
-        class="span-4"
-        (contextmenu)="onContextMenu($event, 'app-appearance')"
-        class="span-4"
-        (contextmenu)="onContextMenu($event, 'app-appearance')"
-      />
+      <app-appearance class="span-4" (contextmenu)="onContextMenu($event, 'app-appearance')" />
 
       <app-dnd-card title="equipment" class="span-4" />
       <app-dnd-card title="Character Sheet Form Value" class="span-12">{{
@@ -83,32 +80,75 @@ import { MenuItem, MenuItemCommandEvent } from 'primeng/api';
   styleUrls: ['./character-sheet.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CharacterSheet {
+export class CharacterSheet implements OnInit {
   private readonly dialogService = inject(DndDialogService);
   private readonly characterSheetForm = inject(DynamicFormService);
+  private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
   readonly form = this.characterSheetForm.getFormGroup();
 
   @ViewChild('contextMenu') contextMenu: ContextMenu | undefined;
   contextTarget?: string;
 
-  items: MenuItem[] = [
-    {
-      label: 'Open fullscreen',
-      icon: 'pi pi-expand',
-      command: (event: MenuItemCommandEvent) => this.onOpenFullscreen(event, this.contextTarget),
-    },
-    { label: 'Explain', icon: 'pi pi-question', command: () => console.log('explain') }, // TODO: implement
-  ];
+  items: MenuItem[] = [];
+
+  getMenuItems(target: string): MenuItem[] {
+    const config = fullscreenMap.get(target);
+    const items: MenuItem[] = [];
+
+    if (config?.enableFullscreen) {
+      items.push({
+        label: 'Open fullscreen',
+        icon: 'pi pi-expand',
+        command: () => this.onOpenFullscreen(target),
+      });
+      items.push({
+        label: 'Copy fullscreen URL',
+        icon: 'pi pi-copy',
+        command: () => this.onCopyUrl(target),
+      });
+    }
+
+    if (config?.enableExplain) {
+      items.push({
+        label: 'Explain',
+        icon: 'pi pi-question',
+        command: () => this.onExplain(),
+      });
+    }
+
+    return items;
+  }
+
+  ngOnInit() {
+    this.route.paramMap.subscribe((params) => {
+      const component = params.get('component');
+      if (component) {
+        setTimeout(() => {
+          this.dialogService.openFullscreen(`Fullscreen: ${component}`, component, false);
+        });
+      }
+    });
+  }
 
   onContextMenu(event: MouseEvent, item: string) {
     this.contextTarget = item;
+    this.items = this.getMenuItems(item);
     this.contextMenu?.show(event);
   }
 
-  onOpenFullscreen(event: MenuItemCommandEvent, target?: string) {
+  onOpenFullscreen(target: string) {
+    this.dialogService.openFullscreen(`Fullscreen: ${target}`, target);
+  }
+
+  onCopyUrl(target?: string) {
     if (target) {
-      console.log('would open component for target:', target);
-      this.dialogService.openFullscreen(`Fullscreen: ${target}`, target);
+      const url = `${window.location.origin}/character-sheet/fullscreen/${encodeURIComponent(target)}`;
+      navigator.clipboard.writeText(url);
     }
+  }
+
+  onExplain() {
+    // TODO: Implement explain functionality
   }
 }

@@ -6,7 +6,8 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { TitleCasePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-export type DndDialogType = 'simple' | 'picklist' | 'multiselect';
+
+export type DndDialogType = 'simple' | 'picklist' | 'multiselect' | 'fullscreen';
 
 @Component({
   selector: 'app-dnd-dynamic-dialog',
@@ -63,6 +64,7 @@ export type DndDialogType = 'simple' | 'picklist' | 'multiselect';
             <p-button label="save" (click)="close()"></p-button>
           </div>
         }
+        @case ('fullscreen') {}
         @default {
           <div class="px-4 flex justify-end">
             <p-button label="close" (click)="close()"></p-button>

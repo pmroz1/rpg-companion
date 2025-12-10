@@ -75,7 +75,7 @@ export interface HitpointsInputs {
         </div>
       </div>
       <div class="dnd-divider-vertical"></div>
-      <div class="col-1  items-center">
+      <div class="col-1 items-center">
         <h3>Hit Dice</h3>
 
         <div class="grid gap-2 mt-2">

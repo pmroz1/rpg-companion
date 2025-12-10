@@ -102,6 +102,7 @@ export class CharacterSheet implements OnInit {
         icon: 'pi pi-expand',
         command: () => this.onOpenFullscreen(target),
       });
+
       items.push({
         label: 'Copy fullscreen URL',
         icon: 'pi pi-copy',
@@ -134,7 +135,12 @@ export class CharacterSheet implements OnInit {
   onContextMenu(event: MouseEvent, item: string) {
     this.contextTarget = item;
     this.items = this.getMenuItems(item);
-    this.contextMenu?.show(event);
+    if (this.items && this.items.length > 0) {
+      this.contextMenu?.show(event);
+      event.preventDefault();
+    } else {
+      this.contextMenu?.hide?.();
+    }
   }
 
   onOpenFullscreen(target: string) {

@@ -169,7 +169,6 @@ export class CharacterSheet implements OnInit, OnDestroy {
   }
 
   onContextMenu(event: MouseEvent, item: string) {
-    console.log('Context menu opened for', item);
     this.contextTarget = item;
     this.items = this.getMenuItems(item);
     event.preventDefault();

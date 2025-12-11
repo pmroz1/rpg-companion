@@ -19,7 +19,6 @@ export type DndDialogType = 'simple' | 'picklist' | 'multiselect' | 'fullscreen'
     NgComponentOutlet,
     FormsModule,
     DragDropModule,
-    NgStyle,
   ],
   template: `
     <div>

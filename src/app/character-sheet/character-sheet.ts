@@ -128,7 +128,7 @@ export class CharacterSheet implements OnInit, OnDestroy {
       command: () =>
         this.dialogService.openSimple(
           'Character Sheet Form Value',
-          `<pre>${JSON.stringify(this.form.value, null, 2)}</pre>`,
+          `${JSON.stringify(this.form.value, null, 2)}`,
         ),
     });
 

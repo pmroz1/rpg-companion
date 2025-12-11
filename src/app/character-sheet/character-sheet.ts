@@ -79,7 +79,9 @@ import { fullscreenMap } from './fullscreen.config';
         </app-dnd-grid-cell>
 
         <app-dnd-grid-cell [colspan]="4">
-          <app-dnd-card title="spellcasting ability" />
+          <app-spellcasting-ability
+            (contextmenu)="onContextMenu($event, 'app-spellcasting-ability')"
+          />
         </app-dnd-grid-cell>
         <app-dnd-grid-cell [colspan]="5">
           <app-spell-slots

@@ -1,4 +1,4 @@
-import { computed, Injectable, signal } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { ClassType, SubclassType } from '@data/enums';
 import { CharacterInfo } from './info';
 

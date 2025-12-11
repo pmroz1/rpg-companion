@@ -40,34 +40,38 @@ export interface SpellcastingAbilityProps {
           placeholder="Select a spellcasting ability"
         />
       </div>
-      <div class="my-1"><div class="dnd-divider w-auto"></div></div>
-
-      <div class="field row-gap my-1">
-        <p-inputnumber
-          inputId="integeronly"
-          [inputStyle]="{ width: '4rem', textAlign: 'center' }"
-          id="spellcasting-modifier"
-          [(ngModel)]="spellcastingModifier"
-        />
-        <label for="spellcasting-modifier" class="field-label number">Spellcasting Modifier</label>
-      </div>
-      <div class="field my-1">
-        <p-inputnumber
-          inputId="integeronly"
-          [inputStyle]="{ width: '4rem', textAlign: 'center' }"
-          id="spell-save-dc"
-          [(ngModel)]="spellSaveDC"
-        />
-        <label for="spell-save-dc" class="field-label number">Spell Save DC</label>
-      </div>
-      <div class="field my-1">
-        <p-inputnumber
-          inputId="integeronly"
-          [inputStyle]="{ width: '4rem', textAlign: 'center' }"
-          id="spell-attack-bonus"
-          [(ngModel)]="spellAttackBonus"
-        />
-        <label for="spell-attack-bonus" class="field-label number">Spell Attack Bonus</label>
+      <div class="my-1 relative"><div class="dnd-divider w-auto"></div></div>
+      <div class="spellcasting-stats relative">
+        <div class="my-1"><div class="dnd-divider-vertical"></div></div>
+        <div class="field my-2">
+          <p-inputnumber
+            inputId="integeronly"
+            [inputStyle]="{ width: '4rem', textAlign: 'center' }"
+            id="spellcasting-modifier"
+            [(ngModel)]="spellcastingModifier"
+          />
+          <label for="spellcasting-modifier" class="field-label number"
+            >Spellcasting Modifier</label
+          >
+        </div>
+        <div class="field my-2">
+          <p-inputnumber
+            inputId="integeronly"
+            [inputStyle]="{ width: '4rem', textAlign: 'center' }"
+            id="spell-save-dc"
+            [(ngModel)]="spellSaveDC"
+          />
+          <label for="spell-save-dc" class="field-label number">Spell Save DC</label>
+        </div>
+        <div class="field my-2">
+          <p-inputnumber
+            inputId="integeronly"
+            [inputStyle]="{ width: '4rem', textAlign: 'center' }"
+            id="spell-attack-bonus"
+            [(ngModel)]="spellAttackBonus"
+          />
+          <label for="spell-attack-bonus" class="field-label number">Spell Attack Bonus</label>
+        </div>
       </div>
     </div>
   </app-dnd-card>`,

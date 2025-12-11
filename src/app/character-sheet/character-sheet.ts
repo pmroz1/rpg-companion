@@ -39,6 +39,7 @@ import { fullscreenMap } from './fullscreen.config';
     SpellSlots,
     ArmorClass,
     ContextMenu,
+    SpellcastingAbility,
   ],
   template: `<form [formGroup]="form" class="sheet-grid">
       <app-info class="span-5 row-span-2" (contextmenu)="onContextMenu($event, 'app-info')" />
@@ -59,7 +60,7 @@ import { fullscreenMap } from './fullscreen.config';
       <app-dnd-card title="passive perception" class="span-2" />
       <app-dnd-card title="inspiration" class="span-2" />
       <app-dnd-card title="abilities" class="span-3 row-span-2" />
-      
+
       <app-spellcasting-ability title="spellcasting ability" class="span-3" />
 
       <app-dnd-card

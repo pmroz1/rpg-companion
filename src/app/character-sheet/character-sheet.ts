@@ -18,6 +18,7 @@ import { Proficiencies } from './components/proficiencies/proficiencies';
 import { SpellSlots } from './components/spell-slots/spell-slots';
 import { ArmorClass } from './components';
 import { Hitpoints } from './components/hitpoints/hitpoints';
+import { SpellcastingAbility } from './components/spellcasting-ability/spellcasting-ability';
 import { ContextMenu } from 'primeng/contextmenu';
 import { DndDialogService } from '@app/shared/components/dnd-dialog/dnd-dialog.service';
 import { MenuItem } from 'primeng/api';
@@ -41,6 +42,7 @@ import { fullscreenMap } from './fullscreen.config';
     ArmorClass,
     ContextMenu,
     Hitpoints,
+    SpellcastingAbility,
   ],
   template: `<form [formGroup]="form" (contextmenu)="onContextMenu($event, '')">
       <app-dnd-grid>
@@ -77,7 +79,9 @@ import { fullscreenMap } from './fullscreen.config';
         </app-dnd-grid-cell>
 
         <app-dnd-grid-cell [colspan]="4">
-          <app-dnd-card title="spellcasting ability" />
+          <app-spellcasting-ability
+            (contextmenu)="onContextMenu($event, 'app-spellcasting-ability')"
+          />
         </app-dnd-grid-cell>
         <app-dnd-grid-cell [colspan]="5">
           <app-spell-slots

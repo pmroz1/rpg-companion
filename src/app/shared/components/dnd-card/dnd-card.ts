@@ -22,7 +22,7 @@ import { Card } from 'primeng/card';
         </ng-template>
       }
 
-      <div class="pl-2 m-0 dnd-card-content"><ng-content /></div>
+      <div class="m-0 dnd-card-content"><ng-content /></div>
     </p-card>
   `,
   styleUrls: ['./dnd-card.scss'],

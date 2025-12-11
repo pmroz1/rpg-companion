@@ -1,0 +1,48 @@
+:host {
+  display: block;
+}
+.spellcasting-grid {
+  display: grid;
+  height: 100%;
+}
+
+.field {
+  width: 100%;
+  display: flex;
+  gap: 0.5rem;
+  &.row-gap {
+    flex-direction: row;
+  }
+  &.col-gap {
+    flex-direction: column;
+  }
+}
+
+.field-label {
+  font-size: 0.875rem;
+  color: var(--color-gold);
+  font-weight: 500;
+  &.number {
+    margin: auto;
+    width: 100%;
+    text-align: end;
+  }
+}
+
+.dnd-divider-vertical {
+  width: 2px;
+  padding: 0;
+  margin: 0;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 100%;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    var(--color-gold-dark) 20%,
+    var(--color-gold) 50%,
+    var(--color-gold-dark) 80%,
+    transparent 100%
+  );
+}

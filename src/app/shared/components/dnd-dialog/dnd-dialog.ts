@@ -3,7 +3,7 @@ import { DynamicDialogRef, DynamicDialogConfig } from 'primeng/dynamicdialog';
 import { Button } from 'primeng/button';
 import { PickListModule } from 'primeng/picklist';
 import { MultiSelectModule } from 'primeng/multiselect';
-import { NgComponentOutlet, TitleCasePipe, NgStyle } from '@angular/common';
+import { NgComponentOutlet, TitleCasePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 

@@ -38,13 +38,12 @@ import { fullscreenMap } from './fullscreen.config';
     DndCard,
     DndGrid,
     DndGridCell,
-    JsonPipe,
     SpellSlots,
     ArmorClass,
     ContextMenu,
     Hitpoints,
   ],
-  template: `<form [formGroup]="form">
+  template: `<form [formGroup]="form" (contextmenu)="onContextMenu($event, '')">
       <app-dnd-grid>
         <app-dnd-grid-cell [colspan]="5" [rowspan]="2">
           <app-info (contextmenu)="onContextMenu($event, 'app-info')" />
@@ -102,9 +101,6 @@ import { fullscreenMap } from './fullscreen.config';
         <app-dnd-grid-cell [colspan]="4">
           <app-dnd-card title="equipment" />
         </app-dnd-grid-cell>
-        <app-dnd-grid-cell [colspan]="12">
-          <app-dnd-card title="Character Sheet Form Value">{{ form.value | json }}</app-dnd-card>
-        </app-dnd-grid-cell>
       </app-dnd-grid>
     </form>
     <p-contextmenu #contextMenu [model]="items"></p-contextmenu>`,
@@ -125,10 +121,19 @@ export class CharacterSheet implements OnInit, OnDestroy {
 
   getMenuItems(target: string): MenuItem[] {
     const config = fullscreenMap.get(target);
-    if (!config) return [];
     const items: MenuItem[] = [];
 
-    if (config.enableFullscreen) {
+    items.push({
+      label: `Show form`,
+      icon: 'pi pi-file',
+      command: () =>
+        this.dialogService.openSimple(
+          'Character Sheet Form Value',
+          JSON.stringify(this.form.value, null, 2),
+        ),
+    });
+
+    if (config?.enableFullscreen) {
       items.push({
         label: 'Open fullscreen',
         icon: 'pi pi-expand',
@@ -142,7 +147,7 @@ export class CharacterSheet implements OnInit, OnDestroy {
       });
     }
 
-    if (config.enableExplain) {
+    if (config?.enableExplain) {
       items.push({
         label: 'Explain',
         icon: 'pi pi-question',
@@ -165,14 +170,11 @@ export class CharacterSheet implements OnInit, OnDestroy {
   }
 
   onContextMenu(event: MouseEvent, item: string) {
+    console.log('Context menu opened for', item);
     this.contextTarget = item;
     this.items = this.getMenuItems(item);
-    if (this.items && this.items.length > 0) {
-      event.preventDefault();
-      this.contextMenu?.show(event);
-    } else {
-      this.contextMenu?.hide?.();
-    }
+    event.preventDefault();
+    this.contextMenu?.show(event);
   }
 
   onOpenFullscreen(target: string) {

@@ -5,7 +5,6 @@ import {
   effect,
   inject,
   Injector,
-  signal,
   OnInit,
   OnDestroy,
 } from '@angular/core';
@@ -20,6 +19,7 @@ import { DND_CLASSES, DND_SUBCLASSES } from '@data/dictionaries';
 import { DND_BACKGROUNDS } from '@data/dictionaries/background.dictionary';
 import { DND_RACES } from '@data/dictionaries/races.dictionary';
 import { LevelPlate } from './level-plate/level-plate';
+import { InfoState } from './info-state';
 
 export interface CharacterInfo {
   name: string;
@@ -43,7 +43,8 @@ export interface CharacterInfo {
             <input
               pInputText
               id="name"
-              [(ngModel)]="characterName"
+              [ngModel]="characterInfo().name"
+              (ngModelChange)="state.updateCharacterInfo({ name: $event })"
               placeholder="Enter character name"
             />
           </div>
@@ -55,7 +56,8 @@ export interface CharacterInfo {
               [options]="classOptions"
               optionLabel="name"
               optionValue="id"
-              [(ngModel)]="class"
+              [ngModel]="characterInfo().class"
+              (ngModelChange)="onClassChange($event)"
               placeholder="Select a class"
             />
           </div>
@@ -65,10 +67,11 @@ export interface CharacterInfo {
             <p-select
               id="subclass"
               [options]="subclassOptions()"
-              [(ngModel)]="subclass"
+              [ngModel]="characterInfo().subclass"
+              (ngModelChange)="state.updateCharacterInfo({ subclass: $event })"
               optionLabel="name"
               optionValue="id"
-              [disabled]="!class()"
+              [disabled]="!characterInfo().class"
               placeholder="Select a subclass"
             />
           </div>
@@ -78,7 +81,8 @@ export interface CharacterInfo {
             <p-select
               id="race"
               [options]="raceOptions"
-              [(ngModel)]="race"
+              [ngModel]="characterInfo().race"
+              (ngModelChange)="state.updateCharacterInfo({ race: $event })"
               optionLabel="name"
               optionValue="id"
               placeholder="Select a race"
@@ -90,7 +94,8 @@ export interface CharacterInfo {
             <p-select
               id="background"
               [options]="backgroundOptions"
-              [(ngModel)]="background"
+              [ngModel]="characterInfo().background"
+              (ngModelChange)="state.updateCharacterInfo({ background: $event })"
               optionLabel="name"
               optionValue="id"
               placeholder="Select a background"
@@ -98,7 +103,12 @@ export interface CharacterInfo {
           </div>
         </div>
       </app-dnd-card>
-      <app-level-plate [(level)]="level" [(xp)]="xp" class="level-plate" />
+      <app-level-plate
+        [level]="characterInfo().level"
+        [xp]="characterInfo().xp"
+        (event)="state.updateCharacterInfo($event)"
+        class="level-plate"
+      />
     </div>
   `,
   styleUrls: ['./info.scss'],
@@ -107,45 +117,20 @@ export interface CharacterInfo {
 export class Info implements OnInit, OnDestroy {
   private readonly formService = inject(DynamicFormService);
   private readonly injector = inject(Injector);
+  readonly state = inject(InfoState);
 
   classOptions = [...DND_CLASSES];
   subclassOptions = computed(() => {
-    const currentClass = this.class();
+    const currentClass = this.characterInfo().class;
     return [...DND_SUBCLASSES.filter((s) => s.parentClass === currentClass)];
   });
 
   backgroundOptions = [...DND_BACKGROUNDS];
   raceOptions = [...DND_RACES];
 
-  characterName = signal('');
-  background = signal('');
-  race = signal('');
-  class = signal<null | ClassType>(null);
-  subclass = signal<null | SubclassType>(null);
-  level = signal(1);
-  xp = signal(0);
+  characterInfo = this.state.characterInfo;
 
-  characterInfo = computed(
-    (): CharacterInfo => ({
-      name: this.characterName(),
-      background: this.background(),
-      race: this.race(),
-      class: this.class(),
-      subclass: this.subclass(),
-      level: this.level(),
-      xp: this.xp(),
-    }),
-  );
-
-  control = new FormControl<CharacterInfo>({
-    name: '',
-    background: '',
-    race: '',
-    class: ClassType.None,
-    subclass: SubclassType.None,
-    level: 1,
-    xp: 0,
-  });
+  control = new FormControl<CharacterInfo>(this.characterInfo());
 
   ngOnInit(): void {
     effect(
@@ -163,7 +148,10 @@ export class Info implements OnInit, OnDestroy {
   }
 
   onClassChange(classType: ClassType | null): void {
-    this.subclass.set(null);
-    this.class.set(classType);
+    this.state.setCharacterInfo({
+      ...this.characterInfo(),
+      class: classType,
+      subclass: null,
+    });
   }
 }

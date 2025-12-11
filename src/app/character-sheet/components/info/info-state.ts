@@ -17,7 +17,7 @@ export class InfoState {
   };
 
   private readonly _characterInfo = signal<CharacterInfo>(this.default);
-  readonly characterInfo = computed(() => this._characterInfo());
+  readonly characterInfo = this._characterInfo.asReadonly();
 
   setCharacterInfo(info: CharacterInfo): void {
     this._characterInfo.set(info);

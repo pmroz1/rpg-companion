@@ -45,7 +45,6 @@ export interface SpellcastingAbilityProps {
         <div class="my-1"><div class="dnd-divider-vertical"></div></div>
         <div class="field my-2">
           <p-inputnumber
-            inputId="integeronly"
             [inputStyle]="{ width: '4rem', textAlign: 'center' }"
             id="spellcasting-modifier"
             [(ngModel)]="spellcastingModifier"
@@ -56,7 +55,6 @@ export interface SpellcastingAbilityProps {
         </div>
         <div class="field my-2">
           <p-inputnumber
-            inputId="integeronly"
             [inputStyle]="{ width: '4rem', textAlign: 'center' }"
             id="spell-save-dc"
             [(ngModel)]="spellSaveDC"
@@ -65,7 +63,6 @@ export interface SpellcastingAbilityProps {
         </div>
         <div class="field my-2">
           <p-inputnumber
-            inputId="integeronly"
             [inputStyle]="{ width: '4rem', textAlign: 'center' }"
             id="spell-attack-bonus"
             [(ngModel)]="spellAttackBonus"
@@ -120,9 +117,4 @@ export class SpellcastingAbility implements OnDestroy, OnInit {
   ngOnDestroy(): void {
     this.formService.removeControl('spellCastingAbility');
   }
-
-  // onClassChange(classType: SpellCastingAbilities | null): void {
-  //   // this.subclass.set(null);
-  //   // this.class.set(classType);
-  // }
 }

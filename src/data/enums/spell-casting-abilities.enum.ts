@@ -1,5 +1,5 @@
 export enum SpellCastingAbilities {
-  Intelligence = 'Intelligence',
-  Wisdom = 'Wisdom',
-  Charisma = 'Charisma',
+  Intelligence = 'intelligence',
+  Wisdom = 'wisdom',
+  Charisma = 'charisma',
 }

@@ -5,6 +5,7 @@ import { Info } from './components/info/info';
 import { Proficiencies } from './components/proficiencies/proficiencies';
 import { SpellSlots } from './components/spell-slots/spell-slots';
 import { TabsComponent } from './components/tabs/tabs';
+import { Hitpoints } from './components/hitpoints/hitpoints';
 
 export interface ComponentConfig {
   component: Type<unknown>;
@@ -19,4 +20,5 @@ export const fullscreenMap = new Map<string, ComponentConfig>([
   ['app-spell-slots', { component: SpellSlots, enableFullscreen: true, enableExplain: false }],
   ['app-appearance', { component: Appearance, enableFullscreen: true, enableExplain: true }],
   ['app-tabs', { component: TabsComponent, enableFullscreen: true, enableExplain: false }],
+  ['app-hitpoints', { component: Hitpoints, enableFullscreen: true, enableExplain: true }],
 ]);

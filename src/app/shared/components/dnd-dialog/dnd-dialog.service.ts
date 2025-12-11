@@ -30,12 +30,16 @@ export class DndDialogService {
       : this.primengDialog;
   }
 
-  openSimple(header: string, content: string): DynamicDialogRef<DndDialogComponent> | null {
+  openSimple(
+    header: string,
+    content: string | HTMLElement,
+  ): DynamicDialogRef<DndDialogComponent> | null {
     this.ensureSecondaryDialog();
     return this.getDialogService().open(DndDialogComponent, {
       header,
-      width: '50vw',
+      width: '30vw',
       closeOnEscape: true,
+      closable: true,
       baseZIndex: 10000,
       data: { body: content },
     });
@@ -50,7 +54,7 @@ export class DndDialogService {
     this.ensureSecondaryDialog();
     return this.getDialogService().open(DndDialogComponent, {
       header,
-      width: '80vw',
+      width: '30vw',
       closeOnEscape: true,
       closable: true,
       baseZIndex: 10000,

@@ -15,7 +15,15 @@ export class DndGrid {
   selector: 'app-dnd-grid-cell',
   imports: [],
   template: `<ng-content />`,
-  styleUrls: ['./dnd-grid.scss'],
+  styles: `
+    :host {
+      display: grid;
+    }
+
+    :host > * {
+      grid-area: 1 / 1;
+    }
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DndGridCell {

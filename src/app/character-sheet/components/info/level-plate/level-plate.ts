@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
   selector: 'app-level-plate',
   imports: [FormsModule],
   template: `
-    <div class="plate dnd-box">
+    <div class="plate dnd-card">
       <div class="level-section">
         <input
           type="number"

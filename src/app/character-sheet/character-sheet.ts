@@ -6,7 +6,6 @@ import {
   OnDestroy,
   ViewChild,
 } from '@angular/core';
-import { JsonPipe } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DynamicFormService } from '@shared/services/dynamic-form.service';
 
@@ -129,7 +128,7 @@ export class CharacterSheet implements OnInit, OnDestroy {
       command: () =>
         this.dialogService.openSimple(
           'Character Sheet Form Value',
-          JSON.stringify(this.form.value, null, 2),
+          `<pre>${JSON.stringify(this.form.value, null, 2)}</pre>`,
         ),
     });
 

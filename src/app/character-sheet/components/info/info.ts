@@ -43,8 +43,8 @@ export interface CharacterInfo {
             <input
               pInputText
               id="name"
-              [ngModel]="characterName()"
-              (ngModelChange)="characterName.set($event)"
+              [(ngModel)]="characterName"
+              placeholder="Enter character name"
             />
           </div>
 
@@ -53,10 +53,9 @@ export interface CharacterInfo {
             <p-select
               id="class-select"
               [options]="classOptions"
-              [ngModel]="class()"
               optionLabel="name"
               optionValue="id"
-              (ngModelChange)="onClassChange($event)"
+              [(ngModel)]="class"
               placeholder="Select a class"
             />
           </div>
@@ -66,10 +65,9 @@ export interface CharacterInfo {
             <p-select
               id="subclass"
               [options]="subclassOptions()"
-              [ngModel]="subclass()"
+              [(ngModel)]="subclass"
               optionLabel="name"
               optionValue="id"
-              (ngModelChange)="subclass.set($event)"
               [disabled]="!class()"
               placeholder="Select a subclass"
             />
@@ -80,10 +78,9 @@ export interface CharacterInfo {
             <p-select
               id="race"
               [options]="raceOptions"
-              [ngModel]="race()"
+              [(ngModel)]="race"
               optionLabel="name"
               optionValue="id"
-              (ngModelChange)="race.set($event)"
               placeholder="Select a race"
             />
           </div>
@@ -93,10 +90,9 @@ export interface CharacterInfo {
             <p-select
               id="background"
               [options]="backgroundOptions"
-              [ngModel]="background()"
+              [(ngModel)]="background"
               optionLabel="name"
               optionValue="id"
-              (ngModelChange)="background.set($event)"
               placeholder="Select a background"
             />
           </div>

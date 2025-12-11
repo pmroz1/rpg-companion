@@ -25,7 +25,7 @@ export type DndDialogType = 'simple' | 'picklist' | 'multiselect' | 'fullscreen'
       <div class="p-4 text-lg">
         @if (dialogType() !== 'fullscreen') {
           @if (dialogType() === 'simple') {
-            <div [innerHTML]="content()"></div>
+            <div class="whitespace-pre-wrap break-words">{{ content() }}</div>
           } @else {
             <div class="font-medium mb-2">
               Select {{ dialogType() === 'picklist' ? 'items' : 'tools' }}:
@@ -87,7 +87,9 @@ export type DndDialogType = 'simple' | 'picklist' | 'multiselect' | 'fullscreen'
         }
         @default {
           <div class="flex flex-row absolute right-10 bottom-10 justify-end">
-            <p-button severity="secondary" class="pr-2" label="copy" (click)="copy()"></p-button>
+            @if (dialogType() === 'simple') {
+              <p-button severity="secondary" class="pr-2" label="copy" (click)="copy()"></p-button>
+            }
             <p-button label="close" (click)="close()"></p-button>
           </div>
         }

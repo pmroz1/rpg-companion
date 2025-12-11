@@ -31,34 +31,27 @@ export interface HitpointsInputs {
         <h3>Hitpoints</h3>
         <div class="grid gap-2 mt-2">
           <div class="row-1 col-2">
-            <span for="temp" class="block mb-1">Temp</span>
+            <span class="block mb-1">Temp</span>
             <p-input-number
-              pInputText
               id="temp"
-              type="number"
               placeholder="0"
               [(ngModel)]="hitpointsInputs().hitpointsTemp"
               inputStyleClass="w-15 h-8"
             />
           </div>
-
           <div class="row-2 col-1">
-            <span for="current" class="block mb-1">Current</span>
+            <span class="block mb-1">Current</span>
             <p-input-number
-              pInputText
               id="current"
-              type="number"
               placeholder="0"
               [(ngModel)]="hitpointsInputs().hitpointsCurrent"
               inputStyleClass="w-15 h-8"
             />
           </div>
           <div class="row-2 col-2">
-            <span for="max" class="block mb-1">Max</span>
+            <span class="block mb-1">Max</span>
             <p-input-number
-              pInputText
               id="max"
-              type="number"
               placeholder="0"
               [(ngModel)]="hitpointsInputs().hitpointsMax"
               inputStyleClass="w-15 h-8"
@@ -72,11 +65,9 @@ export interface HitpointsInputs {
 
         <div class="grid gap-2 mt-2">
           <div class="row-1">
-            <span for="spent" class="block mb-1">Spent</span>
+            <span class="block mb-1">Spent</span>
             <p-input-number
-              pInputText
               id="spent"
-              type="number"
               placeholder="0"
               [(ngModel)]="hitpointsInputs().hitDiceSpent"
               inputStyleClass="w-15 h-8"
@@ -84,11 +75,9 @@ export interface HitpointsInputs {
           </div>
 
           <div class="row-2">
-            <span for="max" class="block mb-1">Max</span>
+            <span class="block mb-1">Max</span>
             <p-input-number
-              pInputText
               id="hitDiceMax"
-              type="number"
               placeholder="0"
               [(ngModel)]="hitpointsInputs().hitDiceMax"
               inputStyleClass="w-15 h-8"
@@ -97,7 +86,7 @@ export interface HitpointsInputs {
         </div>
       </div>
       <div class="dnd-divider-vertical"></div>
-      <div class="col-1  items-center">
+      <div class="col-1 items-center">
         <h3>Death Saves</h3>
 
         <div class="grid gap-2 mt-2">
@@ -119,7 +108,7 @@ export interface HitpointsInputs {
           </div>
 
           <div class="row-2 mt-5">
-            <label class="block mb-1">Failures</label>
+            <span class="block mb-1">Failures</span>
             <div class="flex flex-row gap-2">
               @for (i of [].constructor(3); track $index) {
                 <p-checkbox

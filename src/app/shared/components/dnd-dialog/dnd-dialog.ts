@@ -86,7 +86,7 @@ export type DndDialogType = 'simple' | 'picklist' | 'multiselect' | 'fullscreen'
           <ng-container *ngComponentOutlet="fullscreenComponent()"></ng-container>
         }
         @default {
-          <div class="px-4 flex justify-end">
+          <div class="flex flex-row absolute right-10 bottom-10 justify-end">
             <p-button severity="secondary" class="pr-2" label="copy" (click)="copy()"></p-button>
             <p-button label="close" (click)="close()"></p-button>
           </div>

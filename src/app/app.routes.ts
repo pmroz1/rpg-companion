@@ -11,8 +11,8 @@ export const routes: Routes = [
     loadChildren: () =>
       import('./character-sheet/character-sheet.routes').then((m) => m.CHARACTER_SHEET_ROUTES),
   },
-  {
-    path: 'maps',
-    loadChildren: () => import('./maps/maps.routes').then((m) => m.MAPS_ROUTES),
-  },
+  // {
+  //   path: 'map-editor',
+  //   loadChildren: () => import('./map-editor/map-editor.routes').then((m) => m.MAP_EDITOR_ROUTES),
+  // },
 ];

@@ -4,11 +4,13 @@
 @import 'primeicons/primeicons.css';
 @import './app/theme/dnd-theme.css';
 @import './app/theme/dnd-palette.css';
+@import './app/shared/components/dnd-dialog/dnd-dialog-fullscreen.css';
 
 body {
   background: var(--color-bg);
   color: var(--text-body);
-  font-family: var(--font-body);
+  font-family: var(--font-display);
+  font-weight: 700;
 }
 
 h1,

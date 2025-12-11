@@ -61,7 +61,7 @@ import { NotesTab } from './views/notes/notes';
   styleUrl: './tabs.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Tabs {
+export class TabsComponent {
   tabs = [
     { label: 'Actions' },
     { label: 'Spells & Cantrips' },

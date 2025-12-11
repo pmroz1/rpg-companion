@@ -11,3 +11,4 @@ export * from './tools.enum';
 export * from './trait.enum';
 export * from './weapon-property.enum';
 export * from './weapon.enum';
+export * from './spell-casting-abilities.enum';

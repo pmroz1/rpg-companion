@@ -42,6 +42,7 @@ import { fullscreenMap } from './fullscreen.config';
     SpellSlots,
     ArmorClass,
     ContextMenu,
+    Hitpoints,
   ],
   template: `<form [formGroup]="form">
       <app-dnd-grid>
@@ -52,7 +53,7 @@ import { fullscreenMap } from './fullscreen.config';
           <app-armor-class (contextmenu)="onContextMenu($event, 'app-armor-class')" />
         </app-dnd-grid-cell>
         <app-dnd-grid-cell [colspan]="6" [rowspan]="2">
-          <app-dnd-card title="hitpoints" />
+          <app-hitpoints (contextmenu)="onContextMenu($event, 'app-hitpoints')" />
         </app-dnd-grid-cell>
 
         <app-dnd-grid-cell [colspan]="2">

@@ -12,7 +12,6 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { FormControl, FormsModule } from '@angular/forms';
 import { DynamicFormService } from '@app/shared/services';
-import { CdkScrollable } from '@angular/cdk/scrolling';
 
 export interface HitpointsInputs {
   hitpointsTemp: number;
@@ -25,15 +24,14 @@ export interface HitpointsInputs {
 }
 @Component({
   selector: 'app-hitpoints',
-  imports: [DndCard, Checkbox, InputNumberModule, FloatLabelModule, FormsModule, CdkScrollable],
+  imports: [DndCard, Checkbox, InputNumberModule, FloatLabelModule, FormsModule],
   template: `<app-dnd-card title="Hitpoints">
-    <div class="flex flex-row gap-10 justify-center">
-      <div class="flex flex-col items-center">
+    <div class="flex flex-row gap-5 justify-center">
+      <div class="grid items-center">
         <h3>Hitpoints</h3>
         <div class="grid gap-2 mt-2">
           <div class="row-1 col-2">
             <span for="temp" class="block mb-1">Temp</span>
-            <!-- TODO: create a custom style class for number-inputs -->
             <p-input-number
               pInputText
               id="temp"
@@ -68,8 +66,8 @@ export interface HitpointsInputs {
           </div>
         </div>
       </div>
-      <div class="dnd-divider-vertical h-full"></div>
-      <div class="col-1 items-center">
+      <div class="dnd-divider-vertical"></div>
+      <div class="col-2 items-center">
         <h3>Hit Dice</h3>
 
         <div class="grid gap-2 mt-2">
@@ -98,12 +96,12 @@ export interface HitpointsInputs {
           </div>
         </div>
       </div>
-      <div class="dnd-divider-vertical h-full"></div>
+      <div class="dnd-divider-vertical"></div>
       <div class="col-1  items-center">
         <h3>Death Saves</h3>
 
-        <div class="grid gap-2">
-          <div class="row-1 mt-2">
+        <div class="grid gap-2 mt-2">
+          <div class="row-1">
             <span class="block mb-1">Successes</span>
             <div class="flex flex-row gap-2">
               @for (i of [].constructor(3); track $index) {

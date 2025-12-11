@@ -18,6 +18,7 @@ import { TabsComponent } from './components/tabs/tabs';
 import { Proficiencies } from './components/proficiencies/proficiencies';
 import { SpellSlots } from './components/spell-slots/spell-slots';
 import { ArmorClass } from './components';
+import { Hitpoints } from './components/hitpoints/hitpoints';
 import { ContextMenu } from 'primeng/contextmenu';
 import { DndDialogService } from '@app/shared/components/dnd-dialog/dnd-dialog.service';
 import { MenuItem } from 'primeng/api';
@@ -41,6 +42,7 @@ import { fullscreenMap } from './fullscreen.config';
     SpellSlots,
     ArmorClass,
     ContextMenu,
+    Hitpoints,
   ],
   template: `<form [formGroup]="form">
       <app-dnd-grid>
@@ -51,7 +53,7 @@ import { fullscreenMap } from './fullscreen.config';
           <app-armor-class (contextmenu)="onContextMenu($event, 'app-armor-class')" />
         </app-dnd-grid-cell>
         <app-dnd-grid-cell [colspan]="6" [rowspan]="2">
-          <app-dnd-card title="hitpoints" />
+          <app-hitpoints (contextmenu)="onContextMenu($event, 'app-hitpoints')" />
         </app-dnd-grid-cell>
 
         <app-dnd-grid-cell [colspan]="2">

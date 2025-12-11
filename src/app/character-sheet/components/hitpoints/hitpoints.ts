@@ -26,84 +26,61 @@ export interface HitpointsInputs {
   selector: 'app-hitpoints',
   imports: [DndCard, Checkbox, InputNumberModule, FloatLabelModule, FormsModule],
   template: `<app-dnd-card title="Hitpoints">
-    <div class="flex flex-col-3 gap-5">
-      <div class="flex flex-col  items-center">
+    <div class="flex flex-row gap-5 justify-center">
+      <div class="grid items-center">
         <h3>Hitpoints</h3>
-
         <div class="grid gap-2 mt-2">
           <div class="row-1 col-2">
-            <label for="temp" class="block mb-1">Temp</label>
-            <!-- TODO: create a custom style class for number-inputs -->
-            <input
-              pInputText
+            <span class="block mb-1">Temp</span>
+            <p-input-number
               id="temp"
-              type="number"
               placeholder="0"
-              min="0"
               [(ngModel)]="hitpointsInputs().hitpointsTemp"
-              class="w-15"
-              style="background-color: #1a1410;"
+              inputStyleClass="w-15 h-8"
             />
           </div>
-
           <div class="row-2 col-1">
-            <label for="current" class="block mb-1">Current</label>
-            <input
-              pInputText
+            <span class="block mb-1">Current</span>
+            <p-input-number
               id="current"
-              type="number"
               placeholder="0"
-              min="0"
               [(ngModel)]="hitpointsInputs().hitpointsCurrent"
-              class="w-15"
-              style="background-color: #1a1410;"
+              inputStyleClass="w-15 h-8"
             />
           </div>
           <div class="row-2 col-2">
-            <label for="max" class="block mb-1">Max</label>
-            <input
-              pInputText
+            <span class="block mb-1">Max</span>
+            <p-input-number
               id="max"
-              type="number"
               placeholder="0"
-              min="0"
-              (ngModel)="hitpointsInputs().hitpointsMax"
-              class="w-15"
-              style="background-color: #1a1410;"
+              [(ngModel)]="hitpointsInputs().hitpointsMax"
+              inputStyleClass="w-15 h-8"
             />
           </div>
         </div>
       </div>
       <div class="dnd-divider-vertical"></div>
-      <div class="col-1 items-center">
+      <div class="col-2 items-center">
         <h3>Hit Dice</h3>
 
         <div class="grid gap-2 mt-2">
           <div class="row-1">
-            <label for="spent" class="block mb-1">Spent</label>
-            <input
-              pInputText
+            <span class="block mb-1">Spent</span>
+            <p-input-number
               id="spent"
-              type="number"
               placeholder="0"
-              min="0"
               [(ngModel)]="hitpointsInputs().hitDiceSpent"
-              class="w-15"
-              style="background-color: #1a1410;"
+              inputStyleClass="w-15 h-8"
             />
           </div>
 
           <div class="row-2">
-            <label for="hitDiceMax" class="block mb-1">Max</label>
-            <input
-              pInputText
+            <span class="block mb-1">Max</span>
+            <p-input-number
               id="hitDiceMax"
-              type="number"
               placeholder="0"
-              min="0"
               [(ngModel)]="hitpointsInputs().hitDiceMax"
-              class="w-15"
-              style="background-color: #1a1410;"
+              inputStyleClass="w-15 h-8"
             />
           </div>
         </div>
@@ -112,9 +89,9 @@ export interface HitpointsInputs {
       <div class="col-1 items-center">
         <h3>Death Saves</h3>
 
-        <div class="grid gap-2">
-          <div class="row-1 mt-2">
-            <label class="block mb-1">Successes</label>
+        <div class="grid gap-2 mt-2">
+          <div class="row-1">
+            <span class="block mb-1">Successes</span>
             <div class="flex flex-row gap-2">
               @for (i of [].constructor(3); track $index) {
                 <p-checkbox
@@ -130,8 +107,8 @@ export interface HitpointsInputs {
             </div>
           </div>
 
-          <div class="row-2 mt-2">
-            <label class="block mb-1">Failures</label>
+          <div class="row-2 mt-5">
+            <span class="block mb-1">Failures</span>
             <div class="flex flex-row gap-2">
               @for (i of [].constructor(3); track $index) {
                 <p-checkbox

@@ -3,7 +3,7 @@ import { DynamicDialogRef, DynamicDialogConfig } from 'primeng/dynamicdialog';
 import { Button } from 'primeng/button';
 import { PickListModule } from 'primeng/picklist';
 import { MultiSelectModule } from 'primeng/multiselect';
-import { NgComponentOutlet, TitleCasePipe } from '@angular/common';
+import { NgComponentOutlet, TitleCasePipe, NgStyle } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 
@@ -19,6 +19,7 @@ export type DndDialogType = 'simple' | 'picklist' | 'multiselect' | 'fullscreen'
     NgComponentOutlet,
     FormsModule,
     DragDropModule,
+    NgStyle,
   ],
   template: `
     <div>
@@ -86,7 +87,13 @@ export type DndDialogType = 'simple' | 'picklist' | 'multiselect' | 'fullscreen'
           <ng-container *ngComponentOutlet="fullscreenComponent()"></ng-container>
         }
         @default {
-          <div class="flex flex-row absolute right-10 bottom-10 justify-end">
+          <div
+            [class]="
+              dialogType() === 'simple'
+                ? 'flex flex-row absolute right-10 bottom-5 pt-10 justify-end'
+                : 'p-4 flex justify-end'
+            "
+          >
             @if (dialogType() === 'simple') {
               <p-button severity="secondary" class="pr-2" label="copy" (click)="copy()"></p-button>
             }

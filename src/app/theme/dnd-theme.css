@@ -4,11 +4,40 @@
 
 ::-webkit-scrollbar-track {
   background: var(--color-bg);
+  border-radius: 1px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: var(--color-gold);
-  border-radius: 20px;
+  background: linear-gradient(
+    0deg,
+    transparent 0%,
+    var(--color-gold-dark) 0%,
+    var(--color-gold) 50%,
+    var(--color-gold) 60%,
+    var(--color-gold-dark) 100%,
+    transparent 100%
+  );
+  border-radius: 2px;
+}
+
+html,
+body,
+.dnd-box,
+.dnd-card,
+.p-dialog .p-dialog-content {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-gold) var(--color-bg);
+}
+
+@supports not (scrollbar-color: var(--color-gold) var(--color-bg)) {
+  html,
+  body,
+  .dnd-box,
+  .dnd-card,
+  .p-dialog .p-dialog-content {
+    --scrollbar-thumb-fallback: var(--color-gold);
+    --scrollbar-track-fallback: var(--color-bg);
+  }
 }
 
 .dnd-divider {

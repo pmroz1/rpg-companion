@@ -102,7 +102,7 @@
 .p-dialog .p-dialog-content {
   background: var(--color-bg-card);
   color: var(--text-body);
-  font-family: var(--font-display);
+  font-family: inherit;
   font-weight: 600;
 }
 

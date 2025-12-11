@@ -15,6 +15,7 @@ import { DynamicFormService } from '@app/shared/services';
 import { TableModule } from 'primeng/table';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
+import { InputNumber } from 'primeng/inputnumber';
 export interface SpellSlotInfo {
   level: number;
   total: number;
@@ -22,7 +23,15 @@ export interface SpellSlotInfo {
 }
 @Component({
   selector: 'app-spell-slots',
-  imports: [DndCard, CheckboxModule, TableModule, ReactiveFormsModule, FormsModule, ButtonModule],
+  imports: [
+    DndCard,
+    CheckboxModule,
+    TableModule,
+    ReactiveFormsModule,
+    FormsModule,
+    ButtonModule,
+    InputNumber,
+  ],
   template: `<app-dnd-card title="Spell slots">
     <div class="grid grid-cols-3">
       @for (column of spellDefaultConfig; track $index) {
@@ -40,16 +49,14 @@ export interface SpellSlotInfo {
               <td>Lvl {{ row.level }}</td>
 
               <td>
-                <input
-                  [value]="this.spellSlots()[row.level - 1].total"
+                <p-input-number
+                  [(ngModel)]="this.spellSlots()[row.level - 1].total"
                   type="number"
-                  min="0"
                   [max]="column.count"
                   (input)="onInputChange($event, row.level - 1, column.count)"
-                  class="w-full"
+                  inputStyleClass="w-10 h-8"
                 />
               </td>
-
               <td>
                 <div class="flex flex-row gap-1">
                   @for (i of [].constructor(row.count); track $index) {

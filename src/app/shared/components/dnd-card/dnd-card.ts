@@ -4,8 +4,12 @@ import { Card } from 'primeng/card';
 @Component({
   selector: 'app-dnd-card',
   imports: [Card],
+  host: {
+    class: 'h-full',
+    style: 'display:flex;flex-direction:column;height:100%',
+  },
   template: `
-    <p-card class="dnd-box p-2 ml-1 mr-1 mb-2 mt-2" [style.minHeight]="minHeight()">
+    <p-card class="dnd-card p-2" [style.minHeight]="minHeight()">
       @if (displayTitle()) {
         <ng-template #header>
           <div class="dnd-divider"></div>

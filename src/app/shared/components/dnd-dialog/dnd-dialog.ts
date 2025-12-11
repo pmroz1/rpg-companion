@@ -24,7 +24,13 @@ export type DndDialogType = 'simple' | 'picklist' | 'multiselect' | 'fullscreen'
     <div>
       <div class="p-4 text-lg">
         @if (dialogType() !== 'fullscreen') {
-          {{ content() }}
+          @if (dialogType() === 'simple') {
+            <div class="whitespace-pre-wrap break-words">{{ content() }}</div>
+          } @else {
+            <div class="font-medium mb-2">
+              Select {{ dialogType() === 'picklist' ? 'items' : 'tools' }}:
+            </div>
+          }
         }
       </div>
       @switch (dialogType()) {
@@ -80,7 +86,16 @@ export type DndDialogType = 'simple' | 'picklist' | 'multiselect' | 'fullscreen'
           <ng-container *ngComponentOutlet="fullscreenComponent()"></ng-container>
         }
         @default {
-          <div class="px-4 flex justify-end">
+          <div
+            [class]="
+              dialogType() === 'simple'
+                ? 'flex flex-row absolute right-10 bottom-5 pt-10 justify-end'
+                : 'p-4 flex justify-end'
+            "
+          >
+            @if (dialogType() === 'simple') {
+              <p-button severity="secondary" class="pr-2" label="copy" (click)="copy()"></p-button>
+            }
             <p-button label="close" (click)="close()"></p-button>
           </div>
         }
@@ -117,6 +132,28 @@ export class DndDialogComponent implements OnInit {
 
   cancel() {
     this.ref.close();
+  }
+
+  async copy(): Promise<void> {
+    const html = this.content();
+    const tmp = document.createElement('div');
+    tmp.innerHTML = html;
+    const text = tmp.textContent ?? tmp.innerText ?? '';
+
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch {
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand('copy');
+      } catch {
+        console.error('Copy to clipboard failed.');
+      }
+      textarea.remove();
+    }
   }
 
   close() {

@@ -87,13 +87,9 @@ export type DndDialogType = 'simple' | 'picklist' | 'multiselect' | 'fullscreen'
         }
         @default {
           <div class="flex flex-row absolute right-10 bottom-10 justify-end">
-            <<<<<<< HEAD
             @if (dialogType() === 'simple') {
               <p-button severity="secondary" class="pr-2" label="copy" (click)="copy()"></p-button>
             }
-            =======
-            <p-button severity="secondary" class="pr-2" label="copy" (click)="copy()"></p-button>
-            >>>>>>> develop
             <p-button label="close" (click)="close()"></p-button>
           </div>
         }

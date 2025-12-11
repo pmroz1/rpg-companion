@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, model } from '@angular/core';
+import { ChangeDetectionStrategy, Component, model, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -35,6 +35,7 @@ export class LevelPlate {
   minLevel = 1;
   minXp = 0;
   maxXp = 999999;
+  event = output<{ level: number; xp: number }>();
 
   onLevelInput(event: Event) {
     const input = event.target as HTMLInputElement;
@@ -44,6 +45,7 @@ export class LevelPlate {
       : this.minLevel;
     this.level.set(clamped);
     input.value = String(clamped);
+    this.event.emit({ level: this.level(), xp: this.xp() });
   }
 
   onXpInput(event: Event) {
@@ -54,5 +56,6 @@ export class LevelPlate {
       : this.minXp;
     this.xp.set(clamped);
     input.value = String(clamped);
+    this.event.emit({ level: this.level(), xp: this.xp() });
   }
 }

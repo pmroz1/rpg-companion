@@ -21,7 +21,7 @@
       "@env/*": ["environments/*"],
       "@shared/*": ["app/shared/*"],
       "@character-sheet/*": ["app/character-sheet/*"],
-      "@maps/*": ["app/maps/*"],
+      "@maps/*": ["app/map-editor/*"],
       "@data/*": ["data/*"],
       "@theme/*": ["theme/*"]
     }

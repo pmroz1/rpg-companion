@@ -1,0 +1,48 @@
+:host {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.shield-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  color: var(--color-parchment);
+}
+
+.shield-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  fill: var(--color-gold-dark);
+  stroke: var(--color-parchment);
+  stroke-width: 2;
+}
+
+.ac-input {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  width: 40%;
+  transform: translate(-50%, -50%);
+}
+
+:host ::ng-deep .ac-input .p-inputtext {
+  width: 100% !important;
+  height: auto !important;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: calc(10vw / 4);
+  color: var(--color-parchment);
+  line-height: 1.1;
+  text-align: center;
+  background: transparent;
+  border: none;
+  outline: none;
+  appearance: textfield;
+  -moz-appearance: textfield;
+  padding: 0.1rem 0.25rem;
+  box-sizing: border-box;
+}

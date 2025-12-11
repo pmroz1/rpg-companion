@@ -6,6 +6,8 @@ import {
   inject,
   signal,
   Injector,
+  OnInit,
+  OnDestroy,
 } from '@angular/core';
 import { CardModule } from 'primeng/card';
 import { DividerModule } from 'primeng/divider';
@@ -21,6 +23,14 @@ import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { DND_TOOLS } from '@data/dictionaries';
 import { DndTool } from '@data/models';
 import { DndDialogService } from '@app/shared/components/dnd-dialog/dnd-dialog.service';
+import { DndCheckbox } from '@app/shared/components/dnd-checkbox/dnd-checkbox';
+
+export interface ProficienciesInfo {
+  armorTrainingTypes: string[];
+  weapons: string[];
+  tools: DndTool[];
+}
+
 @Component({
   selector: 'app-proficiencies',
   imports: [
@@ -33,44 +43,41 @@ import { DndDialogService } from '@app/shared/components/dnd-dialog/dnd-dialog.s
     CheckboxModule,
     DndCard,
     ChipModule,
+    DndCheckbox,
   ],
   providers: [DialogService],
   template: `<app-dnd-card title="Proficiencies">
     <div class="flex flex-column">
       <div class="flex flex-col gap-6 items-center w-full">
-        <label class="field-label">Armor Training</label>
+        <span class="field-label">Armor Training</span>
         <div class="flex flex-row gap-6">
           @for (armor of armorProficiencies; let i = $index; track i) {
             <div class="flex w-full items-center">
-              <p-checkbox
-                [inputId]="armor"
-                [name]="armor"
-                [value]="armor"
-                (onChange)="onTrainingCheckboxChange(armor)"
-              />
-              <label class="pl-2"> {{ armor | titlecase }} </label>
+              <app-dnd-checkbox
+                class="flex w-full items-center"
+                (click)="onTrainingCheckboxChange(armor)"
+                label="{{ armor | titlecase }} "
+              ></app-dnd-checkbox>
             </div>
           }
         </div>
 
         <div class="flex flex-col gap-2 items-center w-full">
-          <label class="field-label">Weapons</label>
+          <span class="field-label">Weapons</span>
           <div class="flex flex-row gap-6">
             @for (weapon of weaponProficiencies; let i = $index; track i) {
               <div class="flex w-full items-center">
-                <p-checkbox
-                  [inputId]="weapon"
-                  [name]="weapon"
-                  [value]="weapon"
-                  (onChange)="onWeaponCheckboxChange(weapon)"
-                />
-                <label class="pl-2"> {{ weapon | titlecase }} </label>
+                <app-dnd-checkbox
+                  class="h-100screen mt-2 mb-auto"
+                  (click)="onWeaponCheckboxChange(weapon)"
+                  label="{{ weapon | titlecase }}"
+                ></app-dnd-checkbox>
               </div>
             }
           </div>
         </div>
         <div class="flex flex-col gap-5 items-center">
-          <label class="field-label">Tools</label>
+          <span class="field-label">Tools</span>
         </div>
         <div class="flex flex-row flex-wrap items-center">
           @for (tool of toolTypes(); track tool.id) {
@@ -89,22 +96,24 @@ import { DndDialogService } from '@app/shared/components/dnd-dialog/dnd-dialog.s
   styleUrl: './proficiencies.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Proficiencies {
+export class Proficiencies implements OnInit, OnDestroy {
   private readonly formService = inject(DynamicFormService);
   private readonly injector = inject(Injector);
   private readonly dndDialogService = inject(DndDialogService);
+  private readonly control = new FormControl<ProficienciesInfo>({
+    armorTrainingTypes: [],
+    weapons: [],
+    tools: [],
+  });
+
+  ref: DynamicDialogRef | undefined | null;
+
   armorProficiencies = Object.values(ArmorProficiency);
   weaponProficiencies = Object.values(WeaponProficiency);
   tools = [...DND_TOOLS];
   armorTrainingTypes = signal<string[]>([]);
   weaponTypes = signal<string[]>([]);
   toolTypes = signal<DndTool[]>([]);
-
-  control = new FormControl<ProficienciesInfo>({
-    armorTrainingTypes: [],
-    weapons: [],
-    tools: [],
-  });
 
   proficienciesInfo = computed(
     (): ProficienciesInfo => ({
@@ -113,7 +122,17 @@ export class Proficiencies {
       tools: this.toolTypes(),
     }),
   );
-  ref: DynamicDialogRef | undefined | null;
+
+  ngOnInit(): void {
+    effect(
+      () => {
+        this.control.setValue(this.proficienciesInfo());
+      },
+      { injector: this.injector },
+    );
+
+    this.formService.addControl('proficienciesInfo', this.control);
+  }
 
   show() {
     this.ref = this.dndDialogService.openMultiselect(
@@ -121,6 +140,7 @@ export class Proficiencies {
       ' ',
       this.tools.filter((tool) => !this.toolTypes().includes(tool)),
     );
+
     this.ref?.onClose.subscribe((selectedTools: DndTool[]) => {
       if (selectedTools && selectedTools.length > 0) {
         const currentTools = this.toolTypes();
@@ -135,6 +155,7 @@ export class Proficiencies {
   removeTool(tool: DndTool) {
     this.toolTypes.set(this.toolTypes().filter((t) => t.id !== tool.id));
   }
+
   onWeaponCheckboxChange(weapon: string) {
     if (this.weaponTypes().includes(weapon)) {
       this.weaponTypes.set(this.weaponTypes().filter((a) => a !== weapon));
@@ -142,6 +163,7 @@ export class Proficiencies {
       this.weaponTypes.set([...this.weaponTypes(), weapon]);
     }
   }
+
   onTrainingCheckboxChange(armor: string) {
     if (this.armorTrainingTypes().includes(armor)) {
       this.armorTrainingTypes.set(this.armorTrainingTypes().filter((a) => a !== armor));
@@ -149,24 +171,8 @@ export class Proficiencies {
       this.armorTrainingTypes.set([...this.armorTrainingTypes(), armor]);
     }
   }
-  ngOnInit(): void {
-    effect(
-      () => {
-        this.control.setValue(this.proficienciesInfo());
-      },
-      { injector: this.injector },
-    );
-
-    this.formService.addControl('proficienciesInfo', this.control);
-  }
 
   ngOnDestroy(): void {
     this.formService.removeControl('proficienciesInfo');
   }
-}
-
-export interface ProficienciesInfo {
-  armorTrainingTypes: string[];
-  weapons: string[];
-  tools: DndTool[];
 }

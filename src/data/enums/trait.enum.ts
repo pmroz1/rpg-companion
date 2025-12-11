@@ -45,7 +45,7 @@ export enum TraitType {
   Versatile = 'versatile',
   // orc traits
   AdrenalineRush = 'adrenaline rush',
-  DarkvisionOrc = 'darkvision',
+  // DarkvisionOrc = 'darkvision',
   RelentlessEndurance = 'relentless endurance',
   // tiefling traits
   FiendishLegacy = 'fiendish legacy',

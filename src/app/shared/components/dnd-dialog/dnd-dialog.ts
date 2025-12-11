@@ -1,19 +1,38 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, Type } from '@angular/core';
 import { DynamicDialogRef, DynamicDialogConfig } from 'primeng/dynamicdialog';
 import { Button } from 'primeng/button';
 import { PickListModule } from 'primeng/picklist';
 import { MultiSelectModule } from 'primeng/multiselect';
-import { TitleCasePipe } from '@angular/common';
+import { NgComponentOutlet, TitleCasePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-export type DndDialogType = 'simple' | 'picklist' | 'multiselect';
+
+export type DndDialogType = 'simple' | 'picklist' | 'multiselect' | 'fullscreen';
 
 @Component({
   selector: 'app-dnd-dynamic-dialog',
-  imports: [Button, PickListModule, MultiSelectModule, TitleCasePipe, FormsModule, DragDropModule],
+  imports: [
+    Button,
+    PickListModule,
+    MultiSelectModule,
+    TitleCasePipe,
+    NgComponentOutlet,
+    FormsModule,
+    DragDropModule,
+  ],
   template: `
     <div>
-      <div class="p-4 text-lg">{{ content() }}</div>
+      <div class="p-4 text-lg">
+        @if (dialogType() !== 'fullscreen') {
+          @if (dialogType() === 'simple') {
+            <div class="whitespace-pre-wrap break-words">{{ content() }}</div>
+          } @else {
+            <div class="font-medium mb-2">
+              Select {{ dialogType() === 'picklist' ? 'items' : 'tools' }}:
+            </div>
+          }
+        }
+      </div>
       @switch (dialogType()) {
         @case ('picklist') {
           <p-pickList
@@ -63,8 +82,20 @@ export type DndDialogType = 'simple' | 'picklist' | 'multiselect';
             <p-button label="save" (click)="close()"></p-button>
           </div>
         }
+        @case ('fullscreen') {
+          <ng-container *ngComponentOutlet="fullscreenComponent()"></ng-container>
+        }
         @default {
-          <div class="px-4 flex justify-end">
+          <div
+            [class]="
+              dialogType() === 'simple'
+                ? 'flex flex-row absolute right-10 bottom-5 pt-10 justify-end'
+                : 'p-4 flex justify-end'
+            "
+          >
+            @if (dialogType() === 'simple') {
+              <p-button severity="secondary" class="pr-2" label="copy" (click)="copy()"></p-button>
+            }
             <p-button label="close" (click)="close()"></p-button>
           </div>
         }
@@ -82,18 +113,47 @@ export class DndDialogComponent implements OnInit {
   config = inject(DynamicDialogConfig);
   dialogType = signal<DndDialogType>('simple');
   content = signal<string>('');
-  allOptions = signal<any[]>([]);
-  pickedOptions = signal<any[]>([]);
+  allOptions = signal<unknown[]>([]);
+  pickedOptions = signal<unknown[]>([]);
+  fullscreenComponent = signal<Type<unknown> | null>(null);
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.dialogType.set(this.config.data?.dialogType || 'simple');
     this.content.set(this.config.data?.body || 'Dialog content goes here.');
     this.allOptions.set(this.config.data?.allOptions || []);
     this.pickedOptions.set(this.config.data?.pickedOptions || []);
+
+    if (this.dialogType() === 'fullscreen') {
+      const { fullscreenMap } = await import('@app/character-sheet/fullscreen.config');
+      const config = fullscreenMap.get(this.content());
+      this.fullscreenComponent.set(config?.component ?? null);
+    }
   }
 
   cancel() {
     this.ref.close();
+  }
+
+  async copy(): Promise<void> {
+    const html = this.content();
+    const tmp = document.createElement('div');
+    tmp.innerHTML = html;
+    const text = tmp.textContent ?? tmp.innerText ?? '';
+
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch {
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand('copy');
+      } catch {
+        console.error('Copy to clipboard failed.');
+      }
+      textarea.remove();
+    }
   }
 
   close() {

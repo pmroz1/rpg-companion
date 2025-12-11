@@ -10,7 +10,7 @@ import { TraitsTab } from './views/traits/traits';
 import { NotesTab } from './views/notes/notes';
 
 @Component({
-  selector: 'sheet-tabs',
+  selector: 'app-tabs',
   imports: [
     TabsModule,
     DndCard,
@@ -38,22 +38,22 @@ import { NotesTab } from './views/notes/notes';
           }
         </p-tablist>
         <p-tabpanel [value]="0">
-          <tab-actions></tab-actions>
+          <app-actions />
         </p-tabpanel>
         <p-tabpanel [value]="1">
-          <tab-spells-cantrips></tab-spells-cantrips>
+          <app-spells-cantrips />
         </p-tabpanel>
         <p-tabpanel [value]="2">
-          <tab-inventory></tab-inventory>
+          <app-inventory />
         </p-tabpanel>
         <p-tabpanel [value]="3">
-          <tab-features></tab-features>
+          <app-features />
         </p-tabpanel>
         <p-tabpanel [value]="4">
-          <tab-traits></tab-traits>
+          <app-traits />
         </p-tabpanel>
         <p-tabpanel [value]="5">
-          <tab-notes></tab-notes>
+          <app-notes />
         </p-tabpanel>
       </p-tabs>
     </app-dnd-card>
@@ -61,7 +61,7 @@ import { NotesTab } from './views/notes/notes';
   styleUrl: './tabs.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Tabs {
+export class TabsComponent {
   tabs = [
     { label: 'Actions' },
     { label: 'Spells & Cantrips' },

@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-import { CHARACTER_SHEET_ROUTES } from './character-sheet/character-sheet.routes';
 
 export const routes: Routes = [
   {
@@ -12,4 +11,8 @@ export const routes: Routes = [
     loadChildren: () =>
       import('./character-sheet/character-sheet.routes').then((m) => m.CHARACTER_SHEET_ROUTES),
   },
+  // {
+  //   path: 'map-editor',
+  //   loadChildren: () => import('./map-editor/map-editor.routes').then((m) => m.MAP_EDITOR_ROUTES),
+  // },
 ];

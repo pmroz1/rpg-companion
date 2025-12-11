@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input, model } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, model, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Checkbox } from 'primeng/checkbox';
 
@@ -42,8 +42,10 @@ import { Checkbox } from 'primeng/checkbox';
 export class DndCheckbox {
   checked = model<boolean>(false);
   label = input.required<string>();
+  checkedChange = output<boolean>();
 
   toggleChecked() {
     this.checked.set(!this.checked());
+    this.checkedChange.emit(this.checked());
   }
 }

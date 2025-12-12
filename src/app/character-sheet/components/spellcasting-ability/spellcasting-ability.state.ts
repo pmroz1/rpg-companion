@@ -1,4 +1,4 @@
-import { Injectable, signal, WritableSignal } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { SpellcastingStats } from './model/spellcasting';
 import { ComponentState } from '@app/core/state/component-state';
 
@@ -13,5 +13,5 @@ export class SpellcastingAbilityState extends ComponentState<SpellcastingStats> 
     spellAttackBonus: 0,
   };
 
-  protected override _state: WritableSignal<SpellcastingStats> = signal(this._defaultState);
+  protected override _state = signal(this._defaultState);
 }

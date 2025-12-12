@@ -11,7 +11,7 @@ import {
 import { FormControl, FormsModule } from '@angular/forms';
 import { DndCard } from '@app/shared/components/dnd-card/dnd-card';
 import { DynamicFormService } from '@app/shared/services';
-import { ClassType, SubclassType } from '@data/enums';
+import { ClassType } from '@data/enums';
 import { SelectModule } from 'primeng/select';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
@@ -20,16 +20,8 @@ import { DND_BACKGROUNDS } from '@data/dictionaries/background.dictionary';
 import { DND_RACES } from '@data/dictionaries/races.dictionary';
 import { LevelPlate } from './level-plate/level-plate';
 import { InfoState } from './info-state';
-
-export interface CharacterInfo {
-  name: string;
-  background: string;
-  race: string;
-  class: ClassType | null;
-  subclass: SubclassType | null;
-  level: number;
-  xp: number;
-}
+import { DndSubclass } from '@data/models';
+import { CharacterInfo } from './model/character-info';
 
 @Component({
   selector: 'app-info',
@@ -120,7 +112,7 @@ export class Info implements OnInit, OnDestroy {
   readonly state = inject(InfoState);
 
   classOptions = [...DND_CLASSES];
-  subclassOptions = computed(() => {
+  subclassOptions = computed((): DndSubclass[] => {
     const currentClass = this.characterInfo().class;
     return [...DND_SUBCLASSES.filter((s) => s.parentClass === currentClass)];
   });

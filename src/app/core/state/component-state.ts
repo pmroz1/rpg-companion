@@ -1,6 +1,6 @@
 import { Signal, WritableSignal } from '@angular/core';
 
-export abstract class StateRepository<T> {
+export abstract class ComponentState<T> {
   protected abstract readonly _state: WritableSignal<T>;
   protected abstract readonly _defaultState: T;
 

@@ -19,7 +19,7 @@ import { DND_CLASSES, DND_SUBCLASSES } from '@data/dictionaries';
 import { DND_BACKGROUNDS } from '@data/dictionaries/background.dictionary';
 import { DND_RACES } from '@data/dictionaries/races.dictionary';
 import { LevelPlate } from './level-plate/level-plate';
-import { InfoState } from './info-state';
+import { InfoState } from './info.state';
 import { DndSubclass } from '@data/models';
 import { CharacterInfo } from './model/character-info';
 
@@ -35,7 +35,7 @@ import { CharacterInfo } from './model/character-info';
             <input
               pInputText
               id="name"
-              [ngModel]="characterInfo().name"
+              [ngModel]="characterInfoState().name"
               (ngModelChange)="state.updateState({ name: $event })"
               placeholder="Enter character name"
             />
@@ -48,7 +48,7 @@ import { CharacterInfo } from './model/character-info';
               [options]="classOptions"
               optionLabel="name"
               optionValue="id"
-              [ngModel]="characterInfo().class"
+              [ngModel]="characterInfoState().class"
               (ngModelChange)="onClassChange($event)"
               placeholder="Select a class"
             />
@@ -59,11 +59,11 @@ import { CharacterInfo } from './model/character-info';
             <p-select
               id="subclass"
               [options]="subclassOptions()"
-              [ngModel]="characterInfo().subclass"
+              [ngModel]="characterInfoState().subclass"
               (ngModelChange)="state.updateState({ subclass: $event })"
               optionLabel="name"
               optionValue="id"
-              [disabled]="!characterInfo().class"
+              [disabled]="!characterInfoState().class"
               placeholder="Select a subclass"
             />
           </div>
@@ -73,7 +73,7 @@ import { CharacterInfo } from './model/character-info';
             <p-select
               id="race"
               [options]="raceOptions"
-              [ngModel]="characterInfo().race"
+              [ngModel]="characterInfoState().race"
               (ngModelChange)="state.updateState({ race: $event })"
               optionLabel="name"
               optionValue="id"
@@ -86,7 +86,7 @@ import { CharacterInfo } from './model/character-info';
             <p-select
               id="background"
               [options]="backgroundOptions"
-              [ngModel]="characterInfo().background"
+              [ngModel]="characterInfoState().background"
               (ngModelChange)="state.updateState({ background: $event })"
               optionLabel="name"
               optionValue="id"
@@ -96,8 +96,8 @@ import { CharacterInfo } from './model/character-info';
         </div>
       </app-dnd-card>
       <app-level-plate
-        [level]="characterInfo().level"
-        [xp]="characterInfo().xp"
+        [level]="characterInfoState().level"
+        [xp]="characterInfoState().xp"
         (event)="state.updateState($event)"
         class="level-plate"
       />
@@ -113,21 +113,21 @@ export class Info implements OnInit, OnDestroy {
 
   classOptions = [...DND_CLASSES];
   subclassOptions = computed((): DndSubclass[] => {
-    const currentClass = this.characterInfo().class;
+    const currentClass = this.characterInfoState().class;
     return [...DND_SUBCLASSES.filter((s) => s.parentClass === currentClass)];
   });
 
   backgroundOptions = [...DND_BACKGROUNDS];
   raceOptions = [...DND_RACES];
 
-  characterInfo = this.state.state;
+  characterInfoState = this.state.state;
 
-  control = new FormControl<CharacterInfo>(this.characterInfo());
+  control = new FormControl<CharacterInfo>(this.characterInfoState());
 
   ngOnInit(): void {
     effect(
       () => {
-        this.control.setValue(this.characterInfo());
+        this.control.setValue(this.characterInfoState());
       },
       { injector: this.injector },
     );
@@ -141,7 +141,7 @@ export class Info implements OnInit, OnDestroy {
 
   onClassChange(classType: ClassType | null): void {
     this.state.setState({
-      ...this.characterInfo(),
+      ...this.characterInfoState(),
       class: classType,
       subclass: null,
     });

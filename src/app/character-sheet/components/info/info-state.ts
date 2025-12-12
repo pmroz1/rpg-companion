@@ -1,12 +1,13 @@
 import { Injectable, signal } from '@angular/core';
 import { ClassType, SubclassType } from '@data/enums';
 import { CharacterInfo } from './info';
+import { StateRepository } from '@app/core/abstract/state.repository';
 
 @Injectable({
   providedIn: 'root',
 })
-export class InfoState {
-  default: CharacterInfo = {
+export class InfoState extends StateRepository<CharacterInfo> {
+  protected override _defaultState: CharacterInfo = {
     name: '',
     background: '',
     race: '',
@@ -16,21 +17,5 @@ export class InfoState {
     xp: 0,
   };
 
-  private readonly _characterInfo = signal<CharacterInfo>(this.default);
-  readonly characterInfo = this._characterInfo.asReadonly();
-
-  setCharacterInfo(info: CharacterInfo): void {
-    this._characterInfo.set(info);
-  }
-
-  updateCharacterInfo(partialInfo: Partial<CharacterInfo>): void {
-    this._characterInfo.set({
-      ...this._characterInfo(),
-      ...partialInfo,
-    });
-  }
-
-  reset(): void {
-    this._characterInfo.set(this.default);
-  }
+  protected override _state = signal<CharacterInfo>(this._defaultState);
 }

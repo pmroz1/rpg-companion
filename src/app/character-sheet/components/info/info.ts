@@ -44,7 +44,7 @@ export interface CharacterInfo {
               pInputText
               id="name"
               [ngModel]="characterInfo().name"
-              (ngModelChange)="state.updateCharacterInfo({ name: $event })"
+              (ngModelChange)="state.updateState({ name: $event })"
               placeholder="Enter character name"
             />
           </div>
@@ -68,7 +68,7 @@ export interface CharacterInfo {
               id="subclass"
               [options]="subclassOptions()"
               [ngModel]="characterInfo().subclass"
-              (ngModelChange)="state.updateCharacterInfo({ subclass: $event })"
+              (ngModelChange)="state.updateState({ subclass: $event })"
               optionLabel="name"
               optionValue="id"
               [disabled]="!characterInfo().class"
@@ -82,7 +82,7 @@ export interface CharacterInfo {
               id="race"
               [options]="raceOptions"
               [ngModel]="characterInfo().race"
-              (ngModelChange)="state.updateCharacterInfo({ race: $event })"
+              (ngModelChange)="state.updateState({ race: $event })"
               optionLabel="name"
               optionValue="id"
               placeholder="Select a race"
@@ -95,7 +95,7 @@ export interface CharacterInfo {
               id="background"
               [options]="backgroundOptions"
               [ngModel]="characterInfo().background"
-              (ngModelChange)="state.updateCharacterInfo({ background: $event })"
+              (ngModelChange)="state.updateState({ background: $event })"
               optionLabel="name"
               optionValue="id"
               placeholder="Select a background"
@@ -106,7 +106,7 @@ export interface CharacterInfo {
       <app-level-plate
         [level]="characterInfo().level"
         [xp]="characterInfo().xp"
-        (event)="state.updateCharacterInfo($event)"
+        (event)="state.updateState($event)"
         class="level-plate"
       />
     </div>
@@ -128,7 +128,7 @@ export class Info implements OnInit, OnDestroy {
   backgroundOptions = [...DND_BACKGROUNDS];
   raceOptions = [...DND_RACES];
 
-  characterInfo = this.state.characterInfo;
+  characterInfo = this.state.state;
 
   control = new FormControl<CharacterInfo>(this.characterInfo());
 
@@ -148,7 +148,7 @@ export class Info implements OnInit, OnDestroy {
   }
 
   onClassChange(classType: ClassType | null): void {
-    this.state.setCharacterInfo({
+    this.state.setState({
       ...this.characterInfo(),
       class: classType,
       subclass: null,

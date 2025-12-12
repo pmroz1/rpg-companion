@@ -1,12 +1,12 @@
 import { Injectable, signal } from '@angular/core';
 import { ClassType, SubclassType } from '@data/enums';
-import { CharacterInfo } from './info';
-import { StateRepository } from '@app/core/abstract/state.repository';
+import { CharacterInfo } from './model/character-info';
+import { ComponentState } from '@app/core/state/component-state';
 
 @Injectable({
   providedIn: 'root',
 })
-export class InfoState extends StateRepository<CharacterInfo> {
+export class InfoState extends ComponentState<CharacterInfo> {
   protected override _defaultState: CharacterInfo = {
     name: '',
     background: '',

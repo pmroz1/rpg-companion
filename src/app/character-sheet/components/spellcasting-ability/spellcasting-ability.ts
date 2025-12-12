@@ -14,14 +14,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { SpellCastingAbilities } from '@data/enums';
 import { SelectModule } from 'primeng/select';
-import { SpellcastingAbilityState } from './spellcasting-ability-state';
-
-export interface SpellcastingAbilityProps {
-  spellcastingAbility: string;
-  spellcastingModifier: number;
-  spellSaveDC: number;
-  spellAttackBonus: number;
-}
+import { SpellcastingAbilityState } from './spellcasting-ability.state';
+import { SpellcastingStats } from './model/spellcasting';
 
 @Component({
   selector: 'app-spellcasting-ability',
@@ -33,8 +27,8 @@ export interface SpellcastingAbilityProps {
         <p-select
           id="spellcasting-ability"
           [options]="spellCastingAbilitiesOptions"
-          [ngModel]="state.spellcastingAbilityProps().spellcastingAbility"
-          (ngModelChange)="state.updateSpellcastingAbilityProps({ spellcastingAbility: $event })"
+          [ngModel]="spellCastingState().spellcastingAbility"
+          (ngModelChange)="state.updateState({ spellcastingAbility: $event })"
           optionLabel="name"
           optionValue="id"
           placeholder="Select a spellcasting ability"
@@ -47,8 +41,8 @@ export interface SpellcastingAbilityProps {
           <p-inputnumber
             [inputStyle]="{ width: '4rem', textAlign: 'center' }"
             id="spellcasting-modifier"
-            [ngModel]="state.spellcastingAbilityProps().spellcastingModifier"
-            (ngModelChange)="state.updateSpellcastingAbilityProps({ spellcastingModifier: $event })"
+            [ngModel]="spellCastingState().spellcastingModifier"
+            (ngModelChange)="state.updateState({ spellcastingModifier: $event })"
           />
           <label for="spellcasting-modifier" class="field-label number"
             >Spellcasting Modifier</label
@@ -58,8 +52,8 @@ export interface SpellcastingAbilityProps {
           <p-inputnumber
             [inputStyle]="{ width: '4rem', textAlign: 'center' }"
             id="spell-save-dc"
-            [ngModel]="state.spellcastingAbilityProps().spellSaveDC"
-            (ngModelChange)="state.updateSpellcastingAbilityProps({ spellSaveDC: $event })"
+            [ngModel]="spellCastingState().spellSaveDC"
+            (ngModelChange)="state.updateState({ spellSaveDC: $event })"
           />
           <label for="spell-save-dc" class="field-label number">Spell Save DC</label>
         </div>
@@ -67,8 +61,8 @@ export interface SpellcastingAbilityProps {
           <p-inputnumber
             [inputStyle]="{ width: '4rem', textAlign: 'center' }"
             id="spell-attack-bonus"
-            [ngModel]="state.spellcastingAbilityProps().spellAttackBonus"
-            (ngModelChange)="state.updateSpellcastingAbilityProps({ spellAttackBonus: $event })"
+            [ngModel]="spellCastingState().spellAttackBonus"
+            (ngModelChange)="state.updateState({ spellAttackBonus: $event })"
           />
           <label for="spell-attack-bonus" class="field-label number">Spell Attack Bonus</label>
         </div>
@@ -88,13 +82,13 @@ export class SpellcastingAbility implements OnDestroy, OnInit {
     name: ability,
   }));
 
-  spellCastingAbilityProps = this.state.spellcastingAbilityProps;
+  spellCastingState = this.state.state;
 
-  control = new FormControl<SpellcastingAbilityProps>(this.spellCastingAbilityProps());
+  control = new FormControl<SpellcastingStats>(this.spellCastingState());
   ngOnInit(): void {
     effect(
       () => {
-        this.control.setValue(this.spellCastingAbilityProps());
+        this.control.setValue(this.spellCastingState());
       },
       { injector: this.injector },
     );

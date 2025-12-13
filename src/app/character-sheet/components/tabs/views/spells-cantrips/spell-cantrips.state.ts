@@ -8,7 +8,7 @@ import { SpellCantrip } from '@data/models';
 export class SpellCantripsState extends ComponentState<SpellCantrip[]> {
   protected override _defaultState: SpellCantrip[] = [];
 
-  protected override _state = signal<SpellCantrip[]>(this._defaultState);
+  protected override _state = signal(this._defaultState);
 
   override updateState(newState: SpellCantrip[]): void {
     this._state.set(newState);

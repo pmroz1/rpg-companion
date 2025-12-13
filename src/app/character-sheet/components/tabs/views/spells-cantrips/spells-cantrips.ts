@@ -19,6 +19,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { TableModule } from 'primeng/table';
 import { Popover, PopoverModule } from 'primeng/popover';
+import { SpellCantripsState } from './spell-cantrips.state';
 @Component({
   selector: 'app-spells-cantrips',
   imports: [TableModule, CheckboxModule, FormsModule, ButtonModule, PopoverModule],
@@ -132,9 +133,10 @@ export class SpellsCantrips implements OnInit, OnDestroy {
   private readonly formService = inject(DynamicFormService);
   private readonly zone = inject(NgZone);
   private readonly injector = inject(Injector);
+  readonly state = inject(SpellCantripsState);
 
   spellsCantrips = signal<SpellCantrip[]>([...DND_SPELLS_CANTRIPS]);
-  knownSpellsCantrips = signal<SpellCantrip[]>([]);
+  knownSpellsCantrips = this.state.state;
   addSpellButtonText = 'Add Spell';
   selectedSpellName = signal<string | null>(null);
   knownSpellsControl = new FormControl<SpellCantrip[]>([]);
@@ -179,7 +181,10 @@ export class SpellsCantrips implements OnInit, OnDestroy {
     this.ref?.onClose.subscribe((pickedSpellsCantrips: SpellCantrip[]) => {
       if (pickedSpellsCantrips) {
         this.zone.run(() => {
-          this.knownSpellsCantrips.set(pickedSpellsCantrips);
+          this.spellsCantrips.update((list) =>
+            list.filter((sc) => !pickedSpellsCantrips.some((picked) => picked.name === sc.name)),
+          );
+          this.state.updateState(pickedSpellsCantrips);
         });
       }
     });
@@ -187,7 +192,7 @@ export class SpellsCantrips implements OnInit, OnDestroy {
 
   removeSpell(spellCantrip: SpellCantrip) {
     const updatedList = this.knownSpellsCantrips().filter((sc) => sc.name !== spellCantrip.name);
-    this.knownSpellsCantrips.set(updatedList);
+    this.state.updateState(updatedList);
     this.spellsCantrips.update((list) => [...list, spellCantrip]);
   }
 

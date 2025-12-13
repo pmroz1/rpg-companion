@@ -146,6 +146,7 @@ export class SpellsCantrips implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.formService.addControl('knownSpells', this.knownSpellsControl);
+    this.filterAddedSpells();
 
     effect(
       () => {
@@ -181,19 +182,23 @@ export class SpellsCantrips implements OnInit, OnDestroy {
     this.ref?.onClose.subscribe((pickedSpellsCantrips: SpellCantrip[]) => {
       if (pickedSpellsCantrips) {
         this.zone.run(() => {
-          this.spellsCantrips.update((list) =>
-            list.filter((sc) => !pickedSpellsCantrips.some((picked) => picked.name === sc.name)),
-          );
-          this.state.updateState(pickedSpellsCantrips);
+          this.state.setState(pickedSpellsCantrips);
+          this.filterAddedSpells();
         });
       }
     });
   }
 
+  filterAddedSpells() {
+    const knownNames = this.knownSpellsCantrips().map((sc) => sc.name);
+    const availableCantrips = DND_SPELLS_CANTRIPS.filter((sc) => !knownNames.includes(sc.name));
+    this.spellsCantrips.set(availableCantrips);
+  }
+
   removeSpell(spellCantrip: SpellCantrip) {
     const updatedList = this.knownSpellsCantrips().filter((sc) => sc.name !== spellCantrip.name);
-    this.state.updateState(updatedList);
-    this.spellsCantrips.update((list) => [...list, spellCantrip]);
+    this.state.setState(updatedList);
+    this.filterAddedSpells();
   }
 
   ngOnDestroy(): void {

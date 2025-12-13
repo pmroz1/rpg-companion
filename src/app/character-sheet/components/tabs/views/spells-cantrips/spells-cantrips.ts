@@ -19,7 +19,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { TableModule } from 'primeng/table';
 import { Popover, PopoverModule } from 'primeng/popover';
-import { SpellCantripsState } from './spell-cantrips.state';
+import { SpellsCantripsState } from './spell-cantrips.state';
 @Component({
   selector: 'app-spells-cantrips',
   imports: [TableModule, CheckboxModule, FormsModule, ButtonModule, PopoverModule],
@@ -133,7 +133,7 @@ export class SpellsCantrips implements OnInit, OnDestroy {
   private readonly formService = inject(DynamicFormService);
   private readonly zone = inject(NgZone);
   private readonly injector = inject(Injector);
-  readonly state = inject(SpellCantripsState);
+  readonly state = inject(SpellsCantripsState);
 
   spellsCantrips = signal<SpellCantrip[]>([...DND_SPELLS_CANTRIPS]);
   knownSpellsCantrips = this.state.state;

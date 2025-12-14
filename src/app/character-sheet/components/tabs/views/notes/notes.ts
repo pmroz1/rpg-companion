@@ -18,6 +18,7 @@ import { NotesState } from './notes.state';
     <p-editor
       (onTextChange)="onTextChange($event)"
       [ngModel]="notes()"
+      class="dnd-editor"
       [style]="{ height: '320px', fontSize: '16px' }"
     >
       <ng-template #header>
@@ -35,6 +36,7 @@ import { NotesState } from './notes.state';
       </ng-template>
     </p-editor>
   `,
+  styleUrl: './notes.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NotesTab implements OnInit, OnDestroy {
@@ -43,6 +45,11 @@ export class NotesTab implements OnInit, OnDestroy {
   injector = inject(Injector);
   notes = this.notesState.state;
   control = new FormControl<string>(this.notes());
+
+  editorModules = {
+    toolbar: false
+  };
+
   onTextChange(event: EditorTextChangeEvent) {
     if (event.htmlValue !== undefined && event.htmlValue !== null) {
       this.notesState.setState(event.htmlValue!);

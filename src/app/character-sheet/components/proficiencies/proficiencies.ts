@@ -51,6 +51,7 @@ import { ProficienciesInfo } from './model/proficiencies-info';
             <div class="flex w-full items-center">
               <app-dnd-checkbox
                 class="flex w-full items-center"
+                [checked]="proficienciesState().armorTrainingTypes.includes(armor)"
                 (click)="onTrainingCheckboxChange(armor)"
                 label="{{ armor | titlecase }} "
               ></app-dnd-checkbox>
@@ -65,6 +66,7 @@ import { ProficienciesInfo } from './model/proficiencies-info';
               <div class="flex w-full items-center">
                 <app-dnd-checkbox
                   class="h-100screen mt-2 mb-auto"
+                  [checked]="proficienciesState().weapons.includes(weapon)"
                   (click)="onWeaponCheckboxChange(weapon)"
                   label="{{ weapon | titlecase }}"
                 ></app-dnd-checkbox>

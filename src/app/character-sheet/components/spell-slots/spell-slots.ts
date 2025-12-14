@@ -17,7 +17,7 @@ import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { InputNumber } from 'primeng/inputnumber';
 import { SpellSlotsState } from './spell-slots.state';
-import { SpellSlotInfo } from './model/spell-slots-info';
+import { SpellSlotInfo } from './model/spell-slot-info';
 
 @Component({
   selector: 'app-spell-slots',
@@ -126,7 +126,7 @@ export class SpellSlots implements OnInit, OnDestroy {
         total: 0,
       })),
     );
-    this.control.setValue(this.spellSlotsState());
+    this.state.updateState(this.spellSlotsState());
   }
 
   isDisabledCheckbox(level: number, index: number): boolean {

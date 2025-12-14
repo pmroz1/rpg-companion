@@ -1,6 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { ComponentState } from '@app/core/state/component-state';
-import { SpellSlotInfo } from './model/spell-slots-info';
+import { SpellSlotInfo } from './model/spell-slot-info';
 
 @Injectable({
   providedIn: 'root',

@@ -1,27 +1,13 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  OnDestroy,
-  OnInit,
-  signal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { DndCard } from '@app/shared/components/dnd-card/dnd-card';
 import { Checkbox, CheckboxChangeEvent } from 'primeng/checkbox';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { FormControl, FormsModule } from '@angular/forms';
 import { DynamicFormService } from '@app/shared/services';
+import { HitpointsInfo } from './model/hitpoints-info';
+import { HitpointsState } from './hitpoints.state';
 
-export interface HitpointsInputs {
-  hitpointsTemp: number;
-  hitpointsCurrent: number;
-  hitpointsMax: number;
-  hitDiceSpent: number;
-  hitDiceMax: number;
-  deathSaveSuccesses: number;
-  deathSaveFailures: number;
-}
 @Component({
   selector: 'app-hitpoints',
   imports: [DndCard, Checkbox, InputNumberModule, FloatLabelModule, FormsModule],
@@ -35,7 +21,7 @@ export interface HitpointsInputs {
             <p-input-number
               id="temp"
               placeholder="0"
-              [(ngModel)]="hitpointsInputs().hitpointsTemp"
+              [(ngModel)]="hitpointsInfo().hitpointsTemp"
               inputStyleClass="w-15 h-8"
             />
           </div>
@@ -44,7 +30,7 @@ export interface HitpointsInputs {
             <p-input-number
               id="current"
               placeholder="0"
-              [(ngModel)]="hitpointsInputs().hitpointsCurrent"
+              [(ngModel)]="hitpointsInfo().hitpointsCurrent"
               inputStyleClass="w-15 h-8"
             />
           </div>
@@ -53,7 +39,7 @@ export interface HitpointsInputs {
             <p-input-number
               id="max"
               placeholder="0"
-              [(ngModel)]="hitpointsInputs().hitpointsMax"
+              [(ngModel)]="hitpointsInfo().hitpointsMax"
               inputStyleClass="w-15 h-8"
             />
           </div>
@@ -69,7 +55,7 @@ export interface HitpointsInputs {
             <p-input-number
               id="spent"
               placeholder="0"
-              [(ngModel)]="hitpointsInputs().hitDiceSpent"
+              [(ngModel)]="hitpointsInfo().hitDiceSpent"
               inputStyleClass="w-15 h-8"
             />
           </div>
@@ -79,7 +65,7 @@ export interface HitpointsInputs {
             <p-input-number
               id="hitDiceMax"
               placeholder="0"
-              [(ngModel)]="hitpointsInputs().hitDiceMax"
+              [(ngModel)]="hitpointsInfo().hitDiceMax"
               inputStyleClass="w-15 h-8"
             />
           </div>
@@ -98,8 +84,8 @@ export interface HitpointsInputs {
                   (onChange)="onDeathSaveSuccessChange($event)"
                   binary="true"
                   [disabled]="
-                    hitpointsInputs().deathSaveSuccesses < $index ||
-                    hitpointsInputs().deathSaveSuccesses > $index + 1
+                    hitpointsInfo().deathSaveSuccesses < $index ||
+                    hitpointsInfo().deathSaveSuccesses > $index + 1
                   "
                   checkboxIcon="pi pi-circle-fill"
                 ></p-checkbox>
@@ -115,8 +101,8 @@ export interface HitpointsInputs {
                   (onChange)="onDeathSaveFailureChange($event)"
                   binary="true"
                   [disabled]="
-                    hitpointsInputs().deathSaveFailures < $index ||
-                    hitpointsInputs().deathSaveFailures > $index + 1
+                    hitpointsInfo().deathSaveFailures < $index ||
+                    hitpointsInfo().deathSaveFailures > $index + 1
                   "
                   checkboxIcon="pi pi-circle-fill"
                 ></p-checkbox>
@@ -131,45 +117,25 @@ export interface HitpointsInputs {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Hitpoints implements OnInit, OnDestroy {
-  hitpointsInputs = signal<HitpointsInputs>({
-    hitpointsTemp: 0,
-    hitpointsCurrent: 0,
-    hitpointsMax: 0,
-    hitDiceSpent: 0,
-    hitDiceMax: 0,
-    deathSaveSuccesses: 0,
-    deathSaveFailures: 0,
-  });
+  state = inject(HitpointsState);
   private readonly formService = inject(DynamicFormService);
-  control = new FormControl<HitpointsInputs>(this.hitpointsInputs());
+
+  hitpointsInfo = this.state.state;
+  control = new FormControl<HitpointsInfo>(this.hitpointsInfo());
 
   onDeathSaveSuccessChange($event: CheckboxChangeEvent) {
     if ($event.checked) {
-      this.hitpointsInputs.update((inputs) => ({
-        ...inputs,
-        deathSaveSuccesses: inputs.deathSaveSuccesses + 1,
-      }));
+      this.hitpointsInfo().deathSaveSuccesses++;
     } else {
-      this.hitpointsInputs.update((inputs) => ({
-        ...inputs,
-        deathSaveSuccesses: inputs.deathSaveSuccesses - 1,
-      }));
+      this.hitpointsInfo().deathSaveSuccesses--;
     }
-    this.control.setValue(this.hitpointsInputs());
   }
   onDeathSaveFailureChange($event: CheckboxChangeEvent) {
     if ($event.checked) {
-      this.hitpointsInputs.update((inputs) => ({
-        ...inputs,
-        deathSaveFailures: inputs.deathSaveFailures + 1,
-      }));
+      this.hitpointsInfo().deathSaveFailures++;
     } else {
-      this.hitpointsInputs.update((inputs) => ({
-        ...inputs,
-        deathSaveFailures: inputs.deathSaveFailures - 1,
-      }));
+      this.hitpointsInfo().deathSaveFailures++;
     }
-    this.control.setValue(this.hitpointsInputs());
   }
 
   ngOnInit(): void {

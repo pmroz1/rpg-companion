@@ -96,7 +96,7 @@ export class Proficiencies implements OnInit, OnDestroy {
   private readonly formService = inject(DynamicFormService);
   private readonly injector = inject(Injector);
   private readonly dndDialogService = inject(DndDialogService);
-  readonly state = inject(ProficienciesState);
+  state = inject(ProficienciesState);
 
   proficienciesState = this.state.state;
   control = new FormControl<ProficienciesInfo>(this.proficienciesState());
@@ -136,23 +136,14 @@ export class Proficiencies implements OnInit, OnDestroy {
           (tool) => !currentTools.some((t) => t.name === tool.name),
         );
         this.toolTypes.set([...this.toolTypes(), ...newTools]);
-        this.updateState();
+        this.proficienciesState().tools = this.toolTypes();
       }
     });
   }
 
-  private updateState() {
-    this.proficienciesState.apply({
-      weapons: this.weaponTypes(),
-      armorTrainingTypes: this.armorTrainingTypes(),
-      tools: this.toolTypes(),
-    });
-    this.control.setValue(this.proficienciesState());
-  }
-
   removeTool(tool: DndTool) {
     this.toolTypes.set(this.toolTypes().filter((t) => t.id !== tool.id));
-    this.updateState();
+    this.proficienciesState().tools = this.toolTypes();
   }
 
   onWeaponCheckboxChange(weapon: string) {
@@ -161,7 +152,7 @@ export class Proficiencies implements OnInit, OnDestroy {
     } else {
       this.weaponTypes.set([...this.weaponTypes(), weapon]);
     }
-    this.updateState();
+    this.proficienciesState().weapons = this.weaponTypes();
   }
 
   onTrainingCheckboxChange(armor: string) {
@@ -170,7 +161,7 @@ export class Proficiencies implements OnInit, OnDestroy {
     } else {
       this.armorTrainingTypes.set([...this.armorTrainingTypes(), armor]);
     }
-    this.updateState();
+    this.proficienciesState().armorTrainingTypes = this.armorTrainingTypes();
   }
 
   ngOnDestroy(): void {

@@ -1,6 +1,14 @@
-import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  effect,
+  inject,
+  Injector,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { DndCard } from '@app/shared/components/dnd-card/dnd-card';
-import { Checkbox, CheckboxChangeEvent } from 'primeng/checkbox';
+import { Checkbox } from 'primeng/checkbox';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { FormControl, FormsModule } from '@angular/forms';
@@ -137,12 +145,19 @@ import { HitpointsState } from './hitpoints.state';
 })
 export class Hitpoints implements OnInit, OnDestroy {
   state = inject(HitpointsState);
+  private readonly injector = inject(Injector);
   private readonly formService = inject(DynamicFormService);
 
   hitpointsInfo = this.state.state;
   control = new FormControl<HitpointsInfo>(this.hitpointsInfo());
 
   ngOnInit(): void {
+    effect(
+      () => {
+        this.control.setValue(this.hitpointsInfo());
+      },
+      { injector: this.injector },
+    );
     this.formService.addControl('hitpoints', this.control);
   }
 

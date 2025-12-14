@@ -21,7 +21,8 @@ import { HitpointsState } from './hitpoints.state';
             <p-input-number
               id="temp"
               placeholder="0"
-              [(ngModel)]="hitpointsInfo().hitpointsTemp"
+              [ngModel]="hitpointsInfo().hitpointsTemp"
+              (ngModelChange)="state.updateState({ hitpointsTemp: $event })"
               inputStyleClass="w-15 h-8"
             />
           </div>
@@ -30,7 +31,8 @@ import { HitpointsState } from './hitpoints.state';
             <p-input-number
               id="current"
               placeholder="0"
-              [(ngModel)]="hitpointsInfo().hitpointsCurrent"
+              [ngModel]="hitpointsInfo().hitpointsCurrent"
+              (ngModelChange)="state.updateState({ hitpointsCurrent: $event })"
               inputStyleClass="w-15 h-8"
             />
           </div>
@@ -39,7 +41,8 @@ import { HitpointsState } from './hitpoints.state';
             <p-input-number
               id="max"
               placeholder="0"
-              [(ngModel)]="hitpointsInfo().hitpointsMax"
+              [ngModel]="hitpointsInfo().hitpointsMax"
+              (ngModelChange)="state.updateState({ hitpointsMax: $event })"
               inputStyleClass="w-15 h-8"
             />
           </div>
@@ -55,7 +58,8 @@ import { HitpointsState } from './hitpoints.state';
             <p-input-number
               id="spent"
               placeholder="0"
-              [(ngModel)]="hitpointsInfo().hitDiceSpent"
+              [ngModel]="hitpointsInfo().hitDiceSpent"
+              (ngModelChange)="state.updateState({ hitDiceSpent: $event })"
               inputStyleClass="w-15 h-8"
             />
           </div>
@@ -66,6 +70,7 @@ import { HitpointsState } from './hitpoints.state';
               id="hitDiceMax"
               placeholder="0"
               [(ngModel)]="hitpointsInfo().hitDiceMax"
+              (ngModelChange)="state.updateState({ hitDiceMax: $event })"
               inputStyleClass="w-15 h-8"
             />
           </div>
@@ -83,6 +88,7 @@ import { HitpointsState } from './hitpoints.state';
                 <p-checkbox
                   (onChange)="onDeathSaveSuccessChange($event)"
                   binary="true"
+                  [ngModel]="hitpointsInfo().deathSaveSuccesses > $index"
                   [disabled]="
                     hitpointsInfo().deathSaveSuccesses < $index ||
                     hitpointsInfo().deathSaveSuccesses > $index + 1
@@ -100,6 +106,7 @@ import { HitpointsState } from './hitpoints.state';
                 <p-checkbox
                   (onChange)="onDeathSaveFailureChange($event)"
                   binary="true"
+                  [ngModel]="hitpointsInfo().deathSaveFailures > $index"
                   [disabled]="
                     hitpointsInfo().deathSaveFailures < $index ||
                     hitpointsInfo().deathSaveFailures > $index + 1
@@ -125,16 +132,16 @@ export class Hitpoints implements OnInit, OnDestroy {
 
   onDeathSaveSuccessChange($event: CheckboxChangeEvent) {
     if ($event.checked) {
-      this.hitpointsInfo().deathSaveSuccesses++;
+      this.state.updateState({ deathSaveSuccesses: this.hitpointsInfo().deathSaveSuccesses + 1 });
     } else {
-      this.hitpointsInfo().deathSaveSuccesses--;
+      this.state.updateState({ deathSaveSuccesses: this.hitpointsInfo().deathSaveSuccesses - 1 });
     }
   }
   onDeathSaveFailureChange($event: CheckboxChangeEvent) {
     if ($event.checked) {
-      this.hitpointsInfo().deathSaveFailures++;
+      this.state.updateState({ deathSaveFailures: this.hitpointsInfo().deathSaveFailures + 1 });
     } else {
-      this.hitpointsInfo().deathSaveFailures++;
+      this.state.updateState({ deathSaveFailures: this.hitpointsInfo().deathSaveFailures - 1 });
     }
   }
 

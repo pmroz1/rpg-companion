@@ -24,12 +24,8 @@ import { DND_TOOLS } from '@data/dictionaries';
 import { DndTool } from '@data/models';
 import { DndDialogService } from '@app/shared/components/dnd-dialog/dnd-dialog.service';
 import { DndCheckbox } from '@app/shared/components/dnd-checkbox/dnd-checkbox';
-
-export interface ProficienciesInfo {
-  armorTrainingTypes: string[];
-  weapons: string[];
-  tools: DndTool[];
-}
+import { ProficienciesState } from './proficiencies.state';
+import { ProficienciesInfo } from './model/proficiencies-info';
 
 @Component({
   selector: 'app-proficiencies',
@@ -100,33 +96,25 @@ export class Proficiencies implements OnInit, OnDestroy {
   private readonly formService = inject(DynamicFormService);
   private readonly injector = inject(Injector);
   private readonly dndDialogService = inject(DndDialogService);
-  private readonly control = new FormControl<ProficienciesInfo>({
-    armorTrainingTypes: [],
-    weapons: [],
-    tools: [],
-  });
+  readonly state = inject(ProficienciesState);
+
+  proficienciesState = this.state.state;
+  control = new FormControl<ProficienciesInfo>(this.proficienciesState());
 
   ref: DynamicDialogRef | undefined | null;
 
   armorProficiencies = Object.values(ArmorProficiency);
   weaponProficiencies = Object.values(WeaponProficiency);
   tools = [...DND_TOOLS];
+
   armorTrainingTypes = signal<string[]>([]);
   weaponTypes = signal<string[]>([]);
   toolTypes = signal<DndTool[]>([]);
 
-  proficienciesInfo = computed(
-    (): ProficienciesInfo => ({
-      armorTrainingTypes: this.armorTrainingTypes(),
-      weapons: this.weaponTypes(),
-      tools: this.toolTypes(),
-    }),
-  );
-
   ngOnInit(): void {
     effect(
       () => {
-        this.control.setValue(this.proficienciesInfo());
+        this.control.setValue(this.proficienciesState());
       },
       { injector: this.injector },
     );
@@ -148,12 +136,23 @@ export class Proficiencies implements OnInit, OnDestroy {
           (tool) => !currentTools.some((t) => t.name === tool.name),
         );
         this.toolTypes.set([...this.toolTypes(), ...newTools]);
+        this.updateState();
       }
     });
   }
 
+  private updateState() {
+    this.proficienciesState.apply({
+      weapons: this.weaponTypes(),
+      armorTrainingTypes: this.armorTrainingTypes(),
+      tools: this.toolTypes(),
+    });
+    this.control.setValue(this.proficienciesState());
+  }
+
   removeTool(tool: DndTool) {
     this.toolTypes.set(this.toolTypes().filter((t) => t.id !== tool.id));
+    this.updateState();
   }
 
   onWeaponCheckboxChange(weapon: string) {
@@ -162,6 +161,7 @@ export class Proficiencies implements OnInit, OnDestroy {
     } else {
       this.weaponTypes.set([...this.weaponTypes(), weapon]);
     }
+    this.updateState();
   }
 
   onTrainingCheckboxChange(armor: string) {
@@ -170,6 +170,7 @@ export class Proficiencies implements OnInit, OnDestroy {
     } else {
       this.armorTrainingTypes.set([...this.armorTrainingTypes(), armor]);
     }
+    this.updateState();
   }
 
   ngOnDestroy(): void {

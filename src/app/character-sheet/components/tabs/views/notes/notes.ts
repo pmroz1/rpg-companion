@@ -41,18 +41,14 @@ import { NotesState } from './notes.state';
 })
 export class NotesTab implements OnInit, OnDestroy {
   private readonly formService = inject(DynamicFormService);
-  notesState = inject(NotesState);
-  injector = inject(Injector);
+  readonly notesState = inject(NotesState);
+  private readonly injector = inject(Injector);
   notes = this.notesState.state;
   control = new FormControl<string>(this.notes());
 
-  editorModules = {
-    toolbar: false
-  };
-
   onTextChange(event: EditorTextChangeEvent) {
     if (event.htmlValue !== undefined && event.htmlValue !== null) {
-      this.notesState.setState(event.htmlValue!);
+      this.notesState.setState(event.htmlValue);
     }
   }
 

@@ -6,7 +6,6 @@ import {
   OnDestroy,
   effect,
   Injector,
-  signal,
 } from '@angular/core';
 import { EditorModule, EditorTextChangeEvent } from 'primeng/editor';
 import { FormControl, FormsModule } from '@angular/forms';

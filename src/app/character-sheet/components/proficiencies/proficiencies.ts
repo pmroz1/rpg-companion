@@ -76,7 +76,7 @@ import { ProficienciesInfo } from './model/proficiencies-info';
           <span class="field-label">Tools</span>
         </div>
         <div class="flex flex-row flex-wrap items-center">
-          @for (tool of toolTypes(); track tool.id) {
+          @for (tool of this.proficienciesState().tools; track tool.id) {
             <p-chip
               [removable]="true"
               (onRemove)="removeTool(tool)"
@@ -107,10 +107,6 @@ export class Proficiencies implements OnInit, OnDestroy {
   weaponProficiencies = Object.values(WeaponProficiency);
   tools = [...DND_TOOLS];
 
-  armorTrainingTypes = signal<string[]>([]);
-  weaponTypes = signal<string[]>([]);
-  toolTypes = signal<DndTool[]>([]);
-
   ngOnInit(): void {
     effect(
       () => {
@@ -126,42 +122,46 @@ export class Proficiencies implements OnInit, OnDestroy {
     this.ref = this.dndDialogService.openMultiselect(
       'Select tools',
       ' ',
-      this.tools.filter((tool) => !this.toolTypes().includes(tool)),
+      this.tools.filter((tool) => !this.proficienciesState().tools.includes(tool)),
     );
 
     this.ref?.onClose.subscribe((selectedTools: DndTool[]) => {
       if (selectedTools && selectedTools.length > 0) {
-        const currentTools = this.toolTypes();
+        const currentTools = this.proficienciesState().tools;
         const newTools = selectedTools.filter(
           (tool) => !currentTools.some((t) => t.name === tool.name),
         );
-        this.toolTypes.set([...this.toolTypes(), ...newTools]);
-        this.state.updateState({ tools: this.toolTypes() });
+        this.state.updateState({ tools: [...currentTools, ...newTools] });
       }
     });
   }
 
   removeTool(tool: DndTool) {
-    this.toolTypes.set(this.toolTypes().filter((t) => t.id !== tool.id));
-    this.state.updateState({ tools: this.toolTypes() });
+    this.state.updateState({
+      tools: this.proficienciesState().tools.filter((t) => t.id !== tool.id),
+    });
   }
 
   onWeaponCheckboxChange(weapon: string) {
-    if (this.weaponTypes().includes(weapon)) {
-      this.weaponTypes.set(this.weaponTypes().filter((a) => a !== weapon));
+    if (this.proficienciesState().weapons.includes(weapon)) {
+      this.state.updateState({
+        weapons: this.proficienciesState().weapons.filter((a) => a !== weapon),
+      });
     } else {
-      this.weaponTypes.set([...this.weaponTypes(), weapon]);
+      this.state.updateState({ weapons: [...this.proficienciesState().weapons, weapon] });
     }
-    this.state.updateState({ weapons: this.weaponTypes() });
   }
 
   onTrainingCheckboxChange(armor: string) {
-    if (this.armorTrainingTypes().includes(armor)) {
-      this.armorTrainingTypes.set(this.armorTrainingTypes().filter((a) => a !== armor));
+    if (this.proficienciesState().armorTrainingTypes.includes(armor)) {
+      this.state.updateState({
+        armorTrainingTypes: this.proficienciesState().armorTrainingTypes.filter((a) => a !== armor),
+      });
     } else {
-      this.armorTrainingTypes.set([...this.armorTrainingTypes(), armor]);
+      this.state.updateState({
+        armorTrainingTypes: [...this.proficienciesState().armorTrainingTypes, armor],
+      });
     }
-    this.state.updateState({ armorTrainingTypes: this.armorTrainingTypes() });
   }
 
   ngOnDestroy(): void {

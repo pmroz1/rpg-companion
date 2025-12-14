@@ -136,14 +136,14 @@ export class Proficiencies implements OnInit, OnDestroy {
           (tool) => !currentTools.some((t) => t.name === tool.name),
         );
         this.toolTypes.set([...this.toolTypes(), ...newTools]);
-        this.proficienciesState().tools = this.toolTypes();
+        this.state.updateState({ tools: this.toolTypes() });
       }
     });
   }
 
   removeTool(tool: DndTool) {
     this.toolTypes.set(this.toolTypes().filter((t) => t.id !== tool.id));
-    this.proficienciesState().tools = this.toolTypes();
+    this.state.updateState({ tools: this.toolTypes() });
   }
 
   onWeaponCheckboxChange(weapon: string) {
@@ -152,7 +152,7 @@ export class Proficiencies implements OnInit, OnDestroy {
     } else {
       this.weaponTypes.set([...this.weaponTypes(), weapon]);
     }
-    this.proficienciesState().weapons = this.weaponTypes();
+    this.state.updateState({ weapons: this.weaponTypes() });
   }
 
   onTrainingCheckboxChange(armor: string) {
@@ -161,7 +161,7 @@ export class Proficiencies implements OnInit, OnDestroy {
     } else {
       this.armorTrainingTypes.set([...this.armorTrainingTypes(), armor]);
     }
-    this.proficienciesState().armorTrainingTypes = this.armorTrainingTypes();
+    this.state.updateState({ armorTrainingTypes: this.armorTrainingTypes() });
   }
 
   ngOnDestroy(): void {

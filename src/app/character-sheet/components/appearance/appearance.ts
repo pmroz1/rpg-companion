@@ -5,6 +5,7 @@ import { CardModule } from 'primeng/card';
 import { TextareaModule } from 'primeng/textarea';
 import { DividerModule } from 'primeng/divider';
 import { DndCard } from '@app/shared/components/dnd-card/dnd-card';
+import { AppearanceState } from './appearance-state';
 
 @Component({
   selector: 'app-appearance',
@@ -24,8 +25,10 @@ import { DndCard } from '@app/shared/components/dnd-card/dnd-card';
 })
 export class Appearance implements OnInit, OnDestroy {
   private readonly formService = inject(DynamicFormService);
+  readonly state = inject(AppearanceState);
 
-  control = new FormControl('', Validators.required);
+  appearanceState = this.state.state;
+  control = new FormControl<string>(this.appearanceState());
 
   ngOnInit() {
     this.formService.addControl('appearance', this.control);

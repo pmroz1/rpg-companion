@@ -48,10 +48,10 @@ import { SpellSlotInfo } from './model/spell-slots-info';
 
               <td>
                 <p-input-number
-                  [(ngModel)]="this.spellSlotsState()[row.level - 1].total"
+                  [ngModel]="this.spellSlotsState()[row.level - 1].total"
                   type="number"
                   [max]="column.count"
-                  (input)="onInputChange($event, row.level - 1, column.count)"
+                  (ngModelChange)="onInputChange($event, row.level - 1, column.count)"
                   inputStyleClass="w-10 h-8"
                 />
               </td>
@@ -61,12 +61,7 @@ import { SpellSlotInfo } from './model/spell-slots-info';
                     <p-checkbox
                       class="mr-0.5"
                       [binary]="true"
-                      [disabled]="
-                        ($index > 0 && !isCheckboxChecked(row.level, $index - 1)) ||
-                        isCheckboxChecked(row.level, $index + 1) ||
-                        this.spellSlotsState()[row.level - 1].total < $index + 1 ||
-                        this.spellSlotsState()[row.level - 1].total === 0
-                      "
+                      [disabled]="isDisabledCheckbox(row.level, $index)"
                       [ngModel]="$index < this.spellSlotsState()[row.level - 1].expanded"
                       (onChange)="onCheckboxChange(row.level, $index, $event.checked)"
                       [inputId]="'level-' + row.level + '-' + $index"
@@ -120,7 +115,6 @@ export class SpellSlots implements OnInit, OnDestroy {
       },
       { injector: this.injector },
     );
-
     this.formService.addControl('spellSlots', this.control);
   }
 
@@ -135,6 +129,15 @@ export class SpellSlots implements OnInit, OnDestroy {
     this.control.setValue(this.spellSlotsState());
   }
 
+  isDisabledCheckbox(level: number, index: number): boolean {
+    return (
+      (index > 0 && !this.isCheckboxChecked(level, index - 1)) ||
+      this.isCheckboxChecked(level, index + 1) ||
+      this.spellSlotsState()[level - 1].total < index + 1 ||
+      this.spellSlotsState()[level - 1].total === 0
+    );
+  }
+
   getColumnData(column: { level: number; count: number }[]) {
     return column;
   }
@@ -144,24 +147,20 @@ export class SpellSlots implements OnInit, OnDestroy {
     return this.spellSlotsState()[index].expanded > checkboxIndex;
   }
 
-  onInputChange(event: Event, index: number, maxCount: number) {
-    const input = event.target as HTMLInputElement;
-    let parsed = Number(input.value);
-    if (parsed > maxCount) {
-      input.value = maxCount.toString();
-      parsed = maxCount;
+  onInputChange(event: number, index: number, maxCount: number) {
+    if (event > maxCount) {
+      event = maxCount;
     }
-    var updatedSlots = [...this.spellSlotsState()];
     this.spellSlotsState()[index] = {
-      ...updatedSlots[index],
-      total: parsed,
-      expanded: Math.min(updatedSlots[index].expanded, parsed),
+      ...this.spellSlotsState()[index],
+      expanded: Math.min(this.spellSlotsState()[index].expanded, event),
+      total: event,
     };
+    this.state.updateState(this.spellSlotsState());
   }
 
   onCheckboxChange(level: number, checkboxIndex: number, checked: boolean) {
     const index = level - 1;
-
     if (checked) {
       this.spellSlotsState()[index] = {
         ...this.spellSlotsState()[index],
@@ -173,6 +172,7 @@ export class SpellSlots implements OnInit, OnDestroy {
         expanded: checkboxIndex,
       };
     }
+    this.state.updateState(this.spellSlotsState());
   }
 
   ngOnDestroy(): void {

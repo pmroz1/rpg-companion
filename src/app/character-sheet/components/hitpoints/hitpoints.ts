@@ -86,7 +86,13 @@ import { HitpointsState } from './hitpoints.state';
             <div class="flex flex-row gap-2">
               @for (i of [].constructor(3); track $index) {
                 <p-checkbox
-                  (onChange)="onDeathSaveSuccessChange($event)"
+                  (onChange)="
+                    state.updateState({
+                      deathSaveSuccesses: $event.checked
+                        ? hitpointsInfo().deathSaveSuccesses + 1
+                        : hitpointsInfo().deathSaveSuccesses - 1,
+                    })
+                  "
                   binary="true"
                   [ngModel]="hitpointsInfo().deathSaveSuccesses > $index"
                   [disabled]="
@@ -104,7 +110,13 @@ import { HitpointsState } from './hitpoints.state';
             <div class="flex flex-row gap-2">
               @for (i of [].constructor(3); track $index) {
                 <p-checkbox
-                  (onChange)="onDeathSaveFailureChange($event)"
+                  (onChange)="
+                    state.updateState({
+                      deathSaveFailures: $event.checked
+                        ? hitpointsInfo().deathSaveFailures + 1
+                        : hitpointsInfo().deathSaveFailures - 1,
+                    })
+                  "
                   binary="true"
                   [ngModel]="hitpointsInfo().deathSaveFailures > $index"
                   [disabled]="
@@ -129,21 +141,6 @@ export class Hitpoints implements OnInit, OnDestroy {
 
   hitpointsInfo = this.state.state;
   control = new FormControl<HitpointsInfo>(this.hitpointsInfo());
-
-  onDeathSaveSuccessChange($event: CheckboxChangeEvent) {
-    if ($event.checked) {
-      this.state.updateState({ deathSaveSuccesses: this.hitpointsInfo().deathSaveSuccesses + 1 });
-    } else {
-      this.state.updateState({ deathSaveSuccesses: this.hitpointsInfo().deathSaveSuccesses - 1 });
-    }
-  }
-  onDeathSaveFailureChange($event: CheckboxChangeEvent) {
-    if ($event.checked) {
-      this.state.updateState({ deathSaveFailures: this.hitpointsInfo().deathSaveFailures + 1 });
-    } else {
-      this.state.updateState({ deathSaveFailures: this.hitpointsInfo().deathSaveFailures - 1 });
-    }
-  }
 
   ngOnInit(): void {
     this.formService.addControl('hitpoints', this.control);

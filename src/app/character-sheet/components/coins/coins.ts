@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, Component, effect, inject, Injector, OnInit, OnDestroy } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  effect,
+  inject,
+  Injector,
+  OnInit,
+  OnDestroy,
+} from '@angular/core';
 import { DndCard } from '@app/shared/components/dnd-card/dnd-card';
 import { DynamicFormService } from '@app/shared/services';
 import { InputNumberModule } from 'primeng/inputnumber';
@@ -19,7 +27,7 @@ import { CoinsInfo } from './models/coins-info';
           buttonLayout="vertical"
           spinnerMode="vertical"
           inputId="cp"
-          styleClass="w-full"
+          [min]="0"
           [inputStyle]="{ width: '100%' }"
         >
           <ng-template #incrementbuttonicon>
@@ -39,7 +47,7 @@ import { CoinsInfo } from './models/coins-info';
           buttonLayout="vertical"
           spinnerMode="vertical"
           inputId="sp"
-          styleClass="w-full"
+          [min]="0"
           [inputStyle]="{ width: '100%' }"
         >
           <ng-template #incrementbuttonicon>
@@ -59,7 +67,7 @@ import { CoinsInfo } from './models/coins-info';
           buttonLayout="vertical"
           spinnerMode="vertical"
           inputId="ep"
-          styleClass="w-full"
+          [min]="0"
           [inputStyle]="{ width: '100%' }"
         >
           <ng-template #incrementbuttonicon>
@@ -79,7 +87,7 @@ import { CoinsInfo } from './models/coins-info';
           buttonLayout="vertical"
           spinnerMode="vertical"
           inputId="gp"
-          styleClass="w-full"
+          [min]="0"
           [inputStyle]="{ width: '100%' }"
         >
           <ng-template #incrementbuttonicon>
@@ -99,7 +107,7 @@ import { CoinsInfo } from './models/coins-info';
           buttonLayout="vertical"
           spinnerMode="vertical"
           inputId="pp"
-          styleClass="w-full"
+          [min]="0"
           [inputStyle]="{ width: '100%' }"
         >
           <ng-template #incrementbuttonicon>

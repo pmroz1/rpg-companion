@@ -26,6 +26,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { fullscreenMap } from './fullscreen.config';
+import { Coins } from './components/coins/coins';
 
 @Component({
   selector: 'app-character-sheet',
@@ -43,6 +44,7 @@ import { fullscreenMap } from './fullscreen.config';
     ContextMenu,
     Hitpoints,
     SpellcastingAbility,
+    Coins,
   ],
   template: `<form [formGroup]="form" (contextmenu)="onContextMenu($event, '')">
       <app-dnd-grid>
@@ -103,6 +105,9 @@ import { fullscreenMap } from './fullscreen.config';
 
         <app-dnd-grid-cell [colspan]="4">
           <app-dnd-card title="equipment" />
+        </app-dnd-grid-cell>
+        <app-dnd-grid-cell [colspan]="4">
+          <app-coins (contextmenu)="onContextMenu($event, 'app-coins')" />
         </app-dnd-grid-cell>
       </app-dnd-grid>
     </form>

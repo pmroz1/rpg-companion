@@ -10,6 +10,7 @@ import { DndCard } from '@app/shared/components/dnd-card/dnd-card';
 import { MenuItem } from 'primeng/api';
 import { MenubarModule } from 'primeng/menubar';
 import {
+  ActiveSelection,
   Canvas,
   Circle,
   FabricObject,
@@ -68,6 +69,7 @@ export class MapEditor implements OnInit {
 
     this.addOnObjectMovingListener();
     this.addSelectionListeners();
+    this.addKeyboardListeners();
 
     this.addCircle();
     this.addTextbox();
@@ -225,6 +227,43 @@ export class MapEditor implements OnInit {
     this.mapCanvas.on('selection:cleared', () => {
       this.updateDeleteButtonState();
     });
+  }
+
+  /**
+   * Adds keyboard listeners for:
+   * - Cmd+A / Ctrl+A: Select all objects on the canvas
+   * - Esc: Deselect all objects
+   */
+  addKeyboardListeners() {
+    document.addEventListener('keydown', (e: KeyboardEvent) => {
+      // Select all on Cmd+A (Mac) or Ctrl+A (Windows/Linux)
+      if ((e.metaKey || e.ctrlKey) && e.key === 'a') {
+        e.preventDefault();
+        this.selectAllObjects();
+      }
+
+      // Deselect all on Esc
+      if (e.key === 'Escape') {
+        this.deselectAllObjects();
+      }
+    });
+  }
+
+  selectAllObjects() {
+    const allObjects = this.mapCanvas.getObjects();
+    if (allObjects.length > 0) {
+      this.mapCanvas.discardActiveObject();
+      const selection = new ActiveSelection(allObjects, {
+        canvas: this.mapCanvas,
+      });
+      this.mapCanvas.setActiveObject(selection);
+      this.mapCanvas.requestRenderAll();
+    }
+  }
+
+  deselectAllObjects() {
+    this.mapCanvas.discardActiveObject();
+    this.mapCanvas.requestRenderAll();
   }
 
   updateDeleteButtonState() {

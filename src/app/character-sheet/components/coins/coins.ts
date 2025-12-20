@@ -10,7 +10,7 @@ import {
 import { DndCard } from '@app/shared/components/dnd-card/dnd-card';
 import { DynamicFormService } from '@app/shared/services';
 import { InputNumberModule } from 'primeng/inputnumber';
-import { CoinsState } from './coints.state';
+import { CoinsState } from './coins.state';
 import { FormControl, FormsModule } from '@angular/forms';
 import { CoinsInfo } from './models/coins-info';
 @Component({

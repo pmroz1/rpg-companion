@@ -63,8 +63,7 @@ export class Languages implements OnInit, OnDestroy {
   show() {
     this.ref = this.dndDialogService.openMultiselect(
       'Select languages',
-      'language',
-      ' ',
+      'Select languages',
       this.languages.filter(
         (language) => !this.languagesInfo().knownLanguages.includes(language.name),
       ),

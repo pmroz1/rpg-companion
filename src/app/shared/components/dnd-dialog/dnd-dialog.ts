@@ -28,7 +28,7 @@ export type DndDialogType = 'simple' | 'picklist' | 'multiselect' | 'fullscreen'
             <div class="whitespace-pre-wrap break-words">{{ content() }}</div>
           } @else {
             <div class="font-medium mb-2">
-              Select {{ dialogType() === 'picklist' ? 'items' : type() + 's' }}:
+              {{ dialogType() === 'picklist' ? 'Select items' : content() }}:
             </div>
           }
         }
@@ -59,7 +59,7 @@ export type DndDialogType = 'simple' | 'picklist' | 'multiselect' | 'fullscreen'
                 [options]="allOptions()"
                 [(ngModel)]="pickedOptions"
                 optionLabel="name"
-                [placeholder]="'Select ' + type() + 's'"
+                [placeholder]="content()"
                 [maxSelectedLabels]="5"
                 class="w-full md:w-80"
               >
@@ -113,7 +113,6 @@ export class DndDialogComponent implements OnInit {
   config = inject(DynamicDialogConfig);
   dialogType = signal<DndDialogType>('simple');
   content = signal<string>('');
-  type = signal<string>('');
   allOptions = signal<unknown[]>([]);
   pickedOptions = signal<unknown[]>([]);
   fullscreenComponent = signal<Type<unknown> | null>(null);
@@ -121,7 +120,6 @@ export class DndDialogComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.dialogType.set(this.config.data?.dialogType || 'simple');
     this.content.set(this.config.data?.body || 'Dialog content goes here.');
-    this.type.set(this.config.data?.type || 'Type content goes here.');
     this.allOptions.set(this.config.data?.allOptions || []);
     this.pickedOptions.set(this.config.data?.pickedOptions || []);
 

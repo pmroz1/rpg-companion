@@ -46,8 +46,8 @@ import { Languages } from './components/languages/languages';
     Hitpoints,
     SpellcastingAbility,
     Coins,
-    Languages
-],
+    Languages,
+  ],
   template: `<form [formGroup]="form" (contextmenu)="onContextMenu($event, '')">
       <app-dnd-grid>
         <app-dnd-grid-cell [colspan]="5" [rowspan]="2">

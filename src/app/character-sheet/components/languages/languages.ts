@@ -7,7 +7,7 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import { LanguageState } from './langauges.state';
+import { LanguageState } from './languages.state';
 import { DynamicFormService } from '@app/shared/services';
 import { LanguagesInfo } from './models/languages-info';
 import { FormControl } from '@angular/forms';

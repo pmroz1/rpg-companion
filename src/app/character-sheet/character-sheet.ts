@@ -27,7 +27,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { fullscreenMap } from './fullscreen.config';
 import { Coins } from './components/coins/coins';
-import { Languages } from "./components/languages/languages";
+import { Languages } from './components/languages/languages';
 
 @Component({
   selector: 'app-character-sheet',

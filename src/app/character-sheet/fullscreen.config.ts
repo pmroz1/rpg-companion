@@ -8,7 +8,6 @@ import { TabsComponent } from './components/tabs/tabs';
 import { Hitpoints } from './components/hitpoints/hitpoints';
 import { SpellcastingAbility } from './components/spellcasting-ability/spellcasting-ability';
 import { Coins } from './components/coins/coins';
-import { Language } from '@data/enums/language.enum';
 import { Languages } from './components/languages/languages';
 
 export interface ComponentConfig {

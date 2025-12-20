@@ -88,7 +88,7 @@ export class DndDialogService {
         body: content,
         dialogType: 'multiselect',
         allOptions,
-        type: type,
+        type,
       },
     });
   }

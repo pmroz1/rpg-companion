@@ -71,6 +71,7 @@ export class DndDialogService {
 
   openMultiselect(
     header: string,
+    type: string,
     content: string,
     allOptions: unknown[],
   ): DynamicDialogRef<DndDialogComponent> | null {
@@ -87,6 +88,7 @@ export class DndDialogService {
         body: content,
         dialogType: 'multiselect',
         allOptions,
+        type: type,
       },
     });
   }

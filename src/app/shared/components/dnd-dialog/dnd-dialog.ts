@@ -28,7 +28,7 @@ export type DndDialogType = 'simple' | 'picklist' | 'multiselect' | 'fullscreen'
             <div class="whitespace-pre-wrap break-words">{{ content() }}</div>
           } @else {
             <div class="font-medium mb-2">
-              Select {{ dialogType() === 'picklist' ? 'items' : 'tools' }}:
+              Select {{ dialogType() === 'picklist' ? 'items' : type() + 's' }}:
             </div>
           }
         }
@@ -59,15 +59,15 @@ export type DndDialogType = 'simple' | 'picklist' | 'multiselect' | 'fullscreen'
                 [options]="allOptions()"
                 [(ngModel)]="pickedOptions"
                 optionLabel="name"
-                placeholder="Select tools"
+                [placeholder]="'Select ' + type() + 's'"
                 [maxSelectedLabels]="5"
                 class="w-full md:w-80"
               >
-                <ng-template let-tool pTemplate="item">
-                  {{ tool.name | titlecase }}
+                <ng-template let-item pTemplate="item">
+                  {{ item.name | titlecase }}
                 </ng-template>
-                <ng-template let-tool pTemplate="selectedItem">
-                  {{ tool.name | titlecase }}
+                <ng-template let-item pTemplate="selectedItem">
+                  {{ item.name | titlecase }}
                 </ng-template>
               </p-multiselect>
             </div>
@@ -113,6 +113,7 @@ export class DndDialogComponent implements OnInit {
   config = inject(DynamicDialogConfig);
   dialogType = signal<DndDialogType>('simple');
   content = signal<string>('');
+  type = signal<string>('');
   allOptions = signal<unknown[]>([]);
   pickedOptions = signal<unknown[]>([]);
   fullscreenComponent = signal<Type<unknown> | null>(null);
@@ -120,6 +121,7 @@ export class DndDialogComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.dialogType.set(this.config.data?.dialogType || 'simple');
     this.content.set(this.config.data?.body || 'Dialog content goes here.');
+    this.type.set(this.config.data?.type || 'Type content goes here.');
     this.allOptions.set(this.config.data?.allOptions || []);
     this.pickedOptions.set(this.config.data?.pickedOptions || []);
 

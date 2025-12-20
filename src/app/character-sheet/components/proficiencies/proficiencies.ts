@@ -123,6 +123,7 @@ export class Proficiencies implements OnInit, OnDestroy {
   show() {
     this.ref = this.dndDialogService.openMultiselect(
       'Select tools',
+      'tool',
       ' ',
       this.tools.filter((tool) => !this.proficienciesState().tools.includes(tool)),
     );

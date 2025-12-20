@@ -277,6 +277,11 @@ export class MapEditor implements OnInit {
   }
 
   snapToGrid(obj: FabricObject<Partial<FabricObjectProps>, SerializedObjectProps, ObjectEvents>) {
+    // Skip snapping for Textbox objects
+    if (obj instanceof Textbox) {
+      return;
+    }
+
     obj.set({
       left: Math.round(obj.left / this.gridSize) * this.gridSize,
       top: Math.round(obj.top / this.gridSize) * this.gridSize,

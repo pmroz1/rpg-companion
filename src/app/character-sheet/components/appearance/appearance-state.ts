@@ -5,7 +5,7 @@ import { ComponentState } from '@app/core/state/component-state';
   providedIn: 'root',
 })
 export class AppearanceState extends ComponentState<string> {
-  protected override _defaultState: string = '';
+  protected override _defaultState = '';
 
   protected override _state = signal(this._defaultState);
 }

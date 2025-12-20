@@ -16,11 +16,9 @@ import { TableModule } from 'primeng/table';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { InputNumber } from 'primeng/inputnumber';
-export interface SpellSlotInfo {
-  level: number;
-  total: number;
-  expanded: number;
-}
+import { SpellSlotsState } from './spell-slots.state';
+import { SpellSlotInfo } from './model/spell-slot-info';
+
 @Component({
   selector: 'app-spell-slots',
   imports: [
@@ -50,10 +48,10 @@ export interface SpellSlotInfo {
 
               <td>
                 <p-input-number
-                  [(ngModel)]="this.spellSlots()[row.level - 1].total"
+                  [ngModel]="this.spellSlotsState()[row.level - 1].total"
                   type="number"
                   [max]="column.count"
-                  (input)="onInputChange($event, row.level - 1, column.count)"
+                  (ngModelChange)="onInputChange($event, row.level - 1, column.count)"
                   inputStyleClass="w-10 h-8"
                 />
               </td>
@@ -63,13 +61,8 @@ export interface SpellSlotInfo {
                     <p-checkbox
                       class="mr-0.5"
                       [binary]="true"
-                      [disabled]="
-                        ($index > 0 && !isCheckboxChecked(row.level, $index - 1)) ||
-                        isCheckboxChecked(row.level, $index + 1) ||
-                        this.spellSlots()[row.level - 1].total < $index + 1 ||
-                        this.spellSlots()[row.level - 1].total === 0
-                      "
-                      [ngModel]="$index < this.spellSlots()[row.level - 1].expanded"
+                      [disabled]="isDisabledCheckbox(row.level, $index)"
+                      [ngModel]="$index < this.spellSlotsState()[row.level - 1].expanded"
                       (onChange)="onCheckboxChange(row.level, $index, $event.checked)"
                       [inputId]="'level-' + row.level + '-' + $index"
                       checkboxIcon="pi pi-circle-fill"
@@ -92,8 +85,10 @@ export interface SpellSlotInfo {
 export class SpellSlots implements OnInit, OnDestroy {
   private readonly injector = inject(Injector);
   private readonly formService = inject(DynamicFormService);
-  private readonly control = new FormControl<SpellSlotInfo[]>([]);
-  private updateControl = () => this.control.setValue(this.spellSlots());
+  readonly state = inject(SpellSlotsState);
+
+  spellSlotsState = this.state.state;
+  control = new FormControl<SpellSlotInfo[]>(this.spellSlotsState());
 
   spellDefaultConfig = [
     [
@@ -113,30 +108,34 @@ export class SpellSlots implements OnInit, OnDestroy {
     ],
   ];
 
-  spellSlots = signal<SpellSlotInfo[]>(
-    Array.from({ length: 9 }, (_, i) => ({ level: i + 1, expanded: 0, total: 0 })),
-  );
-
   ngOnInit(): void {
     effect(
       () => {
-        this.control.setValue(this.spellSlots());
+        this.control.setValue(this.spellSlotsState());
       },
       { injector: this.injector },
     );
-
     this.formService.addControl('spellSlots', this.control);
   }
 
   reset() {
-    this.spellSlots.set(
+    this.spellSlotsState = signal(
       Array.from({ length: 9 }, (_, i) => ({
         level: i + 1,
         expanded: 0,
-        total: this.spellSlots()[i].total,
+        total: 0,
       })),
     );
-    this.updateControl();
+    this.state.updateState(this.spellSlotsState());
+  }
+
+  isDisabledCheckbox(level: number, index: number): boolean {
+    return (
+      (index > 0 && !this.isCheckboxChecked(level, index - 1)) ||
+      this.isCheckboxChecked(level, index + 1) ||
+      this.spellSlotsState()[level - 1].total < index + 1 ||
+      this.spellSlotsState()[level - 1].total === 0
+    );
   }
 
   getColumnData(column: { level: number; count: number }[]) {
@@ -145,44 +144,35 @@ export class SpellSlots implements OnInit, OnDestroy {
 
   isCheckboxChecked(level: number, checkboxIndex: number): boolean {
     const index = level - 1;
-    return this.spellSlots()[index].expanded > checkboxIndex;
+    return this.spellSlotsState()[index].expanded > checkboxIndex;
   }
 
-  onInputChange(event: Event, index: number, maxCount: number) {
-    const input = event.target as HTMLInputElement;
-    let parsed = Number(input.value);
-    if (parsed > maxCount) {
-      input.value = maxCount.toString();
-      parsed = maxCount;
+  onInputChange(event: number, index: number, maxCount: number) {
+    if (event > maxCount) {
+      event = maxCount;
     }
-    const updatedSlots = [...this.spellSlots()];
-    updatedSlots[index] = {
-      ...updatedSlots[index],
-      total: parsed,
-      expanded: Math.min(updatedSlots[index].expanded, parsed),
+    this.spellSlotsState()[index] = {
+      ...this.spellSlotsState()[index],
+      expanded: Math.min(this.spellSlotsState()[index].expanded, event),
+      total: event,
     };
-    this.spellSlots.set(updatedSlots);
-    this.updateControl();
+    this.state.updateState(this.spellSlotsState());
   }
 
   onCheckboxChange(level: number, checkboxIndex: number, checked: boolean) {
     const index = level - 1;
-    const updatedSlots = [...this.spellSlots()];
-
     if (checked) {
-      updatedSlots[index] = {
-        ...updatedSlots[index],
+      this.spellSlotsState()[index] = {
+        ...this.spellSlotsState()[index],
         expanded: checkboxIndex + 1,
       };
     } else {
-      updatedSlots[index] = {
-        ...updatedSlots[index],
+      this.spellSlotsState()[index] = {
+        ...this.spellSlotsState()[index],
         expanded: checkboxIndex,
       };
     }
-
-    this.spellSlots.set(updatedSlots);
-    this.updateControl();
+    this.state.updateState(this.spellSlotsState());
   }
 
   ngOnDestroy(): void {

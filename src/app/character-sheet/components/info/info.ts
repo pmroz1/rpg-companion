@@ -11,7 +11,7 @@ import {
 import { FormControl, FormsModule } from '@angular/forms';
 import { DndCard } from '@app/shared/components/dnd-card/dnd-card';
 import { DynamicFormService } from '@app/shared/services';
-import { ClassType, SubclassType } from '@data/enums';
+import { ClassType } from '@data/enums';
 import { SelectModule } from 'primeng/select';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
@@ -19,17 +19,9 @@ import { DND_CLASSES, DND_SUBCLASSES } from '@data/dictionaries';
 import { DND_BACKGROUNDS } from '@data/dictionaries/background.dictionary';
 import { DND_RACES } from '@data/dictionaries/races.dictionary';
 import { LevelPlate } from './level-plate/level-plate';
-import { InfoState } from './info-state';
-
-export interface CharacterInfo {
-  name: string;
-  background: string;
-  race: string;
-  class: ClassType | null;
-  subclass: SubclassType | null;
-  level: number;
-  xp: number;
-}
+import { InfoState } from './info.state';
+import { DndSubclass } from '@data/models';
+import { CharacterInfo } from './model/character-info';
 
 @Component({
   selector: 'app-info',
@@ -43,8 +35,8 @@ export interface CharacterInfo {
             <input
               pInputText
               id="name"
-              [ngModel]="characterInfo().name"
-              (ngModelChange)="state.updateCharacterInfo({ name: $event })"
+              [ngModel]="characterInfoState().name"
+              (ngModelChange)="state.updateState({ name: $event })"
               placeholder="Enter character name"
             />
           </div>
@@ -56,7 +48,7 @@ export interface CharacterInfo {
               [options]="classOptions"
               optionLabel="name"
               optionValue="id"
-              [ngModel]="characterInfo().class"
+              [ngModel]="characterInfoState().class"
               (ngModelChange)="onClassChange($event)"
               placeholder="Select a class"
             />
@@ -67,11 +59,11 @@ export interface CharacterInfo {
             <p-select
               id="subclass"
               [options]="subclassOptions()"
-              [ngModel]="characterInfo().subclass"
-              (ngModelChange)="state.updateCharacterInfo({ subclass: $event })"
+              [ngModel]="characterInfoState().subclass"
+              (ngModelChange)="state.updateState({ subclass: $event })"
               optionLabel="name"
               optionValue="id"
-              [disabled]="!characterInfo().class"
+              [disabled]="!characterInfoState().class"
               placeholder="Select a subclass"
             />
           </div>
@@ -81,8 +73,8 @@ export interface CharacterInfo {
             <p-select
               id="race"
               [options]="raceOptions"
-              [ngModel]="characterInfo().race"
-              (ngModelChange)="state.updateCharacterInfo({ race: $event })"
+              [ngModel]="characterInfoState().race"
+              (ngModelChange)="state.updateState({ race: $event })"
               optionLabel="name"
               optionValue="id"
               placeholder="Select a race"
@@ -94,8 +86,8 @@ export interface CharacterInfo {
             <p-select
               id="background"
               [options]="backgroundOptions"
-              [ngModel]="characterInfo().background"
-              (ngModelChange)="state.updateCharacterInfo({ background: $event })"
+              [ngModel]="characterInfoState().background"
+              (ngModelChange)="state.updateState({ background: $event })"
               optionLabel="name"
               optionValue="id"
               placeholder="Select a background"
@@ -104,9 +96,9 @@ export interface CharacterInfo {
         </div>
       </app-dnd-card>
       <app-level-plate
-        [level]="characterInfo().level"
-        [xp]="characterInfo().xp"
-        (event)="state.updateCharacterInfo($event)"
+        [level]="characterInfoState().level"
+        [xp]="characterInfoState().xp"
+        (event)="state.updateState($event)"
         class="level-plate"
       />
     </div>
@@ -120,22 +112,22 @@ export class Info implements OnInit, OnDestroy {
   readonly state = inject(InfoState);
 
   classOptions = [...DND_CLASSES];
-  subclassOptions = computed(() => {
-    const currentClass = this.characterInfo().class;
+  subclassOptions = computed((): DndSubclass[] => {
+    const currentClass = this.characterInfoState().class;
     return [...DND_SUBCLASSES.filter((s) => s.parentClass === currentClass)];
   });
 
   backgroundOptions = [...DND_BACKGROUNDS];
   raceOptions = [...DND_RACES];
 
-  characterInfo = this.state.characterInfo;
+  characterInfoState = this.state.state;
 
-  control = new FormControl<CharacterInfo>(this.characterInfo());
+  control = new FormControl<CharacterInfo>(this.characterInfoState());
 
   ngOnInit(): void {
     effect(
       () => {
-        this.control.setValue(this.characterInfo());
+        this.control.setValue(this.characterInfoState());
       },
       { injector: this.injector },
     );
@@ -148,8 +140,8 @@ export class Info implements OnInit, OnDestroy {
   }
 
   onClassChange(classType: ClassType | null): void {
-    this.state.setCharacterInfo({
-      ...this.characterInfo(),
+    this.state.setState({
+      ...this.characterInfoState(),
       class: classType,
       subclass: null,
     });

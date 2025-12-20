@@ -1,4 +1,10 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  inject,
+  OnInit,
+} from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DndCard } from '@app/shared/components/dnd-card/dnd-card';
 import { MenuItem } from 'primeng/api';
@@ -8,9 +14,9 @@ import {
   Circle,
   FabricObject,
   FabricObjectProps,
-  FabricText,
   ObjectEvents,
   SerializedObjectProps,
+  Textbox,
 } from 'fabric';
 
 @Component({
@@ -26,6 +32,8 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MapEditor implements OnInit {
+  private cdr = inject(ChangeDetectorRef);
+
   mapCanvas!: Canvas;
   gridSize = 50;
   items: MenuItem[] = [
@@ -37,9 +45,16 @@ export class MapEditor implements OnInit {
       },
     },
     {
+      label: 'Add Text',
+      icon: 'pi pi-pencil',
+      command: () => {
+        this.addTextbox();
+      },
+    },
+    {
       label: 'Delete',
       icon: 'pi pi-trash',
-      disabled: false, // FIXME: this.mapCanvas ? !this.mapCanvas.getActiveObject() : true,
+      disabled: false,
       command: () => {
         this.removeActiveObject();
       },
@@ -50,17 +65,17 @@ export class MapEditor implements OnInit {
     this.initCanvasSize();
 
     this.mapCanvas = new Canvas('map-canvas');
-    const helloWorld = new FabricText('Hello World', {
-      left: 100,
-      top: 100,
-      fontSize: 30,
-      fill: 'blue',
-    });
-    this.mapCanvas.add(helloWorld);
-    this.mapCanvas.renderAll();
 
     this.addOnObjectMovingListener();
-    this.addOnObjectScalingListener();
+    this.addSelectionListeners();
+
+    this.addCircle();
+    this.addTextbox();
+    this.mapCanvas.renderAll();
+
+    // Update button state after initial setup
+    this.updateDeleteButtonState();
+    // this.addOnObjectScalingListener();
   }
 
   addCircle() {
@@ -69,9 +84,13 @@ export class MapEditor implements OnInit {
       fill: 'gray',
       snapAngle: 45,
       cornerStyle: 'circle',
+      cornerColor: '#d4b33a',
+      borderColor: '#d4b33a',
+      borderScaleFactor: 1,
     });
     circle.setControlsVisibility({
       bl: false,
+      br: false,
       mb: false,
       ml: false,
       mr: false,
@@ -83,14 +102,40 @@ export class MapEditor implements OnInit {
     const activeObject = this.mapCanvas.getActiveObject();
     if (activeObject) {
       circle.set({
-        left: activeObject.left! + 40,
-        top: activeObject.top! + 40,
+        left: activeObject.left! + activeObject.width!,
+        top: activeObject.top! + activeObject.height!,
       });
     } else {
       this.mapCanvas.centerObject(circle);
     }
     this.snapToGrid(circle);
     this.mapCanvas.setActiveObject(circle);
+    this.mapCanvas.renderAll();
+  }
+
+  addTextbox() {
+    const textbox = new Textbox('New text', {
+      fontSize: 24,
+      fill: 'white',
+      cornerStyle: 'circle',
+      cornerColor: '#d4b33a',
+      borderColor: '#d4b33a',
+    });
+    textbox.setControlsVisibility({
+      mb: false,
+      mt: false,
+    });
+    this.mapCanvas.add(textbox);
+    const activeObject = this.mapCanvas.getActiveObject();
+    if (activeObject) {
+      textbox.set({
+        left: activeObject.left! + activeObject.width!,
+        top: activeObject.top! + activeObject.height!,
+      });
+    } else {
+      this.mapCanvas.centerObject(textbox);
+    }
+    this.mapCanvas.setActiveObject(textbox);
     this.mapCanvas.renderAll();
   }
 
@@ -149,19 +194,47 @@ export class MapEditor implements OnInit {
   /**
    * Adds an on-object-scaling listener that snaps objects to a grid while resizing.
    */
-  addOnObjectScalingListener() {
-    this.mapCanvas.on('object:scaling', (e) => {
-      const obj = e.target;
-      if (!obj) return;
+  // addOnObjectScalingListener() {
+  //   this.mapCanvas.on('object:scaling', (e) => {
+  //     const obj = e.target;
+  //     if (!obj) return;
 
-      const snappedWidth = Math.round((obj.width! * obj.scaleX!) / this.gridSize) * this.gridSize;
-      const snappedHeight = Math.round((obj.height! * obj.scaleY!) / this.gridSize) * this.gridSize;
-      obj.set({
-        scaleX: snappedWidth / obj.width!,
-        scaleY: snappedHeight / obj.height!,
-      });
-      console.log(`Snapped to ${snappedWidth} x ${snappedHeight}`, obj.scaleX, obj.scaleY);
+  //     const snappedWidth = Math.round((obj.width! * obj.scaleX!) / this.gridSize) * this.gridSize;
+  //     const snappedHeight = Math.round((obj.height! * obj.scaleY!) / this.gridSize) * this.gridSize;
+  //     obj.set({
+  //       scaleX: snappedWidth / obj.width!,
+  //       scaleY: snappedHeight / obj.height!,
+  //     });
+  //     console.log(`Snapped to ${snappedWidth} x ${snappedHeight}`, obj.scaleX, obj.scaleY);
+  //   });
+  // }
+
+  /**
+   * Adds selection event listeners to track when objects are selected or deselected.
+   * This enables/disables the delete button accordingly.
+   */
+  addSelectionListeners() {
+    this.mapCanvas.on('selection:created', () => {
+      this.updateDeleteButtonState();
     });
+
+    this.mapCanvas.on('selection:updated', () => {
+      this.updateDeleteButtonState();
+    });
+
+    this.mapCanvas.on('selection:cleared', () => {
+      this.updateDeleteButtonState();
+    });
+  }
+
+  updateDeleteButtonState() {
+    const deleteItem = this.items.find((item) => item.label === 'Delete');
+    if (deleteItem) {
+      deleteItem.disabled = !this.mapCanvas.getActiveObject();
+      // Create new reference to trigger OnPush change detection
+      this.items = [...this.items];
+      this.cdr.detectChanges();
+    }
   }
 
   snapToGrid(obj: FabricObject<Partial<FabricObjectProps>, SerializedObjectProps, ObjectEvents>) {

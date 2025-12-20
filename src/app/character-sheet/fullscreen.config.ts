@@ -7,6 +7,7 @@ import { SpellSlots } from './components/spell-slots/spell-slots';
 import { TabsComponent } from './components/tabs/tabs';
 import { Hitpoints } from './components/hitpoints/hitpoints';
 import { SpellcastingAbility } from './components/spellcasting-ability/spellcasting-ability';
+import { Coins } from './components/coins/coins';
 
 export interface ComponentConfig {
   component: Type<unknown>;
@@ -22,6 +23,7 @@ export const fullscreenMap = new Map<string, ComponentConfig>([
   ['app-appearance', { component: Appearance, enableFullscreen: true, enableExplain: true }],
   ['app-tabs', { component: TabsComponent, enableFullscreen: true, enableExplain: false }],
   ['app-hitpoints', { component: Hitpoints, enableFullscreen: true, enableExplain: true }],
+  ['app-coins', { component: Coins, enableFullscreen: true }],
   [
     'app-spellcasting-ability',
     { component: SpellcastingAbility, enableFullscreen: true, enableExplain: true },

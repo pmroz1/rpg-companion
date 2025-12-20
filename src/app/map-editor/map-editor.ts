@@ -42,7 +42,7 @@ export class MapEditor implements OnInit {
       label: 'Add Monster',
       icon: 'pi pi-plus',
       command: () => {
-        this.addCircle();
+        this.addCircle(); // TODO: Open monster selection dialog with a table, filters, etc.
       },
     },
     {

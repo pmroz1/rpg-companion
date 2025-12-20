@@ -1,6 +1,7 @@
 export * from './abilities.dictionary';
 export * from './background.dictionary';
 export * from './classes.dictionary';
+export * from './monsters.dictionary';
 export * from './races.dictionary';
 export * from './skills.dictionary';
 export * from './subclasses.dictionary';

@@ -12,11 +12,6 @@ export abstract class ComponentState<T> {
     this._state.set(state);
   }
 
-  /**
-   * Merges partial state into the current state.
-   * Note: This method is intended for object states.
-   * For arrays, it will replace the entire array and log a warning. Use setState() for arrays.
-   */
   updateState(partialState: Partial<T>): void {
     const currentState = this._state();
     if (typeof currentState === 'object' && currentState !== null && !Array.isArray(currentState)) {

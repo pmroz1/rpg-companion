@@ -117,10 +117,6 @@ import { CharacterSheetStateService } from './services/character-sheet-state.ser
         <app-dnd-grid-cell [colspan]="4">
           <app-languages (contextmenu)="onContextMenu($event, 'app-languages')" />
         </app-dnd-grid-cell>
-        <app-dnd-grid-cell [colspan]="4">
-          <app-dnd-card title="placeholder" />
-          <app-backstory (contextmenu)="onContextMenu($event, 'app-backstory')" />
-        </app-dnd-grid-cell>
       </app-dnd-grid>
     </form>
     <p-contextmenu #contextMenu [model]="items"></p-contextmenu>`,

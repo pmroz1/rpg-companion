@@ -22,16 +22,20 @@ import { ChipModule } from 'primeng/chip';
   selector: 'app-languages',
   imports: [DndCard, ChipModule],
   template: `<app-dnd-card title="Languages">
-    <div class="flex flex-row flex-wrap items-center">
-      @for (language of this.languagesInfo().knownLanguages; track language) {
-        <p-chip
-          [removable]="true"
-          (onRemove)="removeLanguage(language)"
-          [label]="language"
-          class="mr-2 mb-2 rounded-md cursor-pointer"
-        />
-      }
-      <p-chip label="Add language" (click)="show()" class="add-language-chip mb-2" />
+    <div class="flex flex-column">
+      <div class="flex flex-col gap-6 items-center w-full">
+        <div class="flex flex-row flex-wrap items-center">
+          @for (language of this.languagesInfo().knownLanguages; track language) {
+            <p-chip
+              [removable]="true"
+              (onRemove)="removeLanguage(language)"
+              [label]="language"
+              class="mr-2 mb-2 rounded-md cursor-pointer"
+            />
+          }
+          <p-chip label="Add language" (click)="show()" class="add-language-chip mb-2 " />
+        </div>
+      </div>
     </div>
   </app-dnd-card>`,
   styleUrl: './languages.scss',
@@ -63,7 +67,7 @@ export class Languages implements OnInit, OnDestroy {
   show() {
     this.ref = this.dndDialogService.openMultiselect(
       'Select languages',
-      'Select languages',
+      ' ',
       this.languages.filter(
         (language) => !this.languagesInfo().knownLanguages.includes(language.name),
       ),

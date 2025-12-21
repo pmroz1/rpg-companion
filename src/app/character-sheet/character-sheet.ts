@@ -114,6 +114,9 @@ import { Languages } from './components/languages/languages';
         <app-dnd-grid-cell [colspan]="4">
           <app-languages (contextmenu)="onContextMenu($event, 'app-languages')" />
         </app-dnd-grid-cell>
+        <app-dnd-grid-cell [colspan]="4">
+          <app-dnd-card title="placeholder" />
+        </app-dnd-grid-cell>
       </app-dnd-grid>
     </form>
     <p-contextmenu #contextMenu [model]="items"></p-contextmenu>`,

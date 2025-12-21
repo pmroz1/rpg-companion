@@ -37,7 +37,7 @@ import { DND_ALIGNMENTS } from '@data/dictionaries/alignment.dictionary';
         (ngModelChange)="state.updateState({ alignment: $event })"
         optionLabel="name"
         placeholder="Select an Alignment"
-        class="w-full md:w-56"
+        class="w-full md:w-70"
         id="alignment-select"
       />
     </div>

@@ -170,7 +170,16 @@ export class MapEditor implements OnInit, OnDestroy {
   removeActiveObject() {
     const activeObject = this.mapCanvas.getActiveObject();
     if (activeObject) {
-      this.mapCanvas.remove(activeObject);
+      // Check if it's a multi-selection (ActiveSelection)
+      if (activeObject instanceof ActiveSelection) {
+        const objects = activeObject.getObjects();
+        objects.forEach((obj) => {
+          this.mapCanvas.remove(obj);
+        });
+        this.mapCanvas.discardActiveObject();
+      } else {
+        this.mapCanvas.remove(activeObject);
+      }
       this.mapCanvas.renderAll();
     }
   }

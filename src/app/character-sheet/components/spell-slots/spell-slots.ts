@@ -6,7 +6,6 @@ import {
   Injector,
   OnDestroy,
   OnInit,
-  signal,
 } from '@angular/core';
 import { DndCard } from '@app/shared/components/dnd-card/dnd-card';
 import { CheckboxModule } from 'primeng/checkbox';

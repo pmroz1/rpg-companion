@@ -21,7 +21,6 @@ export class CharacterSheetStateService {
   private readonly coins = inject(CoinsState);
   private readonly info = inject(InfoState);
   private readonly spellSlots = inject(SpellSlotsState);
-  // private readonly armorState = inject(Armor);
   private readonly backstory = inject(BackstoryState);
   private readonly hitpointState = inject(HitpointsState);
   private readonly languages = inject(LanguageState);
@@ -47,7 +46,6 @@ export class CharacterSheetStateService {
   constructor() {
     this.loadState();
     effect(() => {
-      console.log('Character sheet state changed, saving to localStorage.');
       this.saveState(this.character());
     });
   }

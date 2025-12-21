@@ -2,7 +2,7 @@ import { Alignment, CreatureHabitat, CreatureSize, CreatureType } from '@data/en
 
 export interface DndMonster {
   name: string;
-  challengeRating: number;
+  challengeRating: string;
   armorClass: number;
   hitPointsFormula: string;
   type: CreatureType;

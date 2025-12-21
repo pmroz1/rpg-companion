@@ -4,9 +4,9 @@ import { Alignment, CreatureHabitat, CreatureSize, CreatureType } from '../enums
 export const DND_MONSTERS: readonly DndMonster[] = [
   {
     name: 'Bandit',
-    challengeRating: 1 / 8,
+    challengeRating: '1/8',
     armorClass: 12,
-    hitPointsFormula: '2d8+2',
+    hitPointsFormula: '2d8 + 2',
     hitPoints: 11,
     strength: 11,
     dexterity: 12,

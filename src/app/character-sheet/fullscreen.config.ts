@@ -10,6 +10,7 @@ import { SpellcastingAbility } from './components/spellcasting-ability/spellcast
 import { Coins } from './components/coins/coins';
 import { Languages } from './components/languages/languages';
 import { Backstory } from './components/backstory/backstory';
+import { MonstersTable } from '@app/map-editor/components/monsters-table/monsters-table';
 
 export interface ComponentConfig {
   component: Type<unknown>;
@@ -32,4 +33,5 @@ export const fullscreenMap = new Map<string, ComponentConfig>([
     'app-spellcasting-ability',
     { component: SpellcastingAbility, enableFullscreen: true, enableExplain: true },
   ],
+  ['app-monsters', { component: MonstersTable, enableFullscreen: true, enableExplain: true }],
 ]);

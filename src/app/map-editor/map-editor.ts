@@ -7,8 +7,10 @@ import {
 } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DndCard } from '@app/shared/components/dnd-card/dnd-card';
+import { DndDialogService } from '@app/shared/components/dnd-dialog/dnd-dialog.service';
 import { MenuItem } from 'primeng/api';
 import { MenubarModule } from 'primeng/menubar';
+import { TableModule } from 'primeng/table';
 import {
   ActiveSelection,
   Canvas,
@@ -34,6 +36,7 @@ import {
 })
 export class MapEditor implements OnInit {
   private cdr = inject(ChangeDetectorRef);
+  private readonly dialogService = inject(DndDialogService);
 
   mapCanvas!: Canvas;
   gridSize = 50;
@@ -42,7 +45,7 @@ export class MapEditor implements OnInit {
       label: 'Add Monster',
       icon: 'pi pi-plus',
       command: () => {
-        this.addCircle(); // TODO: Open monster selection dialog with a table, filters, etc.
+        this.dialogService.openFullscreen('Monsters', 'app-monsters', false);
       },
     },
     {

@@ -43,6 +43,7 @@ export class MapEditor implements OnInit, OnDestroy {
   private readonly mapEditorService = inject(MapEditorStateService);
   private subscription = new Subscription();
   private static readonly GRID_SIZE = 50;
+  private keyboardListener!: (e: KeyboardEvent) => void;
 
   mapCanvas!: Canvas;
   items: MenuItem[] = [
@@ -92,6 +93,9 @@ export class MapEditor implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    if (this.keyboardListener) {
+      document.removeEventListener('keydown', this.keyboardListener);
+    }
     if (this.mapCanvas) {
       this.mapCanvas.dispose();
     }
@@ -292,7 +296,7 @@ export class MapEditor implements OnInit, OnDestroy {
    * - Esc: Deselect all objects
    */
   addKeyboardListeners() {
-    document.addEventListener('keydown', (e: KeyboardEvent) => {
+    this.keyboardListener = (e: KeyboardEvent) => {
       // Select all on Cmd+A (Mac) or Ctrl+A (Windows/Linux)
       if ((e.metaKey || e.ctrlKey) && e.key === 'a') {
         e.preventDefault();
@@ -303,7 +307,8 @@ export class MapEditor implements OnInit, OnDestroy {
       if (e.key === 'Escape') {
         this.deselectAllObjects();
       }
-    });
+    };
+    document.addEventListener('keydown', this.keyboardListener);
   }
 
   selectAllObjects() {

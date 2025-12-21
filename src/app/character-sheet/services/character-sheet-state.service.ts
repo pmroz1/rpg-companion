@@ -10,6 +10,7 @@ import { ProficienciesState } from '../components/proficiencies/proficiencies.st
 import { SpellcastingAbilityState } from '../components/spellcasting-ability/spellcasting-ability.state';
 import { NotesState } from '../components/tabs/views/notes/notes.state';
 import { SpellsCantripsState } from '../components/tabs/views/spells-cantrips/spell-cantrips.state';
+import { CharacterSheetState } from '../models/character-sheet-state.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -29,7 +30,7 @@ export class CharacterSheetStateService {
   private readonly spellsCantrips = inject(SpellsCantripsState);
   private readonly notes = inject(NotesState);
 
-  readonly character = computed(() => ({
+  readonly character = computed<CharacterSheetState>(() => ({
     appearance: this.appearance.state(),
     coins: this.coins.state(),
     info: this.info.state(),
@@ -51,8 +52,7 @@ export class CharacterSheetStateService {
     });
   }
 
-  saveState(state: unknown): void {
-    // change 'unknown' to a CharacterSheetState interface if available
+  saveState(state: CharacterSheetState): void {
     try {
       const serializedState = JSON.stringify(state);
       localStorage.setItem(this._storageKey, serializedState);
@@ -65,7 +65,7 @@ export class CharacterSheetStateService {
     try {
       characterData = characterData ?? localStorage.getItem(this._storageKey);
       if (characterData) {
-        const state = JSON.parse(characterData);
+        const state = JSON.parse(characterData) as CharacterSheetState;
 
         this.appearance.setState(state.appearance);
         this.coins.setState(state.coins);

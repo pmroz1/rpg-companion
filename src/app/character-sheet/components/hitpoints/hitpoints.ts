@@ -3,24 +3,31 @@ import {
   Component,
   effect,
   inject,
-  Injector,
   OnDestroy,
   OnInit,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DndCard } from '@app/shared/components/dnd-card/dnd-card';
-import { Checkbox } from 'primeng/checkbox';
-import { InputNumberModule } from 'primeng/inputnumber';
-import { FloatLabelModule } from 'primeng/floatlabel';
-import { FormControl, FormsModule } from '@angular/forms';
 import { DynamicFormService } from '@app/shared/services';
-import { HitpointsInfo } from './model/hitpoints-info';
+import { Checkbox } from 'primeng/checkbox';
+import { FloatLabelModule } from 'primeng/floatlabel';
+import { InputNumberModule } from 'primeng/inputnumber';
 import { HitpointsState } from './hitpoints.state';
+import { HitpointsInfo } from './model/hitpoints-info';
 
 @Component({
   selector: 'app-hitpoints',
-  imports: [DndCard, Checkbox, InputNumberModule, FloatLabelModule, FormsModule],
+  imports: [
+    DndCard,
+    Checkbox,
+    InputNumberModule,
+    FloatLabelModule,
+    ReactiveFormsModule,
+    FormsModule,
+  ],
   template: `<app-dnd-card title="Hitpoints">
-    <div class="flex flex-row gap-5 justify-center">
+    <div class="flex flex-row gap-5 justify-center" [formGroup]="form">
       <div class="grid items-center">
         <h3>Hitpoints</h3>
         <div class="grid gap-2 mt-2">
@@ -29,8 +36,7 @@ import { HitpointsState } from './hitpoints.state';
             <p-input-number
               id="temp"
               placeholder="0"
-              [ngModel]="hitpointsInfo().hitpointsTemp"
-              (ngModelChange)="state.updateState({ hitpointsTemp: $event })"
+              formControlName="hitpointsTemp"
               inputStyleClass="w-15 h-8"
             />
           </div>
@@ -39,8 +45,7 @@ import { HitpointsState } from './hitpoints.state';
             <p-input-number
               id="current"
               placeholder="0"
-              [ngModel]="hitpointsInfo().hitpointsCurrent"
-              (ngModelChange)="state.updateState({ hitpointsCurrent: $event })"
+              formControlName="hitpointsCurrent"
               inputStyleClass="w-15 h-8"
             />
           </div>
@@ -49,8 +54,7 @@ import { HitpointsState } from './hitpoints.state';
             <p-input-number
               id="max"
               placeholder="0"
-              [ngModel]="hitpointsInfo().hitpointsMax"
-              (ngModelChange)="state.updateState({ hitpointsMax: $event })"
+              formControlName="hitpointsMax"
               inputStyleClass="w-15 h-8"
             />
           </div>
@@ -66,8 +70,7 @@ import { HitpointsState } from './hitpoints.state';
             <p-input-number
               id="spent"
               placeholder="0"
-              [ngModel]="hitpointsInfo().hitDiceSpent"
-              (ngModelChange)="state.updateState({ hitDiceSpent: $event })"
+              formControlName="hitDiceSpent"
               inputStyleClass="w-15 h-8"
             />
           </div>
@@ -77,8 +80,7 @@ import { HitpointsState } from './hitpoints.state';
             <p-input-number
               id="hitDiceMax"
               placeholder="0"
-              [(ngModel)]="hitpointsInfo().hitDiceMax"
-              (ngModelChange)="state.updateState({ hitDiceMax: $event })"
+              formControlName="hitDiceMax"
               inputStyleClass="w-15 h-8"
             />
           </div>
@@ -94,18 +96,13 @@ import { HitpointsState } from './hitpoints.state';
             <div class="flex flex-row gap-2">
               @for (i of [].constructor(3); track $index) {
                 <p-checkbox
-                  (onChange)="
-                    state.updateState({
-                      deathSaveSuccesses: $event.checked
-                        ? hitpointsInfo().deathSaveSuccesses + 1
-                        : hitpointsInfo().deathSaveSuccesses - 1,
-                    })
-                  "
+                  [ngModel]="hitpointsState().deathSaveSuccesses > $index"
+                  (ngModelChange)="updateDeathSaves('deathSaveSuccesses', $event)"
+                  [ngModelOptions]="{ standalone: true }"
                   binary="true"
-                  [ngModel]="hitpointsInfo().deathSaveSuccesses > $index"
                   [disabled]="
-                    hitpointsInfo().deathSaveSuccesses < $index ||
-                    hitpointsInfo().deathSaveSuccesses > $index + 1
+                    hitpointsState().deathSaveSuccesses < $index ||
+                    hitpointsState().deathSaveSuccesses > $index + 1
                   "
                   checkboxIcon="pi pi-circle-fill"
                 ></p-checkbox>
@@ -118,18 +115,13 @@ import { HitpointsState } from './hitpoints.state';
             <div class="flex flex-row gap-2">
               @for (i of [].constructor(3); track $index) {
                 <p-checkbox
-                  (onChange)="
-                    state.updateState({
-                      deathSaveFailures: $event.checked
-                        ? hitpointsInfo().deathSaveFailures + 1
-                        : hitpointsInfo().deathSaveFailures - 1,
-                    })
-                  "
+                  [ngModel]="hitpointsState().deathSaveFailures > $index"
+                  (ngModelChange)="updateDeathSaves('deathSaveFailures', $event)"
+                  [ngModelOptions]="{ standalone: true }"
                   binary="true"
-                  [ngModel]="hitpointsInfo().deathSaveFailures > $index"
                   [disabled]="
-                    hitpointsInfo().deathSaveFailures < $index ||
-                    hitpointsInfo().deathSaveFailures > $index + 1
+                    hitpointsState().deathSaveFailures < $index ||
+                    hitpointsState().deathSaveFailures > $index + 1
                   "
                   checkboxIcon="pi pi-circle-fill"
                 ></p-checkbox>
@@ -144,24 +136,43 @@ import { HitpointsState } from './hitpoints.state';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Hitpoints implements OnInit, OnDestroy {
-  state = inject(HitpointsState);
-  private readonly injector = inject(Injector);
   private readonly formService = inject(DynamicFormService);
+  readonly state = inject(HitpointsState);
 
-  hitpointsInfo = this.state.state;
-  control = new FormControl<HitpointsInfo>(this.hitpointsInfo());
+  hitpointsState = this.state.state;
+
+  form = new FormGroup({
+    hitpointsTemp: new FormControl<number>(0, { nonNullable: true }),
+    hitpointsCurrent: new FormControl<number>(0, { nonNullable: true }),
+    hitpointsMax: new FormControl<number>(0, { nonNullable: true }),
+    hitDiceSpent: new FormControl<number>(0, { nonNullable: true }),
+    hitDiceMax: new FormControl<number>(0, { nonNullable: true }),
+    deathSaveSuccesses: new FormControl<number>(0, { nonNullable: true }),
+    deathSaveFailures: new FormControl<number>(0, { nonNullable: true }),
+  });
+
+  constructor() {
+    this.form.valueChanges.pipe(takeUntilDestroyed()).subscribe((value) => {
+      this.state.updateState(value as Partial<HitpointsInfo>);
+    });
+
+    effect(() => {
+      const stateValue = this.hitpointsState();
+      this.form.setValue(stateValue, { emitEvent: false });
+    });
+  }
 
   ngOnInit(): void {
-    effect(
-      () => {
-        this.control.setValue(this.hitpointsInfo());
-      },
-      { injector: this.injector },
-    );
-    this.formService.addControl('hitpoints', this.control);
+    this.formService.addControl('hitpoints', this.form);
   }
 
   ngOnDestroy(): void {
     this.formService.removeControl('hitpoints');
+  }
+
+  updateDeathSaves(field: 'deathSaveSuccesses' | 'deathSaveFailures', checked: boolean) {
+    const currentValue = this.form.controls[field].value;
+    const newValue = checked ? currentValue + 1 : currentValue - 1;
+    this.form.controls[field].setValue(newValue);
   }
 }

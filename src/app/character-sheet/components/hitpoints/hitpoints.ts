@@ -173,6 +173,7 @@ export class Hitpoints implements OnInit, OnDestroy {
   updateDeathSaves(field: 'deathSaveSuccesses' | 'deathSaveFailures', checked: boolean) {
     const currentValue = this.form.controls[field].value;
     const newValue = checked ? currentValue + 1 : currentValue - 1;
-    this.form.controls[field].setValue(newValue);
+    const clampedValue = Math.min(3, Math.max(0, newValue));
+    this.form.controls[field].setValue(clampedValue);
   }
 }

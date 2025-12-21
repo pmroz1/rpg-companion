@@ -121,8 +121,8 @@ export class Info implements OnInit, OnDestroy {
     name: new FormControl<string>('', { nonNullable: true }),
     class: new FormControl<ClassType | null>(null),
     subclass: new FormControl<SubclassType | null>(null),
-    race: new FormControl<string>('', { nonNullable: true }),
-    background: new FormControl<string>('', { nonNullable: true }),
+    race: new FormControl<string | null>(null),
+    background: new FormControl<string | null>(null),
     level: new FormControl<number>(1, { nonNullable: true }),
     xp: new FormControl<number>(0, { nonNullable: true }),
   });
@@ -143,13 +143,14 @@ export class Info implements OnInit, OnDestroy {
 
     effect(() => {
       const state = this.characterInfoState();
-      this.form.patchValue(state, { emitEvent: false });
 
       if (!state.class) {
         this.form.controls.subclass.disable({ emitEvent: false });
       } else {
         this.form.controls.subclass.enable({ emitEvent: false });
       }
+
+      this.form.patchValue(state, { emitEvent: false });
     });
   }
 

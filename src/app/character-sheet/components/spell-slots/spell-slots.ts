@@ -132,7 +132,7 @@ export class SpellSlots implements OnInit, OnDestroy {
     this.form.valueChanges.pipe(takeUntilDestroyed()).subscribe((value) => {
       if (value.spellSlots) {
         const slots = value.spellSlots as SpellSlotInfo[];
-        this.state.updateState(slots);
+        this.state.setState(slots);
       }
     });
 

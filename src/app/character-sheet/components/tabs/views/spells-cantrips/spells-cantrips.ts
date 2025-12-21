@@ -1,6 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   effect,
   inject,
   NgZone,
@@ -138,8 +139,11 @@ export class SpellsCantrips implements OnInit, OnDestroy {
   private readonly zone = inject(NgZone);
   readonly state = inject(SpellsCantripsState);
 
-  spellsCantrips = signal<SpellCantrip[]>([...DND_SPELLS_CANTRIPS]);
   knownSpellsCantrips = this.state.state;
+  spellsCantrips = computed(() => {
+    const knownNames = this.knownSpellsCantrips().map((sc) => sc.name);
+    return DND_SPELLS_CANTRIPS.filter((sc) => !knownNames.includes(sc.name));
+  });
   addSpellButtonText = 'Add Spell';
   selectedSpellName = signal<string | null>(null);
 
@@ -154,14 +158,12 @@ export class SpellsCantrips implements OnInit, OnDestroy {
     this.form.valueChanges.pipe(takeUntilDestroyed()).subscribe((value) => {
       if (value.knownSpells) {
         this.state.setState(value.knownSpells);
-        this.filterAddedSpells();
       }
     });
 
     effect(() => {
       const stateValue = this.knownSpellsCantrips();
       this.form.patchValue({ knownSpells: stateValue }, { emitEvent: false });
-      this.filterAddedSpells();
     });
   }
 
@@ -199,12 +201,6 @@ export class SpellsCantrips implements OnInit, OnDestroy {
         });
       }
     });
-  }
-
-  filterAddedSpells() {
-    const knownNames = this.knownSpellsCantrips().map((sc) => sc.name);
-    const availableCantrips = DND_SPELLS_CANTRIPS.filter((sc) => !knownNames.includes(sc.name));
-    this.spellsCantrips.set(availableCantrips);
   }
 
   removeSpell(spellCantrip: SpellCantrip) {

@@ -22,7 +22,7 @@ export class CharacterSheetStateService {
   private readonly info = inject(InfoState);
   private readonly spellSlots = inject(SpellSlotsState);
   private readonly backstory = inject(BackstoryState);
-  private readonly hitpointState = inject(HitpointsState);
+  private readonly hitpoints = inject(HitpointsState);
   private readonly languages = inject(LanguageState);
   private readonly proficiencies = inject(ProficienciesState);
   private readonly spellCasting = inject(SpellcastingAbilityState);
@@ -35,7 +35,7 @@ export class CharacterSheetStateService {
     info: this.info.state(),
     spellSlots: this.spellSlots.state(),
     backstory: this.backstory.state(),
-    hitpoints: this.hitpointState.state(),
+    hitpoints: this.hitpoints.state(),
     languages: this.languages.state(),
     proficiencies: this.proficiencies.state(),
     spellCasting: this.spellCasting.state(),
@@ -63,22 +63,44 @@ export class CharacterSheetStateService {
     try {
       characterData = characterData ?? localStorage.getItem(this._storageKey);
       if (characterData) {
-        const state = JSON.parse(characterData) as CharacterSheetState;
+        const state = JSON.parse(characterData);
 
-        this.appearance.setState(state.appearance);
-        this.coins.setState(state.coins);
-        this.info.setState(state.info);
-        this.spellSlots.setState(state.spellSlots);
-        this.backstory.setState(state.backstory);
-        this.hitpointState.setState(state.hitpoints);
-        this.languages.setState(state.languages);
-        this.proficiencies.setState(state.proficiencies);
-        this.spellCasting.setState(state.spellCasting);
-        this.spellsCantrips.setState(state.spellsCantrips);
-        this.notes.setState(state.notes);
+        if (this.isValidState(state)) {
+          this.appearance.setState(state.appearance);
+          this.coins.setState(state.coins);
+          this.info.setState(state.info);
+          this.spellSlots.setState(state.spellSlots);
+          this.backstory.setState(state.backstory);
+          this.hitpoints.setState(state.hitpoints);
+          this.languages.setState(state.languages);
+          this.proficiencies.setState(state.proficiencies);
+          this.spellCasting.setState(state.spellCasting);
+          this.spellsCantrips.setState(state.spellsCantrips);
+          this.notes.setState(state.notes);
+        } else {
+          console.warn('Invalid character sheet state loaded.');
+        }
       }
     } catch (error) {
       console.error('Error loading character sheet state:', error);
     }
+  }
+
+  private isValidState(state: unknown): state is CharacterSheetState {
+    return (
+      typeof state === 'object' &&
+      state !== null &&
+      'appearance' in state &&
+      'coins' in state &&
+      'info' in state &&
+      'spellSlots' in state &&
+      'backstory' in state &&
+      'hitpoints' in state &&
+      'languages' in state &&
+      'proficiencies' in state &&
+      'spellCasting' in state &&
+      'spellsCantrips' in state &&
+      'notes' in state
+    );
   }
 }

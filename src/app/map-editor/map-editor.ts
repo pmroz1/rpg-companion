@@ -185,12 +185,31 @@ export class MapEditor implements OnInit, OnDestroy {
   }
 
   initCanvasSize() {
-    const canvasElement = document.getElementById('map-canvas') as HTMLCanvasElement;
-    if (!canvasElement) return;
+    // Guard against non-browser environments (e.g., SSR) where document is undefined.
+    if (typeof document === 'undefined') {
+      return;
+    }
+
+    const canvasElement = document.getElementById('map-canvas');
+    if (!(canvasElement instanceof HTMLCanvasElement)) {
+      return;
+    }
+
     const parentElement = canvasElement.parentElement;
-    if (!parentElement) return;
-    canvasElement.width = parentElement.clientWidth - 2 * 20;
-    canvasElement.height = parentElement.clientHeight;
+    if (!(parentElement instanceof HTMLElement)) {
+      return;
+    }
+
+    const parentWidth = parentElement.clientWidth;
+    const parentHeight = parentElement.clientHeight;
+
+    // If layout has not yet produced a size, avoid setting zero dimensions.
+    if (!parentWidth || !parentHeight) {
+      return;
+    }
+
+    canvasElement.width = parentWidth - 2 * 20;
+    canvasElement.height = parentHeight;
   }
 
   /**

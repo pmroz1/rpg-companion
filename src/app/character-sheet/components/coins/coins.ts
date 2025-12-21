@@ -124,7 +124,6 @@ export class Coins implements OnInit, OnDestroy {
   readonly state = inject(CoinsState);
 
   coinsState = this.state.state;
-
   form = new FormGroup({
     cp: new FormControl<number>(0, { nonNullable: true }),
     sp: new FormControl<number>(0, { nonNullable: true }),

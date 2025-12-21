@@ -36,7 +36,7 @@ export class Appearance implements OnInit, OnDestroy {
   readonly state = inject(AppearanceState);
 
   appearanceState = this.state.state;
-  control = new FormControl(this.appearanceState());
+  control = new FormControl(this.appearanceState(), { nonNullable: true });
 
   constructor() {
     this.control.valueChanges.pipe(takeUntilDestroyed()).subscribe((value) => {

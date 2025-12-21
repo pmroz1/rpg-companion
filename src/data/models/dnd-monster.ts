@@ -1,0 +1,23 @@
+import { Alignment, CreatureHabitat, CreatureSize, CreatureType } from '@data/enums';
+
+export interface DndMonster {
+  name: string;
+  type: CreatureType;
+  size: CreatureSize;
+  habitat: CreatureHabitat;
+  challengeRating: string;
+  armorClass: number;
+  hitPoints: number;
+  hitPointsFormula: string;
+  strength: number;
+  dexterity: number;
+  constitution: number;
+  intelligence: number;
+  wisdom: number;
+  charisma: number;
+  alignment: Alignment;
+  speed: string;
+  languages: string[];
+  actions: string[];
+  gear: string[];
+}

@@ -7,7 +7,6 @@ import { DndMonster } from '@data/models';
   providedIn: 'root',
 })
 export class MapEditorStateService {
-  private mapEditorData: unknown;
   private monstersSubmittedSubject = new Subject<{ monster: DndMonster; count: number }[]>();
 
   monstersSubmitted$ = this.monstersSubmittedSubject.asObservable();

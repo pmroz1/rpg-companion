@@ -29,6 +29,7 @@ import { fullscreenMap } from './fullscreen.config';
 import { Coins } from './components/coins/coins';
 import { Languages } from './components/languages/languages';
 import { Backstory } from "./components/backstory/backstory";
+import { CharacterSheetStateService } from './services/character-sheet-state.service';
 
 @Component({
   selector: 'app-character-sheet',
@@ -130,6 +131,7 @@ export class CharacterSheet implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>();
   private readonly dialogService = inject(DndDialogService);
   private readonly characterSheetForm = inject(DynamicFormService);
+  private readonly characterSheetState = inject(CharacterSheetStateService);
   private readonly route = inject(ActivatedRoute);
   readonly form = this.characterSheetForm.getFormGroup();
 

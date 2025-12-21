@@ -20,6 +20,12 @@ export abstract class ComponentState<T> {
         ...partialState,
       });
     } else {
+      if (Array.isArray(currentState) && !Array.isArray(partialState)) {
+        console.warn(
+          'ComponentState: Invalid update for array state. Use setState for arrays or provide a complete array.',
+        );
+        return;
+      }
       this._state.set(partialState as T);
     }
   }

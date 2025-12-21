@@ -1,4 +1,4 @@
-import { computed, effect, inject, Injectable } from '@angular/core';
+import { computed, effect, inject, Injectable, untracked } from '@angular/core';
 import { AppearanceState } from '../components/appearance/appearance-state';
 import { CoinsState } from '../components/coins/coins.state';
 import { InfoState } from '../components/info/info.state';
@@ -46,7 +46,10 @@ export class CharacterSheetStateService {
   constructor() {
     this.loadState();
     effect(() => {
-      this.saveState(this.character());
+      const state = this.character();
+      untracked(() => {
+        this.saveState(state);
+      });
     });
   }
 

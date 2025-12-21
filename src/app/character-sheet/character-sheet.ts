@@ -125,6 +125,7 @@ export class CharacterSheet implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>();
   private readonly dialogService = inject(DndDialogService);
   private readonly characterSheetForm = inject(DynamicFormService);
+  // Injected to initialize the state service and trigger loadState/saveState side effects
   private readonly characterSheetState = inject(CharacterSheetStateService);
   private readonly route = inject(ActivatedRoute);
   readonly form = this.characterSheetForm.getFormGroup();

@@ -13,10 +13,15 @@ export abstract class ComponentState<T> {
   }
 
   updateState(partialState: Partial<T>): void {
-    this._state.set({
-      ...this._state(),
-      ...partialState,
-    });
+    const currentState = this._state();
+    if (typeof currentState === 'object' && currentState !== null && !Array.isArray(currentState)) {
+      this._state.set({
+        ...currentState,
+        ...partialState,
+      });
+    } else {
+      this._state.set(partialState as T);
+    }
   }
 
   resetState(): void {

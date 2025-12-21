@@ -3,11 +3,11 @@ import {
   Component,
   effect,
   inject,
-  Injector,
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { DndCard } from '@app/shared/components/dnd-card/dnd-card';
 import { DynamicFormService } from '@app/shared/services';
 import { CardModule } from 'primeng/card';
@@ -17,12 +17,11 @@ import { AppearanceState } from './appearance-state';
 
 @Component({
   selector: 'app-appearance',
-  imports: [CardModule, TextareaModule, ReactiveFormsModule, FormsModule, DividerModule, DndCard],
+  imports: [CardModule, TextareaModule, ReactiveFormsModule, DividerModule, DndCard],
   template: `<app-dnd-card title="Appearance">
     <textarea
       pTextarea
-      [ngModel]="appearanceState()"
-      (ngModelChange)="state.setState($event)"
+      [formControl]="control"
       rows="10"
       class="appearance-textarea p-5"
       placeholder="Enter your appearance here.."
@@ -34,19 +33,25 @@ import { AppearanceState } from './appearance-state';
 })
 export class Appearance implements OnInit, OnDestroy {
   private readonly formService = inject(DynamicFormService);
-  private readonly injector = inject(Injector);
   readonly state = inject(AppearanceState);
 
   appearanceState = this.state.state;
-  control = new FormControl<string>(this.appearanceState());
+  control = new FormControl(this.appearanceState());
+
+  constructor() {
+    this.control.valueChanges.pipe(takeUntilDestroyed()).subscribe((value) => {
+      this.state.setState(value);
+    });
+
+    effect(() => {
+      const stateValue = this.appearanceState();
+      if (this.control.value !== stateValue) {
+        this.control.setValue(stateValue, { emitEvent: false });
+      }
+    });
+  }
 
   ngOnInit() {
-    effect(
-      () => {
-        this.control.setValue(this.appearanceState());
-      },
-      { injector: this.injector },
-    );
     this.formService.addControl('appearance', this.control);
   }
 

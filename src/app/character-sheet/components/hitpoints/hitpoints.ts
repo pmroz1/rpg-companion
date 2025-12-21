@@ -158,7 +158,9 @@ export class Hitpoints implements OnInit, OnDestroy {
 
     effect(() => {
       const stateValue = this.hitpointsState();
-      this.form.setValue(stateValue, { emitEvent: false });
+      if (JSON.stringify(this.form.value) !== JSON.stringify(stateValue)) {
+        this.form.setValue(stateValue, { emitEvent: false });
+      }
     });
   }
 

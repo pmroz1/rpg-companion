@@ -150,7 +150,9 @@ export class Info implements OnInit, OnDestroy {
         this.form.controls.subclass.enable({ emitEvent: false });
       }
 
-      this.form.patchValue(state, { emitEvent: false });
+      if (JSON.stringify(this.form.value) !== JSON.stringify(state)) {
+        this.form.patchValue(state, { emitEvent: false });
+      }
     });
   }
 

@@ -27,6 +27,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { fullscreenMap } from './fullscreen.config';
 import { Coins } from './components/coins/coins';
+import { Languages } from './components/languages/languages';
 import { Backstory } from "./components/backstory/backstory";
 
 @Component({
@@ -46,6 +47,7 @@ import { Backstory } from "./components/backstory/backstory";
     Hitpoints,
     SpellcastingAbility,
     Coins,
+    Languages,
     Backstory
 ],
   template: `<form [formGroup]="form" (contextmenu)="onContextMenu($event, '')">
@@ -112,6 +114,10 @@ import { Backstory } from "./components/backstory/backstory";
           <app-coins (contextmenu)="onContextMenu($event, 'app-coins')" />
         </app-dnd-grid-cell>
         <app-dnd-grid-cell [colspan]="4">
+          <app-languages (contextmenu)="onContextMenu($event, 'app-languages')" />
+        </app-dnd-grid-cell>
+        <app-dnd-grid-cell [colspan]="4">
+          <app-dnd-card title="placeholder" />
           <app-backstory (contextmenu)="onContextMenu($event, 'app-backstory')" />
         </app-dnd-grid-cell>
       </app-dnd-grid>

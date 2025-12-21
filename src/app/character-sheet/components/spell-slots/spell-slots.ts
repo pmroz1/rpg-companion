@@ -14,6 +14,7 @@ import {
   FormsModule,
   ReactiveFormsModule,
 } from '@angular/forms';
+import { deepEqual } from '@app/shared/utils/deep-equal';
 import { DndCard } from '@app/shared/components/dnd-card/dnd-card';
 import { DynamicFormService } from '@app/shared/services';
 import { ButtonModule } from 'primeng/button';
@@ -150,7 +151,7 @@ export class SpellSlots implements OnInit, OnDestroy {
 
     effect(() => {
       const stateValue = this.spellSlotsState();
-      if (JSON.stringify(this.form.value.spellSlots) !== JSON.stringify(stateValue)) {
+      if (!deepEqual(this.form.value.spellSlots, stateValue)) {
         this.form.patchValue({ spellSlots: stateValue }, { emitEvent: false });
       }
     });

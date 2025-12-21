@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { deepEqual } from '@app/shared/utils/deep-equal';
 import { DndCard } from '@app/shared/components/dnd-card/dnd-card';
 import { DynamicFormService } from '@app/shared/services';
 import { Checkbox } from 'primeng/checkbox';
@@ -158,7 +159,7 @@ export class Hitpoints implements OnInit, OnDestroy {
 
     effect(() => {
       const stateValue = this.hitpointsState();
-      if (JSON.stringify(this.form.value) !== JSON.stringify(stateValue)) {
+      if (!deepEqual(this.form.value, stateValue)) {
         this.form.setValue(stateValue, { emitEvent: false });
       }
     });

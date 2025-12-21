@@ -23,6 +23,7 @@ import { DndDialogService } from '@app/shared/components/dnd-dialog/dnd-dialog.s
 import { DndCheckbox } from '@app/shared/components/dnd-checkbox/dnd-checkbox';
 import { ProficienciesState } from './proficiencies.state';
 import { ProficienciesInfo } from './model/proficiencies-info';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-proficiencies',
@@ -109,7 +110,7 @@ export class Proficiencies implements OnInit, OnDestroy {
   });
 
   constructor() {
-    this.form.valueChanges.pipe().subscribe((value) => {
+    this.form.valueChanges.pipe(takeUntilDestroyed()).subscribe((value) => {
       this.state.updateState(value as Partial<ProficienciesInfo>);
     });
 

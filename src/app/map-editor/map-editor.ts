@@ -92,6 +92,9 @@ export class MapEditor implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    if (this.mapCanvas) {
+      this.mapCanvas.dispose();
+    }
     this.subscription.unsubscribe();
   }
 

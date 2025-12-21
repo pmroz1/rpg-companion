@@ -43,7 +43,7 @@ export class MapEditor implements OnInit, OnDestroy {
   private readonly mapEditorService = inject(MapEditorStateService);
   private subscription = new Subscription();
   private static readonly GRID_SIZE = 50;
-  private keyboardListener!: (e: KeyboardEvent) => void;
+  private keyboardListener?: (e: KeyboardEvent) => void;
 
   mapCanvas!: Canvas;
   items: MenuItem[] = [

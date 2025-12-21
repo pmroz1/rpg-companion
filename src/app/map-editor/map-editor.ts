@@ -42,9 +42,9 @@ export class MapEditor implements OnInit, OnDestroy {
   private readonly dialogService = inject(DndDialogService);
   private readonly mapEditorService = inject(MapEditorStateService);
   private subscription = new Subscription();
+  private static readonly GRID_SIZE = 50;
 
   mapCanvas!: Canvas;
-  gridSize = 50;
   items: MenuItem[] = [
     {
       label: 'Add Monsters',
@@ -258,8 +258,8 @@ export class MapEditor implements OnInit, OnDestroy {
   //     const obj = e.target;
   //     if (!obj) return;
 
-  //     const snappedWidth = Math.round((obj.width! * obj.scaleX!) / this.gridSize) * this.gridSize;
-  //     const snappedHeight = Math.round((obj.height! * obj.scaleY!) / this.gridSize) * this.gridSize;
+  //     const snappedWidth = Math.round((obj.width! * obj.scaleX!) / MapEditor.GRID_SIZE) * MapEditor.GRID_SIZE;
+  //     const snappedHeight = Math.round((obj.height! * obj.scaleY!) / MapEditor.GRID_SIZE) * MapEditor.GRID_SIZE;
   //     obj.set({
   //       scaleX: snappedWidth / obj.width!,
   //       scaleY: snappedHeight / obj.height!,
@@ -340,8 +340,8 @@ export class MapEditor implements OnInit, OnDestroy {
     }
 
     obj.set({
-      left: Math.round(obj.left / this.gridSize) * this.gridSize,
-      top: Math.round(obj.top / this.gridSize) * this.gridSize,
+      left: Math.round(obj.left / MapEditor.GRID_SIZE) * MapEditor.GRID_SIZE,
+      top: Math.round(obj.top / MapEditor.GRID_SIZE) * MapEditor.GRID_SIZE,
     });
   }
 }

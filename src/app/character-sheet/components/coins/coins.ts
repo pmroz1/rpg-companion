@@ -3,26 +3,26 @@ import {
   Component,
   effect,
   inject,
-  Injector,
-  OnInit,
   OnDestroy,
+  OnInit,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { DndCard } from '@app/shared/components/dnd-card/dnd-card';
 import { DynamicFormService } from '@app/shared/services';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { CoinsState } from './coins.state';
-import { FormControl, FormsModule } from '@angular/forms';
 import { CoinsInfo } from './models/coins-info';
+
 @Component({
   selector: 'app-coins',
-  imports: [DndCard, InputNumberModule, FormsModule],
+  imports: [DndCard, InputNumberModule, ReactiveFormsModule],
   template: `<app-dnd-card title="Coins">
-    <div class="grid grid-cols-5 gap-4">
+    <div class="grid grid-cols-5 gap-4" [formGroup]="form">
       <div class="flex flex-col items-center gap-2">
         <label for="cp" class="text-center">CP</label>
         <p-inputnumber
-          [ngModel]="coinsInfo().cp"
-          (ngModelChange)="state.updateState({ cp: $event })"
+          formControlName="cp"
           [showButtons]="true"
           buttonLayout="vertical"
           spinnerMode="vertical"
@@ -41,8 +41,7 @@ import { CoinsInfo } from './models/coins-info';
       <div class="flex flex-col items-center gap-2">
         <label for="sp" class="text-center">SP</label>
         <p-inputnumber
-          [ngModel]="coinsInfo().sp"
-          (ngModelChange)="state.updateState({ sp: $event })"
+          formControlName="sp"
           [showButtons]="true"
           buttonLayout="vertical"
           spinnerMode="vertical"
@@ -61,8 +60,7 @@ import { CoinsInfo } from './models/coins-info';
       <div class="flex flex-col items-center gap-2">
         <label for="ep" class="text-center">EP</label>
         <p-inputnumber
-          [ngModel]="coinsInfo().ep"
-          (ngModelChange)="state.updateState({ ep: $event })"
+          formControlName="ep"
           [showButtons]="true"
           buttonLayout="vertical"
           spinnerMode="vertical"
@@ -81,8 +79,7 @@ import { CoinsInfo } from './models/coins-info';
       <div class="flex flex-col items-center gap-2">
         <label for="gp" class="text-center">GP</label>
         <p-inputnumber
-          [ngModel]="coinsInfo().gp"
-          (ngModelChange)="state.updateState({ gp: $event })"
+          formControlName="gp"
           [showButtons]="true"
           buttonLayout="vertical"
           spinnerMode="vertical"
@@ -101,8 +98,7 @@ import { CoinsInfo } from './models/coins-info';
       <div class="flex flex-col items-center gap-2">
         <label for="pp" class="text-center">PP</label>
         <p-inputnumber
-          [ngModel]="coinsInfo().pp"
-          (ngModelChange)="state.updateState({ pp: $event })"
+          formControlName="pp"
           [showButtons]="true"
           buttonLayout="vertical"
           spinnerMode="vertical"
@@ -124,21 +120,32 @@ import { CoinsInfo } from './models/coins-info';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Coins implements OnInit, OnDestroy {
-  state = inject(CoinsState);
-  private readonly injector = inject(Injector);
   private readonly formService = inject(DynamicFormService);
+  readonly state = inject(CoinsState);
 
-  coinsInfo = this.state.state;
-  control = new FormControl<CoinsInfo>(this.coinsInfo());
+  coinsState = this.state.state;
+
+  form = new FormGroup({
+    cp: new FormControl<number>(0, { nonNullable: true }),
+    sp: new FormControl<number>(0, { nonNullable: true }),
+    ep: new FormControl<number>(0, { nonNullable: true }),
+    gp: new FormControl<number>(0, { nonNullable: true }),
+    pp: new FormControl<number>(0, { nonNullable: true }),
+  });
+
+  constructor() {
+    this.form.valueChanges.pipe(takeUntilDestroyed()).subscribe((value) => {
+      this.state.updateState(value as Partial<CoinsInfo>);
+    });
+
+    effect(() => {
+      const state = this.coinsState();
+      this.form.patchValue(state, { emitEvent: false });
+    });
+  }
 
   ngOnInit(): void {
-    effect(
-      () => {
-        this.control.setValue(this.coinsInfo());
-      },
-      { injector: this.injector },
-    );
-    this.formService.addControl('coins', this.control);
+    this.formService.addControl('coins', this.form);
   }
 
   ngOnDestroy(): void {

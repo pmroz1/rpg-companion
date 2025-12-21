@@ -61,7 +61,9 @@ export class Languages implements OnInit, OnDestroy {
 
     effect(() => {
       const stateValue = this.languageState();
-      this.form.patchValue(stateValue, { emitEvent: false });
+      if (JSON.stringify(this.form.value) !== JSON.stringify(stateValue)) {
+        this.form.patchValue(stateValue, { emitEvent: false });
+      }
     });
   }
 

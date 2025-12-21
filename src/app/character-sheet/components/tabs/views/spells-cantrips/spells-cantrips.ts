@@ -163,7 +163,10 @@ export class SpellsCantrips implements OnInit, OnDestroy {
 
     effect(() => {
       const stateValue = this.knownSpellsCantrips();
-      this.form.patchValue({ knownSpells: stateValue }, { emitEvent: false });
+      const currentValue = this.form.controls.knownSpells.value;
+      if (JSON.stringify(currentValue) !== JSON.stringify(stateValue)) {
+        this.form.patchValue({ knownSpells: stateValue }, { emitEvent: false });
+      }
     });
   }
 

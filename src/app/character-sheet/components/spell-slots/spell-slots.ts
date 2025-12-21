@@ -150,7 +150,9 @@ export class SpellSlots implements OnInit, OnDestroy {
 
     effect(() => {
       const stateValue = this.spellSlotsState();
-      this.form.patchValue({ spellSlots: stateValue }, { emitEvent: false });
+      if (JSON.stringify(this.form.value.spellSlots) !== JSON.stringify(stateValue)) {
+        this.form.patchValue({ spellSlots: stateValue }, { emitEvent: false });
+      }
     });
   }
 

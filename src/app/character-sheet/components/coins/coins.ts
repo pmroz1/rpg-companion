@@ -139,7 +139,9 @@ export class Coins implements OnInit, OnDestroy {
 
     effect(() => {
       const state = this.coinsState();
-      this.form.patchValue(state, { emitEvent: false });
+      if (JSON.stringify(this.form.value) !== JSON.stringify(state)) {
+        this.form.patchValue(state, { emitEvent: false });
+      }
     });
   }
 

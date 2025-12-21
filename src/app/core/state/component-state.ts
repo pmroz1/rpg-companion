@@ -12,6 +12,11 @@ export abstract class ComponentState<T> {
     this._state.set(state);
   }
 
+  /**
+   * Merges partial state into the current state.
+   * Note: This method is intended for object states.
+   * For arrays, it will replace the entire array and log a warning. Use setState() for arrays.
+   */
   updateState(partialState: Partial<T>): void {
     const currentState = this._state();
     if (typeof currentState === 'object' && currentState !== null && !Array.isArray(currentState)) {
@@ -20,11 +25,10 @@ export abstract class ComponentState<T> {
         ...partialState,
       });
     } else {
-      if (Array.isArray(currentState) && !Array.isArray(partialState)) {
+      if (Array.isArray(currentState)) {
         console.warn(
-          'ComponentState: Invalid update for array state. Use setState for arrays or provide a complete array.',
+          'ComponentState: updateState called on array state. This will replace the entire array. Use setState instead.',
         );
-        return;
       }
       this._state.set(partialState as T);
     }

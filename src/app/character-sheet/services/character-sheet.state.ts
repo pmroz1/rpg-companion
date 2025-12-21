@@ -45,10 +45,16 @@ export class CharacterSheetStateService {
 
   constructor() {
     this.loadState();
-    effect(() => {
+    effect((onCleanup) => {
       const state = this.character();
-      untracked(() => {
-        this.saveState(state);
+      const timer = setTimeout(() => {
+        untracked(() => {
+          this.saveState(state);
+        });
+      }, 200);
+
+      onCleanup(() => {
+        clearTimeout(timer);
       });
     });
   }
@@ -90,20 +96,31 @@ export class CharacterSheetStateService {
   }
 
   private isValidState(state: unknown): state is CharacterSheetState {
+    if (typeof state !== 'object' || state === null) {
+      return false;
+    }
+
+    const s = state as Record<string, unknown>;
+
     return (
-      typeof state === 'object' &&
-      state !== null &&
-      'appearance' in state &&
-      'coins' in state &&
-      'info' in state &&
-      'spellSlots' in state &&
-      'backstory' in state &&
-      'hitpoints' in state &&
-      'languages' in state &&
-      'proficiencies' in state &&
-      'spellCasting' in state &&
-      'spellsCantrips' in state &&
-      'notes' in state
+      typeof s['appearance'] === 'string' &&
+      typeof s['coins'] === 'object' &&
+      s['coins'] !== null &&
+      typeof s['info'] === 'object' &&
+      s['info'] !== null &&
+      Array.isArray(s['spellSlots']) &&
+      typeof s['backstory'] === 'object' &&
+      s['backstory'] !== null &&
+      typeof s['hitpoints'] === 'object' &&
+      s['hitpoints'] !== null &&
+      typeof s['languages'] === 'object' &&
+      s['languages'] !== null &&
+      typeof s['proficiencies'] === 'object' &&
+      s['proficiencies'] !== null &&
+      typeof s['spellCasting'] === 'object' &&
+      s['spellCasting'] !== null &&
+      Array.isArray(s['spellsCantrips']) &&
+      typeof s['notes'] === 'string'
     );
   }
 }

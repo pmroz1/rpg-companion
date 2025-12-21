@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { deepEqual } from '@app/shared/utils/deep-equal';
 import { DndCard } from '@app/shared/components/dnd-card/dnd-card';
 import { DynamicFormService } from '@app/shared/services';
 import { InputNumberModule } from 'primeng/inputnumber';
@@ -139,7 +140,7 @@ export class Coins implements OnInit, OnDestroy {
 
     effect(() => {
       const state = this.coinsState();
-      if (JSON.stringify(this.form.value) !== JSON.stringify(state)) {
+      if (!deepEqual(this.form.value, state)) {
         this.form.patchValue(state, { emitEvent: false });
       }
     });

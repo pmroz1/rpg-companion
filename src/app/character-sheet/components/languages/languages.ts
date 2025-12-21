@@ -11,6 +11,7 @@ import { DynamicFormService } from '@app/shared/services';
 import { LanguagesInfo } from './models/languages-info';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { deepEqual } from '@app/shared/utils/deep-equal';
 import { DndCard } from '@app/shared/components/dnd-card/dnd-card';
 import { DndDialogService } from '@app/shared/components/dnd-dialog/dnd-dialog.service';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
@@ -61,7 +62,7 @@ export class Languages implements OnInit, OnDestroy {
 
     effect(() => {
       const stateValue = this.languageState();
-      if (JSON.stringify(this.form.value) !== JSON.stringify(stateValue)) {
+      if (!deepEqual(this.form.value, stateValue)) {
         this.form.patchValue(stateValue, { emitEvent: false });
       }
     });

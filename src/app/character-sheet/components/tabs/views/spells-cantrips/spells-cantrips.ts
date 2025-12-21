@@ -11,6 +11,7 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { deepEqual } from '@app/shared/utils/deep-equal';
 import { DndDialogService } from '@app/shared/components/dnd-dialog/dnd-dialog.service';
 import { DynamicFormService } from '@app/shared/services';
 import { DND_SPELLS_CANTRIPS } from '@data/dictionaries/spells-cantrips.dictionary';
@@ -164,7 +165,7 @@ export class SpellsCantrips implements OnInit, OnDestroy {
     effect(() => {
       const stateValue = this.knownSpellsCantrips();
       const currentValue = this.form.controls.knownSpells.value;
-      if (JSON.stringify(currentValue) !== JSON.stringify(stateValue)) {
+      if (!deepEqual(currentValue, stateValue)) {
         this.form.patchValue({ knownSpells: stateValue }, { emitEvent: false });
       }
     });

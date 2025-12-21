@@ -2,20 +2,20 @@ import { Alignment, CreatureHabitat, CreatureSize, CreatureType } from '@data/en
 
 export interface DndMonster {
   name: string;
-  challengeRating: string;
-  armorClass: number;
-  hitPointsFormula: string;
   type: CreatureType;
   size: CreatureSize;
   habitat: CreatureHabitat;
-  alignment: Alignment;
+  challengeRating: string;
+  armorClass: number;
   hitPoints: number;
+  hitPointsFormula: string;
   strength: number;
   dexterity: number;
   constitution: number;
   intelligence: number;
   wisdom: number;
   charisma: number;
+  alignment: Alignment;
   speed: string;
   languages: string[];
   actions: string[];

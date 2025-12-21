@@ -9,6 +9,8 @@
   position: relative;
   box-sizing: border-box;
   border: 1px solid var(--color-parchment);
+  border-radius: var(--p-menubar-border-radius);
+  margin-top: 1rem;
 }
 
 .map-canvas {

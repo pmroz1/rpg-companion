@@ -10,7 +10,6 @@ import { DndCard } from '@app/shared/components/dnd-card/dnd-card';
 import { DndDialogService } from '@app/shared/components/dnd-dialog/dnd-dialog.service';
 import { MenuItem } from 'primeng/api';
 import { MenubarModule } from 'primeng/menubar';
-import { TableModule } from 'primeng/table';
 import {
   ActiveSelection,
   Canvas,

@@ -1,6 +1,7 @@
 # Normalize line endings and ensure LF across text files
 * text=auto
 *.ts text eol=lf
+*.js text eol=lf
 *.html text eol=lf
 *.css text eol=lf
 *.scss text eol=lf

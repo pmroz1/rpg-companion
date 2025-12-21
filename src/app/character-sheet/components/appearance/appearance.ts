@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, OnDestroy } from '@angular/core';
-import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { DynamicFormService } from '@app/shared/services';
 import { CardModule } from 'primeng/card';
 import { TextareaModule } from 'primeng/textarea';

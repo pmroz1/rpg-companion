@@ -3,11 +3,13 @@ import {
   ChangeDetectorRef,
   Component,
   inject,
+  OnDestroy,
   OnInit,
 } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DndCard } from '@app/shared/components/dnd-card/dnd-card';
 import { DndDialogService } from '@app/shared/components/dnd-dialog/dnd-dialog.service';
+import { DndMonster } from '@data/models';
 import { MenuItem } from 'primeng/api';
 import { MenubarModule } from 'primeng/menubar';
 import {
@@ -20,6 +22,8 @@ import {
   SerializedObjectProps,
   Textbox,
 } from 'fabric';
+import { MapEditorStateService } from './services/map-editor-state.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-map-editor',
@@ -33,15 +37,17 @@ import {
   styleUrls: ['./map-editor.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MapEditor implements OnInit {
+export class MapEditor implements OnInit, OnDestroy {
   private cdr = inject(ChangeDetectorRef);
   private readonly dialogService = inject(DndDialogService);
+  private readonly mapEditorService = inject(MapEditorStateService);
+  private subscription = new Subscription();
 
   mapCanvas!: Canvas;
   gridSize = 50;
   items: MenuItem[] = [
     {
-      label: 'Add Monster',
+      label: 'Add Monsters',
       icon: 'pi pi-plus',
       command: () => {
         this.dialogService.openFullscreen('Monsters', 'app-monsters', false);
@@ -73,16 +79,31 @@ export class MapEditor implements OnInit {
     this.addSelectionListeners();
     this.addKeyboardListeners();
 
-    this.addCircle();
-    this.addTextbox();
-    this.mapCanvas.renderAll();
-
     // Update button state after initial setup
     this.updateDeleteButtonState();
+
+    // Subscribe to monster submissions
+    this.subscription.add(
+      this.mapEditorService.monstersSubmitted$.subscribe((monsters) => {
+        this.addMonstersToCanvas(monsters);
+      }),
+    );
     // this.addOnObjectScalingListener();
   }
 
-  addCircle() {
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
+
+  addMonstersToCanvas(monsters: { monster: DndMonster; count: number }[]) {
+    monsters.forEach(({ monster, count }) => {
+      for (let i = 0; i < count; i++) {
+        this.addMonster(monster);
+      }
+    });
+  }
+
+  addMonster(monster: DndMonster) {
     const circle = new Circle({
       radius: 25,
       fill: 'gray',
@@ -102,6 +123,9 @@ export class MapEditor implements OnInit {
       tl: false,
       tr: false,
     });
+
+    circle.set('data', { monster });
+
     this.mapCanvas.add(circle);
     const activeObject = this.mapCanvas.getActiveObject();
     if (activeObject) {

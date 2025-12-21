@@ -1,19 +1,37 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { KeyValuePipe } from '@angular/common';
 import { DND_MONSTERS } from '@data/dictionaries/monsters.dictionary';
 import { DndMonster } from '@data/models';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { DndCard } from '@app/shared/components/dnd-card/dnd-card';
+import { Chip } from 'primeng/chip';
+import { MapEditorStateService } from '@app/map-editor/services/map-editor-state.service';
+import { DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-monsters-table',
-  imports: [TableModule, ButtonModule, DndCard],
+  imports: [TableModule, ButtonModule, DndCard, KeyValuePipe, Chip],
   template: `
     <app-dnd-card title="Monsters" [displayTitle]="false">
       <app-dnd-card title="Selected Monsters" [displayTitle]="false">
-        @for (sm of selectedMonsters; track sm.name) {
-          <div class="selected-monster">
-            <span>{{ sm.name }} (CR: {{ sm.challengeRating }})</span>
+        @for (monsterCounts of selectedMonsters | keyvalue; track monsterCounts.key) {
+          <div>
+            <p-chip>
+              <span
+                class="bg-primary text-primary-contrast rounded-full w-6 h-6 flex items-center justify-center"
+              >
+                {{ monsterCounts.value.count }}
+              </span>
+              <span> {{ monsterCounts.value.monster.name }} </span>
+              <p-button
+                size="small"
+                icon="pi pi-minus"
+                severity="secondary"
+                [rounded]="true"
+                (onClick)="removeMonster(monsterCounts.value.monster)"
+              />
+            </p-chip>
           </div>
         } @empty {
           <h3 style="display: flex; justify-content: center; color: var(--text-muted);">
@@ -23,7 +41,6 @@ import { DndCard } from '@app/shared/components/dnd-card/dnd-card';
       </app-dnd-card>
       <p-table
         [value]="monsters"
-        [(selection)]="selectedMonsters"
         dataKey="name"
         [expandedRowKeys]="expandedRows"
         [paginator]="true"
@@ -33,14 +50,22 @@ import { DndCard } from '@app/shared/components/dnd-card/dnd-card';
         stripedRows
       >
         <ng-template #caption>
-          <div class="flex flex-wrap justify-end gap-2">
-            <p-button label="Expand All" icon="pi pi-plus" text (onClick)="expandAll()" />
-            <p-button label="Collapse All" icon="pi pi-minus" text (onClick)="collapseAll()" />
+          <div class="flex flex-wrap justify-between gap-2">
+            <p-button
+              label="Add selected monsters"
+              icon="pi pi-check"
+              (onClick)="submitMonsters()"
+              [disabled]="isSelectedMonstersEmpty()"
+            />
+            <div class="flex flex-wrap gap-2">
+              <p-button label="Expand All" icon="pi pi-plus" text (onClick)="expandAll()" />
+              <p-button label="Collapse All" icon="pi pi-minus" text (onClick)="collapseAll()" />
+            </div>
           </div>
         </ng-template>
         <ng-template #header>
           <tr>
-            <th style="width: 4rem"><p-tableHeaderCheckbox /></th>
+            <th style="width: 4rem"></th>
             <th style="width: 5rem"></th>
             <th pSortableColumn="name">
               <div class="flex items-center gap-2">
@@ -88,7 +113,14 @@ import { DndCard } from '@app/shared/components/dnd-card/dnd-card';
         </ng-template>
         <ng-template #body let-monster let-expanded="expanded">
           <tr>
-            <td><p-tableCheckbox [value]="monster" /></td>
+            <td>
+              <p-button
+                size="small"
+                icon="pi pi-plus"
+                severity="secondary"
+                (onClick)="addMonster(monster)"
+              />
+            </td>
             <td>
               <p-button
                 type="button"
@@ -174,12 +206,14 @@ import { DndCard } from '@app/shared/components/dnd-card/dnd-card';
       </p-table>
     </app-dnd-card>
   `,
-  styleUrls: ['./monsters-table.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MonstersTable {
+  private mapEditorService = inject(MapEditorStateService);
+  private dialogRef = inject(DynamicDialogRef, { optional: true });
+
   monsters: DndMonster[] = [...DND_MONSTERS];
-  selectedMonsters: DndMonster[] = [];
+  selectedMonsters: Record<string, { monster: DndMonster; count: number }> = {};
   expandedRows: Record<string, boolean> = {};
 
   expandAll() {
@@ -194,5 +228,33 @@ export class MonstersTable {
 
   collapseAll() {
     this.expandedRows = {};
+  }
+
+  isSelectedMonstersEmpty(): boolean {
+    return Object.keys(this.selectedMonsters).length === 0;
+  }
+
+  addMonster(monster: DndMonster) {
+    if (this.selectedMonsters[monster.name]) {
+      this.selectedMonsters[monster.name].count += 1;
+    } else {
+      this.selectedMonsters[monster.name] = { monster, count: 1 };
+    }
+  }
+
+  removeMonster(monster: DndMonster) {
+    if (this.selectedMonsters[monster.name]) {
+      this.selectedMonsters[monster.name].count -= 1;
+      if (this.selectedMonsters[monster.name].count <= 0) {
+        delete this.selectedMonsters[monster.name];
+      }
+    }
+  }
+
+  submitMonsters() {
+    const monstersArray = Object.values(this.selectedMonsters);
+    this.mapEditorService.submitMonsters(monstersArray);
+    this.selectedMonsters = {};
+    this.dialogRef?.close();
   }
 }

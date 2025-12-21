@@ -119,14 +119,7 @@ export class SpellSlots implements OnInit, OnDestroy {
   }
 
   reset() {
-    this.spellSlotsState = signal(
-      Array.from({ length: 9 }, (_, i) => ({
-        level: i + 1,
-        expanded: 0,
-        total: 0,
-      })),
-    );
-    this.state.updateState(this.spellSlotsState());
+    this.state.resetState();
   }
 
   isDisabledCheckbox(level: number, index: number): boolean {
@@ -151,28 +144,30 @@ export class SpellSlots implements OnInit, OnDestroy {
     if (event > maxCount) {
       event = maxCount;
     }
-    this.spellSlotsState()[index] = {
-      ...this.spellSlotsState()[index],
-      expanded: Math.min(this.spellSlotsState()[index].expanded, event),
+    const newState = [...this.spellSlotsState()];
+    newState[index] = {
+      ...newState[index],
+      expanded: Math.min(newState[index].expanded, event),
       total: event,
     };
-    this.state.updateState(this.spellSlotsState());
+    this.state.setState(newState);
   }
 
   onCheckboxChange(level: number, checkboxIndex: number, checked: boolean) {
     const index = level - 1;
+    const newState = [...this.spellSlotsState()];
     if (checked) {
-      this.spellSlotsState()[index] = {
-        ...this.spellSlotsState()[index],
+      newState[index] = {
+        ...newState[index],
         expanded: checkboxIndex + 1,
       };
     } else {
-      this.spellSlotsState()[index] = {
-        ...this.spellSlotsState()[index],
+      newState[index] = {
+        ...newState[index],
         expanded: checkboxIndex,
       };
     }
-    this.state.updateState(this.spellSlotsState());
+    this.state.setState(newState);
   }
 
   ngOnDestroy(): void {

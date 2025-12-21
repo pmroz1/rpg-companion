@@ -95,6 +95,7 @@ export class MapEditor implements OnInit, OnDestroy {
   ngOnDestroy() {
     if (this.keyboardListener) {
       document.removeEventListener('keydown', this.keyboardListener);
+      this.keyboardListener = undefined;
     }
     if (this.mapCanvas) {
       this.mapCanvas.dispose();

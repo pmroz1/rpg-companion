@@ -3,13 +3,12 @@ import {
   Component,
   effect,
   inject,
-  Injector,
   OnInit,
   OnDestroy,
 } from '@angular/core';
 import { CardModule } from 'primeng/card';
 import { DividerModule } from 'primeng/divider';
-import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CheckboxModule } from 'primeng/checkbox';
 import { DynamicFormService } from '@app/shared/services';
 import { ArmorProficiency, WeaponProficiency } from '@data/enums/proficiency.enum';
@@ -94,28 +93,34 @@ import { ProficienciesInfo } from './model/proficiencies-info';
 })
 export class Proficiencies implements OnInit, OnDestroy {
   private readonly formService = inject(DynamicFormService);
-  private readonly injector = inject(Injector);
   private readonly dndDialogService = inject(DndDialogService);
-  state = inject(ProficienciesState);
-
-  proficienciesState = this.state.state;
-  control = new FormControl<ProficienciesInfo>(this.proficienciesState());
-
-  ref: DynamicDialogRef | undefined | null;
+  readonly state = inject(ProficienciesState);
 
   armorProficiencies = Object.values(ArmorProficiency);
   weaponProficiencies = Object.values(WeaponProficiency);
   tools = [...DND_TOOLS];
 
-  ngOnInit(): void {
-    effect(
-      () => {
-        this.control.setValue(this.proficienciesState());
-      },
-      { injector: this.injector },
-    );
+  proficienciesState = this.state.state;
+  ref: DynamicDialogRef | undefined | null;
+  form = new FormGroup({
+    armorTrainingTypes: new FormControl<string[]>([], { nonNullable: true }),
+    weapons: new FormControl<string[]>([], { nonNullable: true }),
+    tools: new FormControl<DndTool[]>([], { nonNullable: true }),
+  });
 
-    this.formService.addControl('proficienciesInfo', this.control);
+  constructor() {
+    this.form.valueChanges.pipe().subscribe((value) => {
+      this.state.updateState(value as Partial<ProficienciesInfo>);
+    });
+
+    effect(() => {
+      const stateValue = this.proficienciesState();
+      this.form.patchValue(stateValue, { emitEvent: false });
+    });
+  }
+
+  ngOnInit(): void {
+    this.formService.addControl('proficienciesInfo', this.form);
   }
 
   show() {

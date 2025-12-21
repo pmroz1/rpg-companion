@@ -28,6 +28,7 @@ import { takeUntil } from 'rxjs/operators';
 import { fullscreenMap } from './fullscreen.config';
 import { Coins } from './components/coins/coins';
 import { Languages } from './components/languages/languages';
+import { Backstory } from "./components/backstory/backstory";
 
 @Component({
   selector: 'app-character-sheet',
@@ -47,7 +48,8 @@ import { Languages } from './components/languages/languages';
     SpellcastingAbility,
     Coins,
     Languages,
-  ],
+    Backstory
+],
   template: `<form [formGroup]="form" (contextmenu)="onContextMenu($event, '')">
       <app-dnd-grid>
         <app-dnd-grid-cell [colspan]="5" [rowspan]="2">
@@ -116,6 +118,7 @@ import { Languages } from './components/languages/languages';
         </app-dnd-grid-cell>
         <app-dnd-grid-cell [colspan]="4">
           <app-dnd-card title="placeholder" />
+          <app-backstory (contextmenu)="onContextMenu($event, 'app-backstory')" />
         </app-dnd-grid-cell>
       </app-dnd-grid>
     </form>

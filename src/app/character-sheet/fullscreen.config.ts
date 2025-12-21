@@ -9,6 +9,7 @@ import { Hitpoints } from './components/hitpoints/hitpoints';
 import { SpellcastingAbility } from './components/spellcasting-ability/spellcasting-ability';
 import { Coins } from './components/coins/coins';
 import { Languages } from './components/languages/languages';
+import { Backstory } from './components/backstory/backstory';
 
 export interface ComponentConfig {
   component: Type<unknown>;
@@ -26,6 +27,7 @@ export const fullscreenMap = new Map<string, ComponentConfig>([
   ['app-hitpoints', { component: Hitpoints, enableFullscreen: true, enableExplain: true }],
   ['app-coins', { component: Coins, enableFullscreen: true }],
   ['app-languages', { component: Languages, enableFullscreen: true }],
+  ['app-backstory', { component: Backstory, enableFullscreen: true }],
   [
     'app-spellcasting-ability',
     { component: SpellcastingAbility, enableFullscreen: true, enableExplain: true },

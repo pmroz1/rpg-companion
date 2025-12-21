@@ -7,4 +7,5 @@ export * from './dnd-subclass';
 export * from './dnd-tool';
 export * from './dnd-weapon';
 export * from './dnd-language';
+export * from './dnd-alignment';
 export * from './spell-cantrip';

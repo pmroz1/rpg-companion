@@ -1,10 +1,8 @@
 name: Discord PR Notifications
-
 on:
   pull_request:
     types:
       - opened
-      - closed
 
 jobs:
   notify:

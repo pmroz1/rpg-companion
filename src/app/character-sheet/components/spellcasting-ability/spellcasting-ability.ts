@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DndCard } from '@app/shared/components/dnd-card/dnd-card';
-import { DynamicFormService } from '@app/shared/services';
+import { DynamicFormService } from '@app/core/form';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { SpellCastingAbilities } from '@data/enums';

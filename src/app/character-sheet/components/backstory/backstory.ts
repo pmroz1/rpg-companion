@@ -8,7 +8,7 @@ import {
   OnInit,
 } from '@angular/core';
 import { FormControl, FormsModule } from '@angular/forms';
-import { DynamicFormService } from '@app/shared/services';
+import { DynamicFormService } from '@app/core/form';
 import { BackstoryInfo } from './models/backstory-info';
 import { BackstoryState } from './backstory.state';
 import { DndCard } from '@app/shared/components/dnd-card/dnd-card';

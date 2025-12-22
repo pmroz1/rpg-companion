@@ -7,7 +7,7 @@ import {
   OnInit,
 } from '@angular/core';
 import { LanguageState } from './languages.state';
-import { DynamicFormService } from '@app/shared/services';
+import { DynamicFormService } from '@app/core/form';
 import { LanguagesInfo } from './models/languages-info';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';

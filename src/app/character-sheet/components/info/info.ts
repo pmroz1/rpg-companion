@@ -11,7 +11,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { deepEqual } from '@app/shared/utils/deep-equal';
 import { DndCard } from '@app/shared/components/dnd-card/dnd-card';
-import { DynamicFormService } from '@app/shared/services';
+import { DynamicFormService } from '@app/core/form';
 import { DND_CLASSES, DND_SUBCLASSES } from '@data/dictionaries';
 import { DND_BACKGROUNDS } from '@data/dictionaries/background.dictionary';
 import { DND_RACES } from '@data/dictionaries/races.dictionary';

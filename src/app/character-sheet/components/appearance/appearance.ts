@@ -9,7 +9,7 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { DndCard } from '@app/shared/components/dnd-card/dnd-card';
-import { DynamicFormService } from '@app/shared/services';
+import { DynamicFormService } from '@app/core/form';
 import { CardModule } from 'primeng/card';
 import { DividerModule } from 'primeng/divider';
 import { TextareaModule } from 'primeng/textarea';

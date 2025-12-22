@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { EditorModule, EditorTextChangeEvent } from 'primeng/editor';
 import { FormControl, FormsModule } from '@angular/forms';
-import { DynamicFormService } from '@app/shared/services';
+import { DynamicFormService } from '@app/core/form';
 import { NotesState } from './notes.state';
 @Component({
   selector: 'app-notes',

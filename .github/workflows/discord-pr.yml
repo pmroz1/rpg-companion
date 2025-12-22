@@ -29,9 +29,10 @@ jobs:
             STATUS="🔔 ${ACTION}"
           fi
 
-          curl -H "Content-Type: application/json" \
-               -X POST \
-               -d "{
-                 \"content\": \"${STATUS}\\n**${TITLE}**\\n${PR_URL}\\nRepo: ${REPO}\\nAuthor: ${AUTHOR}\"
-               }" \
-               "$DISCORD_WEBHOOK_URL"
+          CONTENT="$(printf '%s\n**%s**\n%s\nRepo: %s\nAuthor: %s' "$STATUS" "$TITLE" "$PR_URL" "$REPO" "$AUTHOR")"
+
+          jq -n --arg content "$CONTENT" '{content: $content}' | \
+            curl -H "Content-Type: application/json" \
+                 -X POST \
+                 -d @- \
+                 "$DISCORD_WEBHOOK_URL"

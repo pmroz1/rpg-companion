@@ -26,7 +26,7 @@ jobs:
           elif [ "$ACTION" = "closed" ]; then
             STATUS="❌ Closed"
           else
-            STATUS="🔔 ${ACTION}"
+            STATUS="🔔 ${ACTION^}"
           fi
 
           CONTENT="$(printf '%s\n**%s**\n%s\nRepo: %s\nAuthor: %s' "$STATUS" "$TITLE" "$PR_URL" "$REPO" "$AUTHOR")"

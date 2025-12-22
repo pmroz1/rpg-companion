@@ -13,7 +13,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { deepEqual } from '@app/shared/utils/deep-equal';
 import { DndDialogService } from '@app/shared/components/dnd-dialog/dnd-dialog.service';
-import { DynamicFormService } from '@app/shared/services';
+import { DynamicFormService } from '@app/core/form';
 import { DND_SPELLS_CANTRIPS } from '@data/dictionaries/spells-cantrips.dictionary';
 import { SpellCantrip } from '@data/models';
 import { ButtonModule } from 'primeng/button';

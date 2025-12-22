@@ -10,7 +10,7 @@ import { CardModule } from 'primeng/card';
 import { DividerModule } from 'primeng/divider';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CheckboxModule } from 'primeng/checkbox';
-import { DynamicFormService } from '@app/shared/services';
+import { DynamicFormService } from '@app/core/form';
 import { ArmorProficiency, WeaponProficiency } from '@data/enums/proficiency.enum';
 import { TitleCasePipe } from '@angular/common';
 import { DndCard } from '@app/shared/components/dnd-card/dnd-card';

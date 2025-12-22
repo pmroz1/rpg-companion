@@ -7,7 +7,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { DynamicFormService } from '@shared/services/dynamic-form.service';
+import { DynamicFormService } from '@core/form/dynamic-form.service';
 
 import { Appearance } from './components/appearance/appearance';
 import { DndCard } from '@app/shared/components/dnd-card/dnd-card';

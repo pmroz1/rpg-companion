@@ -187,3 +187,27 @@ body,
 .p-menubar-item-link:hover .p-menubar-item-label {
   color: var(--color-gold-light);
 }
+
+.p-menubar-item-link:hover {
+  background: var(--color-hover) !important;
+}
+
+.active-route .p-menubar-item-label {
+  color: var(--color-gold) !important;
+  text-shadow: 0 0 8px rgba(201, 162, 39, 0.5);
+}
+
+.active-route {
+  position: relative;
+}
+
+.active-route::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0.5rem;
+  right: 0.5rem;
+  height: 2px;
+  background: var(--color-gold);
+  box-shadow: 0 0 5px var(--color-gold);
+}

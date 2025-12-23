@@ -1,26 +1,34 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { GameSessionService } from '@app/core/session/session.service';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { GameSessionService } from '@app/core/session/game-session.service';
 import { DndCard } from '@app/shared/components/dnd-card/dnd-card';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-game-session',
-  imports: [DndCard],
+  imports: [DndCard, ButtonModule],
   template: `<div
     class="flex flex-col w-full h-full bg-dnd-darken justify-center items-center align-center p-4"
   >
-    <h1 class="text-2xl text-center text-white mt-4">Game Session</h1>
-    <div class="flex-grow flex items-center justify-center">
-      @if (sessionsService.session.length == 0) {
-        <span class="text-white">Session Data Loaded</span>
+    <div class="flex-grow flex items-center justify-center"></div>
+    <app-dnd-card title="Game Session" class="w-1/2 mt-4 mb-auto">
+      @if (session()) {
+        <div class="flex flex-col gap-4 w-full">
+          <p class="text-lg font-semibold">Session Name: {{ session()?.name }}</p>
+          <p class="text-md font-medium">Player Characters:</p>
+          <ul class="list-disc list-inside">
+            @for (character of session()?.playerCharacters || []; track $index) {
+              <li>{{ character.name }}</li>
+            }
+          </ul>
+        </div>
+      } @else {
+        <p class="text-center">No active game session. Please create or load a session.</p>
       }
-    </div>
-    <app-dnd-card
-      title=""
-      [displayTitle]="false"
-      [displayDivider]="false"
-      class="w-1/2 mt-4 mb-auto"
-    >
-      <span>cyce</span>
+      <div class="flex flex-row gap-4 mt-4 w-full justify-center">
+        <p-button label="Continue"></p-button>
+        <p-button label="New Session"></p-button>
+        <p-button label="Clear Session"></p-button>
+      </div>
     </app-dnd-card>
   </div>`,
   styleUrl: './game-session.css',
@@ -28,4 +36,5 @@ import { DndCard } from '@app/shared/components/dnd-card/dnd-card';
 })
 export class GameSession {
   readonly sessionsService = inject(GameSessionService);
+  readonly session = computed(() => this.sessionsService.session());
 }

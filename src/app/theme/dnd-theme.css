@@ -214,3 +214,16 @@ main,
   background: var(--color-gold);
   box-shadow: 0 0 5px var(--color-gold);
 }
+
+.p-skeleton {
+  background: var(--color-bg-elevated) !important;
+}
+
+.p-skeleton::after {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0,
+    rgba(201, 162, 39, 0.05) 50%,
+    rgba(255, 255, 255, 0) 100%
+  ) !important;
+}

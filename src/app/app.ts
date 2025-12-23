@@ -1,4 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   NavigationCancel,
   NavigationEnd,
@@ -10,14 +11,13 @@ import {
   RouterOutlet,
 } from '@angular/router';
 import { MenuItem } from 'primeng/api';
-import { ButtonModule } from 'primeng/button';
 import { Menubar } from 'primeng/menubar';
 import { Skeleton } from 'primeng/skeleton';
 import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterLink, RouterLinkActive, RouterOutlet, ButtonModule, Menubar, Skeleton],
+  imports: [RouterLink, RouterLinkActive, RouterOutlet, Menubar, Skeleton],
   template: `<div class="flex flex-col h-screen overflow-hidden">
     <header
       class="bg-[var(--color-bg-elevated)] border-b-2 border-[var(--color-gold-dark)] px-6 py-2 flex-none"
@@ -66,11 +66,11 @@ import { filter } from 'rxjs';
 })
 export class App {
   private readonly router = inject(Router);
-  protected readonly title = signal('rpg-companion');
   protected readonly isLoading = signal(false);
 
   constructor() {
     this.router.events
+      .pipe(takeUntilDestroyed())
       .pipe(
         filter(
           (event) =>

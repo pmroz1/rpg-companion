@@ -8,7 +8,8 @@ export const GAME_SESSION_ROUTES: Route[] = [
   },
   {
     path: 'wrapper',
-    loadComponent: () => import('./pages/wrapper/wrapper').then((m) => m.Wrapper),
+    loadComponent: () =>
+      import('./pages/game-session-wrapper/game-session-wrapper').then((m) => m.GameSessionWrapper),
   },
   {
     path: 'board',

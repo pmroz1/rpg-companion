@@ -4,7 +4,7 @@ export interface DndMonster {
   name: string;
   type: CreatureType;
   size: CreatureSize;
-  habitat: CreatureHabitat;
+  habitats: CreatureHabitat[];
   challengeRating: string;
   armorClass: number;
   hitPoints: number;

@@ -165,3 +165,25 @@ body,
   display: flex;
   flex-direction: column;
 }
+
+.p-menubar {
+  font-family: var(--font-display);
+  border: none !important;
+  box-shadow: none !important;
+  width: 100%;
+}
+
+.p-menubar-start {
+  flex: 1;
+}
+
+.p-menubar-item-label {
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--text-heading);
+}
+
+.p-menubar-item-link:hover .p-menubar-item-label {
+  color: var(--color-gold-light);
+}

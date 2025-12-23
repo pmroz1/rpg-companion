@@ -1,4 +1,4 @@
-import { effect, Injectable, Signal, signal, WritableSignal } from '@angular/core';
+import { effect, Injectable, Signal, signal } from '@angular/core';
 import { CharacterInfo } from '@app/character-sheet/components/info/model/character-info';
 
 export interface GameSession {

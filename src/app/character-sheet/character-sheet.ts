@@ -61,8 +61,10 @@ import { CharacterSheetStateService } from './services/character-sheet.state';
           <app-hitpoints (contextmenu)="onContextMenu($event, 'app-hitpoints')" />
         </app-dnd-grid-cell>
 
+        <!-- to najlepiej do jakiegoś jednego komponentu 'quickstats' wyciągnąć-->
         <app-dnd-grid-cell [colspan]="2">
-          <app-dnd-card title="proficiency bonus" />
+          <app-dnd-card title="proficiency" />
+          <!-- wartość modyfikatora eg +2; -1; 0; +14 -->
         </app-dnd-grid-cell>
         <app-dnd-grid-cell [colspan]="2">
           <app-dnd-card title="initiative" />
@@ -74,10 +76,12 @@ import { CharacterSheetStateService } from './services/character-sheet.state';
           <app-dnd-card title="size" />
         </app-dnd-grid-cell>
         <app-dnd-grid-cell [colspan]="2">
-          <app-dnd-card title="passive perception" />
+          <app-dnd-card title="perception" />
+          <!--  wartość modyfikatora eg +2; -1; 0; +14 -->
         </app-dnd-grid-cell>
         <app-dnd-grid-cell [colspan]="2">
           <app-dnd-card title="inspiration" />
+          <!--  checkbox jest/lub nie -->
         </app-dnd-grid-cell>
         <app-dnd-grid-cell [colspan]="3" [rowspan]="2">
           <app-dnd-card title="abilities" />

@@ -20,4 +20,13 @@ export interface DndMonster {
   languages: string[];
   actions: string[];
   gear: string[];
+  traits?: string[];
+  skills?: string[];
+  vulnerabilities?: string[];
+  resistances?: string[];
+  immunities?: string[];
+  senses: string[];
+  bonusActions?: string[];
+  legendaryActions?: string[];
+  reactions?: string[];
 }

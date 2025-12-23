@@ -3,9 +3,10 @@ export enum Alignment {
   NeutralGood = 'neutral good',
   ChaoticGood = 'chaotic good',
   LawfulNeutral = 'lawful neutral',
-  TrueNeutral = 'true neutral',
+  Neutral = 'neutral',
   ChaoticNeutral = 'chaotic neutral',
   LawfulEvil = 'lawful evil',
   NeutralEvil = 'neutral evil',
   ChaoticEvil = 'chaotic evil',
+  Unaligned = 'unaligned',
 }

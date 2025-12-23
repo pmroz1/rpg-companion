@@ -7,9 +7,9 @@ import { Menubar } from 'primeng/menubar';
 @Component({
   selector: 'app-root',
   imports: [RouterLink, RouterLinkActive, RouterOutlet, ButtonModule, Menubar],
-  template: `<div class="min-h-screen">
+  template: `<div class="flex flex-col h-screen overflow-hidden">
     <header
-      class="bg-[var(--color-bg-elevated)] border-b-2 border-[var(--color-gold-dark)] px-6 py-2"
+      class="bg-[var(--color-bg-elevated)] border-b-2 border-[var(--color-gold-dark)] px-6 py-2 flex-none"
     >
       <p-menubar [model]="menuItems">
         <ng-template #start>
@@ -26,7 +26,7 @@ import { Menubar } from 'primeng/menubar';
         </ng-template>
       </p-menubar>
     </header>
-    <main class="p-6"><router-outlet /></main>
+    <main class="flex-1 overflow-y-auto p-6"><router-outlet /></main>
   </div> `,
 })
 export class App {

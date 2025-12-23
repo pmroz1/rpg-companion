@@ -21,19 +21,22 @@
 }
 
 html,
-body,
+body {
+  overflow: hidden;
+}
+
 .dnd-box,
 .dnd-card,
+main,
 .p-dialog .p-dialog-content {
   scrollbar-width: thin;
   scrollbar-color: var(--color-gold) var(--color-bg);
 }
 
 @supports not (scrollbar-color: var(--color-gold) var(--color-bg)) {
-  html,
-  body,
   .dnd-box,
   .dnd-card,
+  main,
   .p-dialog .p-dialog-content {
     --scrollbar-thumb-fallback: var(--color-gold);
     --scrollbar-track-fallback: var(--color-bg);

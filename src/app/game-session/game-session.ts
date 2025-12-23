@@ -31,7 +31,11 @@ import { ButtonModule } from 'primeng/button';
       </div>
     </app-dnd-card>
   </div>`,
-  styleUrl: './game-session.css',
+  styles: `
+    :host {
+      display: block;
+    }
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GameSession {

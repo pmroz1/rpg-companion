@@ -1,36 +1,11 @@
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
-import { GameSessionService } from '@app/core/session/game-session.service';
-import { DndCard } from '@app/shared/components/dnd-card/dnd-card';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-game-session',
-  imports: [DndCard, ButtonModule],
-  template: `<div
-    class="flex flex-col w-full h-full bg-dnd-darken justify-center items-center align-center p-4"
-  >
-    <div class="flex-grow flex items-center justify-center"></div>
-    <app-dnd-card title="Game Session" class="w-1/2 mt-4 mb-auto">
-      @if (session()) {
-        <div class="flex flex-col gap-4 w-full">
-          <p class="text-lg font-semibold">Session Name: {{ session()?.name }}</p>
-          <p class="text-md font-medium">Player Characters:</p>
-          <ul class="list-disc list-inside">
-            @for (character of session()?.playerCharacters || []; track $index) {
-              <li>{{ character.name }}</li>
-            }
-          </ul>
-        </div>
-      } @else {
-        <p class="text-center">No active game session. Please create or load a session.</p>
-      }
-      <div class="flex flex-row gap-4 mt-4 w-full justify-center">
-        <p-button label="Continue"></p-button>
-        <p-button label="New Session"></p-button>
-        <p-button label="Clear Session"></p-button>
-      </div>
-    </app-dnd-card>
-  </div>`,
+  imports: [ButtonModule, RouterOutlet],
+  template: `<router-outlet></router-outlet>`,
   styles: `
     :host {
       display: block;
@@ -38,7 +13,4 @@ import { ButtonModule } from 'primeng/button';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GameSession {
-  readonly sessionsService = inject(GameSessionService);
-  readonly session = computed(() => this.sessionsService.session());
-}
+export class GameSession {}

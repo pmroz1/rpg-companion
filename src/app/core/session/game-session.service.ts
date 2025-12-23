@@ -1,4 +1,4 @@
-import { effect, Injectable, signal, WritableSignal } from '@angular/core';
+import { effect, Injectable, Signal, signal, WritableSignal } from '@angular/core';
 import { CharacterInfo } from '@app/character-sheet/components/info/model/character-info';
 
 export interface GameSession {
@@ -42,11 +42,7 @@ export class GameSessionService {
     this.sessionData.set(null);
   }
 
-  get session(): GameSession | null {
-    return this.sessionData();
-  }
-
-  get sessionSignal(): WritableSignal<GameSession | null> {
+  get session(): Signal<GameSession | null> {
     return this.sessionData;
   }
 

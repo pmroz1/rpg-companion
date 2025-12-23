@@ -38,7 +38,7 @@ import { ButtonModule } from 'primeng/button';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Wrapper {
+export class GameSessionWrapper {
   readonly sessionsService = inject(GameSessionService);
   readonly session = computed(() => this.sessionsService.session());
 }

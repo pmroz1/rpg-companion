@@ -10,11 +10,11 @@ export interface GameSession {
   providedIn: 'root',
 })
 export class GameSessionService {
-  private readonly _sessionStorageKey = 'game_session_data';
+  private readonly _localStorageKey = 'game_session_data';
   private sessionData = signal<GameSession | null>(null);
 
   constructor() {
-    const savedSession = localStorage.getItem(this._sessionStorageKey);
+    const savedSession = localStorage.getItem(this._localStorageKey);
     if (savedSession) {
       try {
         const parsedSession: GameSession = JSON.parse(savedSession);
@@ -27,9 +27,9 @@ export class GameSessionService {
     effect(() => {
       const session = this.sessionData();
       if (session) {
-        localStorage.setItem(this._sessionStorageKey, JSON.stringify(session));
+        localStorage.setItem(this._localStorageKey, JSON.stringify(session));
       } else {
-        localStorage.removeItem(this._sessionStorageKey);
+        localStorage.removeItem(this._localStorageKey);
       }
     });
   }

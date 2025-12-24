@@ -18,14 +18,14 @@ export interface DndMonster {
   alignment: Alignment;
   speed: string;
   languages: string[];
+  senses: string[];
   actions: string[];
-  gear: string[];
+  gear?: string[];
   traits?: string[];
   skills?: string[];
   vulnerabilities?: string[];
   resistances?: string[];
   immunities?: string[];
-  senses: string[];
   bonusActions?: string[];
   legendaryActions?: string[];
   reactions?: string[];

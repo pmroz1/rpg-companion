@@ -2,16 +2,17 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { KeyValuePipe } from '@angular/common';
 import { DND_MONSTERS } from '@data/dictionaries/monsters.dictionary';
 import { DndMonster } from '@data/models';
-import { TableModule } from 'primeng/table';
+import { DataViewModule } from 'primeng/dataview';
 import { ButtonModule } from 'primeng/button';
 import { DndCard } from '@app/shared/components/dnd-card/dnd-card';
 import { Chip } from 'primeng/chip';
 import { MapEditorStateService } from '@app/map-editor/services/map-editor-state.service';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
+import { SelectChangeEvent, SelectModule } from 'primeng/select';
 
 @Component({
   selector: 'app-monsters-table',
-  imports: [TableModule, ButtonModule, DndCard, KeyValuePipe, Chip],
+  imports: [DataViewModule, ButtonModule, DndCard, KeyValuePipe, Chip, SelectModule],
   template: `
     <app-dnd-card title="Monsters" [displayTitle]="false">
       <app-dnd-card title="Selected Monsters" [displayTitle]="false">
@@ -39,7 +40,81 @@ import { DynamicDialogRef } from 'primeng/dynamicdialog';
           </h3>
         }
       </app-dnd-card>
-      <p-table
+      <p-dataview
+        #dv
+        [value]="monsters"
+        dataKey="name"
+        layout="list"
+        [paginator]="true"
+        [rows]="10"
+        [rowsPerPageOptions]="[5, 10, 15, 25, 50]"
+        [sortField]="sortField"
+        [sortOrder]="sortOrder"
+      >
+        <ng-template #header>
+          <div class="flex flex-col md:flex-row md:justify-between">
+            <p-select
+              id="sortField-select"
+              [options]="sortOptions"
+              formControlName="sortField"
+              placeholder="Sort By"
+              (onChange)="onSortChange($event)"
+              class="mb-2 md:mb-0"
+            />
+          </div>
+        </ng-template>
+        <ng-template #list let-monsters>
+          <div class="grid grid-cols-12 gap-4 grid-nogutter">
+            @for (monster of monsters; track monster.name) {
+              <div class="col-span-12">
+                <div class="flex flex-col sm:flex-row sm:items-center p-6 gap-4">
+                  <div
+                    class="flex flex-col md:flex-row justify-between md:items-center flex-1 gap-6"
+                  >
+                    <div class="flex flex-row md:flex-col justify-between items-start gap-2">
+                      <div>
+                        <span class="font-medium text-secondary text-sm">{{ monster.type }}</span>
+                        <div class="text-lg font-medium text-surface-900 dark:text-surface-0 mt-2">
+                          {{ monster.name }}
+                        </div>
+                      </div>
+                      <div
+                        class="bg-surface-100 dark:bg-surface-700 p-1"
+                        style="border-radius: 30px"
+                      >
+                        <div
+                          class="bg-surface-0 dark:bg-surface-900 flex items-center gap-2 justify-center py-1 px-2"
+                          style="border-radius: 30px; box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.04), 0px 1px 2px 0px rgba(0, 0, 0, 0.06)"
+                        >
+                          <span class="text-surface-900 dark:text-surface-0 font-medium text-sm">{{
+                            monster.rating
+                          }}</span>
+                          <i class="pi pi-star-fill text-yellow-500"></i>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="flex flex-col md:items-end gap-8">
+                      <span class="text-xl font-semibold text-surface-900 dark:text-surface-0">{{
+                        '$' + monster.price
+                      }}</span>
+                      <div class="flex flex-row-reverse md:flex-row gap-2">
+                        <p-button icon="pi pi-heart" [outlined]="true" />
+                        <p-button
+                          icon="pi pi-shopping-cart"
+                          class="flex-auto md:flex-initial whitespace-nowrap"
+                          label="Buy Now"
+                          [disabled]="monster.inventoryStatus === 'OUTOFSTOCK'"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        </ng-template>
+      </p-dataview>
+      <!-- <p-table
         [value]="monsters"
         dataKey="name"
         [expandedRowKeys]="expandedRows"
@@ -203,7 +278,7 @@ import { DynamicDialogRef } from 'primeng/dynamicdialog';
             <td colspan="1"></td>
           </tr>
         </ng-template>
-      </p-table>
+      </p-table> -->
     </app-dnd-card>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -212,22 +287,30 @@ export class MonstersTable {
   private mapEditorService = inject(MapEditorStateService);
   private dialogRef = inject(DynamicDialogRef, { optional: true });
 
+  sortOptions = [
+    { label: 'Name Ascending', value: 'name' },
+    { label: 'Name Descending', value: '!name' },
+    { label: 'Type Ascending', value: 'type' },
+    { label: 'Type Descending', value: '!type' },
+    { label: 'Challenge Rating Ascending', value: 'challengeRating' },
+    { label: 'Challenge Rating Descending', value: '!challengeRating' },
+  ];
+  sortField = 'name';
+  sortOrder = 1;
+
   monsters: DndMonster[] = [...DND_MONSTERS];
   selectedMonsters: Record<string, { monster: DndMonster; count: number }> = {};
-  expandedRows: Record<string, boolean> = {};
 
-  expandAll() {
-    this.expandedRows = this.monsters.reduce(
-      (acc, m) => {
-        acc[m.name] = true;
-        return acc;
-      },
-      {} as Record<string, boolean>,
-    );
-  }
+  onSortChange(event: SelectChangeEvent) {
+    const value = event.value;
 
-  collapseAll() {
-    this.expandedRows = {};
+    if (value.indexOf('!') === 0) {
+      this.sortOrder = -1;
+      this.sortField = value.substring(1, value.length);
+    } else {
+      this.sortOrder = 1;
+      this.sortField = value;
+    }
   }
 
   isSelectedMonstersEmpty(): boolean {

@@ -216,7 +216,7 @@ export class CharacterSheet implements OnInit, OnDestroy {
   }
 
   onExplain() {
-    //TODO: implement explain functionality
+    // @TODO @FIXME: implement explain functionality
   }
 
   ngOnDestroy() {

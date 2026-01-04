@@ -214,11 +214,7 @@ export class CharacterSheet implements OnInit, OnDestroy {
   }
 
   onExplain() {
-    const currentState = this.state.character();
-    this.dialogService.openSimple(
-      'Character State Explanation',
-      `Current state of ${currentState.info.name || 'unnamed character'}: ${JSON.stringify(currentState, null, 2)}`,
-    );
+    //TODO: implement explain functionality
   }
 
   ngOnDestroy() {

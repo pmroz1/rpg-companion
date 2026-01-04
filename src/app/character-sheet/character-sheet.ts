@@ -49,6 +49,7 @@ import { CharacterSheetStateService } from './services/character-sheet.state';
     Coins,
     Languages,
   ],
+  providers: [CharacterSheetStateService],
   template: `<form [formGroup]="form" (contextmenu)="onContextMenu($event, '')">
       <app-dnd-grid>
         <app-dnd-grid-cell [colspan]="5" [rowspan]="2">
@@ -128,11 +129,11 @@ import { CharacterSheetStateService } from './services/character-sheet.state';
 export class CharacterSheet implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>();
   private readonly dialogService = inject(DndDialogService);
-  private readonly characterSheetForm = inject(DynamicFormService);
-  // Injected to initialize the state service and trigger loadState/saveState side effects
-  private readonly characterSheetState = inject(CharacterSheetStateService);
   private readonly route = inject(ActivatedRoute);
-  readonly form = this.characterSheetForm.getFormGroup();
+  protected readonly state = inject(CharacterSheetStateService);
+  protected readonly formService = inject(DynamicFormService);
+
+  readonly form = this.formService.getFormGroup();
 
   @ViewChild('contextMenu') contextMenu: ContextMenu | undefined;
   contextTarget?: string;
@@ -213,7 +214,11 @@ export class CharacterSheet implements OnInit, OnDestroy {
   }
 
   onExplain() {
-    // @TODO @FIXME: Implement explain functionality
+    const currentState = this.state.character();
+    this.dialogService.openSimple(
+      'Character State Explanation',
+      `Current state of ${currentState.info.name || 'unnamed character'}: ${JSON.stringify(currentState, null, 2)}`,
+    );
   }
 
   ngOnDestroy() {

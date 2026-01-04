@@ -7,8 +7,10 @@ import { LanguagesInfo } from '../components/languages/models/languages-info';
 import { ProficienciesInfo } from '../components/proficiencies/model/proficiencies-info';
 import { SpellcastingStats } from '../components/spellcasting-ability/model/spellcasting';
 import { SpellCantrip } from '@data/models';
+import { AbilitiesInfo } from '../components/abilities/models/abilities-info';
 
 export interface CharacterSheetState {
+  abilities: AbilitiesInfo;
   appearance: string;
   coins: CoinsInfo;
   info: CharacterInfo;

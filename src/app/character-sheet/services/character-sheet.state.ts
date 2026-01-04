@@ -1,4 +1,5 @@
 import { computed, effect, inject, Injectable, untracked } from '@angular/core';
+import { AbilitiesState } from '../components/abilities/abilities.state';
 import { AppearanceState } from '../components/appearance/appearance-state';
 import { CoinsState } from '../components/coins/coins.state';
 import { InfoState } from '../components/info/info.state';
@@ -15,6 +16,7 @@ import { CharacterSheetState } from '../models/character-sheet-state.interface';
 @Injectable()
 export class CharacterSheetStateService {
   private readonly _storageKey = 'characterSheetState';
+  private readonly abilities = inject(AbilitiesState);
   private readonly appearance = inject(AppearanceState);
   private readonly coins = inject(CoinsState);
   private readonly info = inject(InfoState);
@@ -28,6 +30,7 @@ export class CharacterSheetStateService {
   private readonly notes = inject(NotesState);
 
   readonly character = computed<CharacterSheetState>(() => ({
+    abilities: this.abilities.state(),
     appearance: this.appearance.state(),
     coins: this.coins.state(),
     info: this.info.state(),
@@ -73,6 +76,7 @@ export class CharacterSheetStateService {
         const state = JSON.parse(characterData);
 
         if (this.isValidState(state)) {
+          this.abilities.setState(state.abilities);
           this.appearance.setState(state.appearance);
           this.coins.setState(state.coins);
           this.info.setState(state.info);
@@ -101,6 +105,8 @@ export class CharacterSheetStateService {
     const s = state as Record<string, unknown>;
 
     return (
+      typeof s['abilities'] === 'object' &&
+      s['abilities'] !== null &&
       typeof s['appearance'] === 'string' &&
       typeof s['coins'] === 'object' &&
       s['coins'] !== null &&

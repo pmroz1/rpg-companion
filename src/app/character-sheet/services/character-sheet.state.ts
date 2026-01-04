@@ -12,9 +12,7 @@ import { NotesState } from '../components/tabs/views/notes/notes.state';
 import { SpellsCantripsState } from '../components/tabs/views/spells-cantrips/spell-cantrips.state';
 import { CharacterSheetState } from '../models/character-sheet-state.interface';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class CharacterSheetStateService {
   private readonly _storageKey = 'characterSheetState';
   private readonly appearance = inject(AppearanceState);

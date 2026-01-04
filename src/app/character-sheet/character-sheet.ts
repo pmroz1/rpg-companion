@@ -10,6 +10,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { DynamicFormService } from '@core/form/dynamic-form.service';
 
 import { Appearance } from './components/appearance/appearance';
+import { Abilities } from './components/abilities/abilities';
 import { DndCard } from '@app/shared/components/dnd-card/dnd-card';
 import { DndGrid, DndGridCell } from '@app/shared/components/dnd-grid/dnd-grid';
 import { Info } from './components/info/info';
@@ -35,6 +36,7 @@ import { CharacterSheetStateService } from './services/character-sheet.state';
   imports: [
     ReactiveFormsModule,
     Appearance,
+    Abilities,
     Info,
     TabsComponent,
     Proficiencies,
@@ -85,7 +87,7 @@ import { CharacterSheetStateService } from './services/character-sheet.state';
           <!--  checkbox jest/lub nie -->
         </app-dnd-grid-cell>
         <app-dnd-grid-cell [colspan]="3" [rowspan]="2">
-          <app-dnd-card title="abilities" />
+          <app-abilities (contextmenu)="onContextMenu($event, 'app-abilities')" />
         </app-dnd-grid-cell>
 
         <app-dnd-grid-cell [colspan]="4">

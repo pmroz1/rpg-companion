@@ -95,6 +95,18 @@ main,
   font-size: 0.85rem;
 }
 
+.p-button-ghost {
+  background: transparent !important;
+  border-color: transparent !important;
+  color: var(--color-gold) !important;
+}
+
+.p-button-ghost:hover {
+  background: var(--color-hover) !important;
+  border-color: transparent !important;
+  color: var(--color-gold-light) !important;
+}
+
 .p-inputtext::placeholder,
 .p-textarea::placeholder {
   color: var(--text-muted);

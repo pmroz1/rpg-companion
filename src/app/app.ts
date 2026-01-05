@@ -39,7 +39,7 @@ import { filter } from 'rxjs';
         </p-menubar>
       </header>
     }
-    <main class="flex-1 overflow-y-auto" [class.p-6]="!hideNavbar()">
+    <main class="flex-1 overflow-y-auto" [class.p-6]="!noPadding()">
       @if (isLoading()) {
         <div class="flex flex-col gap-6">
           <div class="grid grid-cols-12 gap-4">
@@ -70,6 +70,7 @@ export class App {
   private readonly router = inject(Router);
   protected readonly isLoading = signal(false);
   protected readonly hideNavbar = signal(false);
+  protected readonly noPadding = signal(false);
 
   constructor() {
     this.router.events
@@ -87,7 +88,11 @@ export class App {
         this.isLoading.set(event instanceof NavigationStart);
 
         if (event instanceof NavigationEnd) {
-          this.hideNavbar.set(event.urlAfterRedirects.includes('game-session/board'));
+          const url = event.urlAfterRedirects;
+          this.hideNavbar.set(url.includes('game-session/board'));
+          this.noPadding.set(
+            url.includes('game-session/board') || url.includes('game-session/dm-view'),
+          );
         }
       });
   }

@@ -1,12 +1,12 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { GameSessionService } from '@app/core/session/game-session.service';
 import { DndCard } from '@app/shared/components/dnd-card/dnd-card';
 import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-wrapper',
-  imports: [DndCard, ButtonModule, RouterLink],
+  imports: [DndCard, ButtonModule],
   template: `<div
     class="flex flex-col w-full h-full bg-dnd-darken justify-center items-center align-center p-4"
   >
@@ -26,9 +26,9 @@ import { ButtonModule } from 'primeng/button';
         <p class="text-center">No active game session. Please create or load a session.</p>
       }
       <div class="flex flex-row gap-4 mt-4 w-full justify-center">
-        <p-button label="Continue" routerLink="../dm-tools" [disabled]="!session()"></p-button>
-        <p-button label="Load Session" routerLink="../load-session"></p-button>
-        <p-button label="New Session" routerLink="../new-session"></p-button>
+        <p-button label="Continue" (onClick)="continueGame()" [disabled]="!session()"></p-button>
+        <p-button label="Load Session" (onClick)="loadGame()"></p-button>
+        <p-button label="New Session" (onClick)="newGame()"></p-button>
       </div>
     </app-dnd-card>
   </div>`,
@@ -42,4 +42,22 @@ import { ButtonModule } from 'primeng/button';
 export class GameSessionWrapper {
   readonly sessionsService = inject(GameSessionService);
   readonly session = computed(() => this.sessionsService.session());
+  private readonly router = inject(Router);
+
+  continueGame() {
+    console.log('Continuing game session:', this.session()?.name);
+  }
+
+  loadGame() {
+    console.log('Navigating to load session page');
+  }
+
+  newGame() {
+    this.openGameViews();
+  }
+
+  private openGameViews() {
+    window.open('/game-session/board', '_blank');
+    this.router.navigate(['/game-session/dm-view']);
+  }
 }

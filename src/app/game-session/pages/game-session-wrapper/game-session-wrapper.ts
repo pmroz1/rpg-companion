@@ -27,6 +27,7 @@ import { ButtonModule } from 'primeng/button';
       }
       <div class="flex flex-row gap-4 mt-4 w-full justify-center">
         <p-button label="Continue" routerLink="../dm-tools" [disabled]="!session()"></p-button>
+        <p-button label="Load Session" routerLink="../load-session"></p-button>
         <p-button label="New Session" routerLink="../new-session"></p-button>
       </div>
     </app-dnd-card>

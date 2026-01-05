@@ -6,6 +6,7 @@ on:
     workflows: ['Angular CI Pipeline']
     types: [completed]
     branches: [master]
+  workflow_dispatch:
 
 jobs:
   deploy:

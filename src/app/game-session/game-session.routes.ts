@@ -16,7 +16,7 @@ export const GAME_SESSION_ROUTES: Route[] = [
     loadComponent: () => import('./pages/board/board').then((m) => m.Board),
   },
   {
-    path: 'dm-tools',
+    path: 'dm-view',
     loadComponent: () => import('./pages/dm-view/dm-view').then((m) => m.DmView),
   },
   {

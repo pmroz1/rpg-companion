@@ -3,10 +3,11 @@ import { Router } from '@angular/router';
 import { GameSessionService } from '@app/core/session/game-session.service';
 import { DndCard } from '@app/shared/components/dnd-card/dnd-card';
 import { ButtonModule } from 'primeng/button';
+import { FileUploadEvent, FileUploadModule } from 'primeng/fileupload';
 
 @Component({
   selector: 'app-wrapper',
-  imports: [DndCard, ButtonModule],
+  imports: [DndCard, ButtonModule, FileUploadModule],
   template: `<div
     class="flex flex-col w-full h-full bg-dnd-darken justify-center items-center align-center p-4"
   >
@@ -27,7 +28,17 @@ import { ButtonModule } from 'primeng/button';
       }
       <div class="flex flex-row gap-4 mt-4 w-full justify-center">
         <p-button label="Continue" (onClick)="continueGame()" [disabled]="!session()"></p-button>
-        <p-button label="Load Session" (onClick)="loadGame()"></p-button>
+        <p-fileupload
+          mode="basic"
+          name="demo[]"
+          chooseIcon="pi pi-save"
+          url="https://www.primefaces.org/cdn/api/upload.php"
+          accept="image/*"
+          maxFileSize="1000000"
+          (onUpload)="loadGame($event)"
+          [auto]="true"
+          chooseLabel="Load Session"
+        />
         <p-button label="New Session" (onClick)="newGame()"></p-button>
       </div>
     </app-dnd-card>
@@ -48,7 +59,7 @@ export class GameSessionWrapper {
     console.log('Continuing game session:', this.session()?.name);
   }
 
-  loadGame() {
+  loadGame(event: FileUploadEvent) {
     console.log('Navigating to load session page');
   }
 

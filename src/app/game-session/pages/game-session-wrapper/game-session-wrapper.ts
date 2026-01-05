@@ -55,20 +55,15 @@ export class GameSessionWrapper {
   readonly session = computed(() => this.sessionsService.session());
   private readonly router = inject(Router);
 
-  continueGame() {
+  continueGame(): void {
     console.log('Continuing game session:', this.session()?.name);
   }
 
-  loadGame(event: FileUploadEvent) {
+  loadGame(event: FileUploadEvent): void {
     console.log('Navigating to load session page');
   }
 
-  newGame() {
-    this.openGameViews();
-  }
-
-  private openGameViews() {
-    window.open('/game-session/board', '_blank');
+  newGame(): void {
     this.router.navigate(['/game-session/dm-view']);
   }
 }

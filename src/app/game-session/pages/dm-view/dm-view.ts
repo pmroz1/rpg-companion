@@ -11,6 +11,7 @@ interface Sound {
   name: WritableSignal<string>;
   audio: HTMLAudioElement;
   playing: WritableSignal<boolean>;
+  volume: WritableSignal<number>;
 }
 
 // TODO: move big chunks of template to separate components
@@ -19,35 +20,45 @@ interface Sound {
   imports: [Button, FileUploadModule, InputTextModule, FormsModule, DockModule, TooltipModule],
   template: `<div class="flex flex-row h-full w-full overflow-hidden">
     <!-- SCEMNES -->
-    <div
-      class="flex-1 flex flex-col h-full border-r border-[var(--color-gold)] overflow-hidden max-w-90 bg-[var(--color-bg-elevated)]"
-    >
-      <div class="p-4 flex flex-col shrink-0">
-        <h3 class="text-lg font-semibold uppercase tracking-wider mb-2">scenes</h3>
-        <div class="flex flex-col space-y-1 pl-2 max-h-80 overflow-y-auto pr-1">
-          @for (scene of scenes; track $index) {
-            <p-button
-              styleClass="w-full !justify-start !text-sm !whitespace-nowrap !overflow-hidden p-button-ghost {{
-                activeScene().name === scene.name ? '!text-[var(--color-gold)]' : ''
-              }}"
-              icon="pi pi-map"
-              label="{{ scene.name }}"
-              (onClick)="activeScene.set(scene)"
-            ></p-button>
-          }
+    <div class="left-column flex-1 flex flex-col h-full overflow-hidden max-w-90">
+      <div class="p-5 pb-2 flex flex-col shrink-0">
+        <div class="flex justify-between items-center mb-3">
+          <h3 class="text-sm font-bold uppercase tracking-[0.15em]">Scenes</h3>
           <p-button
-            styleClass="w-full !justify-start !text-sm !whitespace-nowrap !overflow-hidden p-button-ghost !text-[var(--color-parchment)]"
             icon="pi pi-plus"
-            label="New Scene"
+            styleClass="p-button-rounded p-button-text p-button-sm w-7 h-7 !p-0 text-[var(--color-gold)] hover:bg-[var(--color-gold-dark)]/20"
+            pTooltip="New Scene"
           ></p-button>
+        </div>
+
+        <div
+          class="flex flex-col space-y-0.5 max-h-80 overflow-y-auto pr-1 custom-scrollbar -mx-2 px-2"
+        >
+          @for (scene of scenes; track $index) {
+            <button
+              class="scene-list-item w-full flex items-center gap-3 px-3 py-2.5 text-left group cursor-pointer"
+              [class.active]="activeScene().name === scene.name"
+              (click)="activeScene.set(scene)"
+            >
+              <i
+                class="scene-icon pi pi-map text-[var(--text-muted)] text-xs group-hover:text-[var(--color-gold-light)] transition-colors"
+              ></i>
+              <span
+                class="scene-name text-sm text-[var(--text-body)] truncate font-medium font-[family-name:var(--font-body)]"
+                >{{ scene.name }}</span
+              >
+            </button>
+          }
         </div>
       </div>
 
       <div
-        class="p-4 flex-1 overflow-y-auto border-t border-[var(--color-border)] flex flex-col min-h-0"
+        class="p-5 pt-2 flex-1 overflow-y-auto border-t border-[var(--color-border)] flex flex-col min-h-0"
       >
-        <div class="flex justify-between items-center mb-4 shrink-0">
-          <h3 class="text-lg font-semibold uppercase tracking-wider">atmosphere</h3>
+        <div
+          class="flex justify-between items-center mb-4 shrink-0 top-0 bg-[var(--color-bg-elevated)] pt-2 z-10"
+        >
+          <h3 class="text-sm font-bold uppercase tracking-[0.15em]">Atmosphere</h3>
           <div class="flex items-center">
             <input
               #fileInput
@@ -58,63 +69,116 @@ interface Sound {
             />
             <p-button
               icon="pi pi-upload"
-              styleClass="p-button-sm p-button-ghost"
+              styleClass="p-button-rounded p-button-text p-button-sm w-7 h-7 !p-0 text-[var(--color-gold)] hover:bg-[var(--color-gold-dark)]/20"
+              pTooltip="Upload Ambient Sound"
               (onClick)="fileInput.click()"
             ></p-button>
           </div>
         </div>
 
-        <div class="flex flex-col gap-3 overflow-y-auto pr-2 custom-scrollbar">
+        <div class="flex flex-col gap-3 overflow-y-auto pr-1 -mr-1 custom-scrollbar pb-2">
           @for (sound of sounds(); track $index) {
-            <div
-              class="flex flex-col p-3 bg-[var(--color-bg-elevated)] border border-[var(--color-border)] rounded-md gap-3 shadow-sm"
-            >
-              <div class="flex items-center gap-2 overflow-hidden">
-                <i class="pi pi-volume-up text-[var(--color-gold)] opacity-70"></i>
+            <div class="sound-card flex flex-col p-3 rounded-md gap-2 relative group">
+              @if (sound.playing()) {
+                <div
+                  class="absolute inset-0 bg-[var(--color-gold)] opacity-5 rounded-md pointer-events-none"
+                ></div>
+              }
+
+              <div class="flex items-center gap-3 overflow-hidden relative z-10">
+                <div
+                  class="w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-colors duration-300"
+                  [class.bg-[var(--color-gold-dark)]]="sound.playing()"
+                  [class.bg-[var(--color-bg)]]="!sound.playing()"
+                >
+                  <i
+                    class="pi text-xs"
+                    [class.pi-spin]="sound.playing()"
+                    [class.pi-spinner]="sound.playing()"
+                    [class.pi-volume-up]="!sound.playing()"
+                    [class.text-[var(--color-gold-light)]]="sound.playing()"
+                    [class.text-[var(--text-muted)]]="!sound.playing()"
+                  ></i>
+                </div>
+
                 <input
                   pInputText
-                  class="p-inputtext-sm w-full bg-transparent border-none !p-0 font-medium gold-text focus:shadow-none truncate"
+                  class="p-inputtext-sm w-full bg-transparent border-none !p-0 font-medium text-[var(--text-body)] focus:text-[var(--color-gold)] focus:shadow-none truncate text-sm"
                   [ngModel]="sound.name()"
                   (ngModelChange)="sound.name.set($event)"
                 />
               </div>
-              <div class="flex items-center gap-2">
-                <p-button
-                  [icon]="sound.playing() ? 'pi pi-pause' : 'pi pi-play'"
-                  styleClass="p-button-rounded p-button-text p-button-sm !w-8 !h-8"
-                  (onClick)="toggleSound(sound)"
-                ></p-button>
-                <p-button
-                  icon="pi pi-refresh"
-                  styleClass="p-button-rounded p-button-text p-button-sm !w-8 !h-8"
-                  (onClick)="stopSound(sound)"
-                ></p-button>
-                <div
-                  class="flex-1 bg-[var(--color-bg)] h-1.5 rounded-full overflow-hidden relative"
+
+              <div class="flex items-center gap-2 pl-11 relative z-10">
+                <button
+                  class="text-[var(--text-muted)] hover:text-[var(--color-gold)] transition-colors cursor-pointer"
+                  (click)="toggleSound(sound)"
                 >
+                  <i
+                    [class]="sound.playing() ? 'pi pi-pause' : 'pi pi-play'"
+                    style="font-size: 0.8rem"
+                  ></i>
+                </button>
+
+                <button
+                  class="text-[var(--text-muted)] hover:text-red-400 transition-colors cursor-pointer"
+                  (click)="stopSound(sound)"
+                >
+                  <i class="pi pi-stop" style="font-size: 0.8rem"></i>
+                </button>
+
+                <div class="flex items-center gap-2 ml-2 group/volume">
+                  <i class="pi pi-volume-down text-[10px] text-[var(--text-muted)]"></i>
+                  <input
+                    type="range"
+                    min="0"
+                    max="1"
+                    step="0.05"
+                    [ngModel]="sound.volume()"
+                    (ngModelChange)="onVolumeChange(sound, $event)"
+                    class="volume-slider w-16 h-1 bg-[var(--color-bg)] rounded-full appearance-none cursor-pointer accent-[var(--color-gold)]"
+                  />
+                </div>
+
+                <div class="flex-1 bg-[var(--color-bg)] h-1 rounded-full overflow-hidden ml-2">
                   <div
-                    class="h-full bg-[var(--color-gold)] transition-all duration-300"
-                    [style.width.%]="0"
+                    class="h-full bg-[var(--color-gold)] transition-all duration-300 w-0"
+                    [class.animate-pulse]="sound.playing()"
                   ></div>
                 </div>
               </div>
             </div>
           }
+
           @if (sounds().length === 0) {
             <div
-              class="text-center py-10 text-muted text-sm border-2 border-dashed border-[var(--color-border)] rounded-lg opacity-60"
+              class="flex flex-col items-center justify-center py-12 px-4 border border-dashed border-[var(--color-border)] rounded-lg bg-[var(--color-bg)]/30"
             >
-              <i class="pi pi-headphones mb-3 text-2xl block"></i>
-              No sounds yet. Upload first ambient track!
+              <div
+                class="w-12 h-12 rounded-full bg-[var(--color-bg)] border border-[var(--color-border)] flex items-center justify-center mb-3"
+              >
+                <i class="pi pi-headphones text-xl text-[var(--text-muted)] opacity-50"></i>
+              </div>
+              <p class="text-xs text-[var(--text-muted)] text-center max-w-[150px] leading-relaxed">
+                Upload ambient tracks to set the mood
+              </p>
             </div>
           }
         </div>
       </div>
 
-      <div class="p-4 border-t border-[var(--color-border)]">
-        <div class="flex flex-row justify-center items-center space-x-2">
-          <p-button icon="pi pi-save" label="Save" styleClass="p-button-sm"></p-button>
-          <p-button icon="pi pi-download" label="Export" styleClass="p-button-sm"></p-button>
+      <div class="p-4 border-t border-[var(--color-border)] bg-[var(--color-bg-elevated)] shrink-0">
+        <div class="grid grid-cols-2 gap-3">
+          <p-button
+            icon="pi pi-save"
+            label="Save"
+            styleClass="p-button-sm p-button-outlined w-full !border-[var(--color-border)] !text-[var(--text-muted)] hover:!text-[var(--color-gold)] hover:!border-[var(--color-gold)]"
+          ></p-button>
+          <p-button
+            icon="pi pi-download"
+            label="Export"
+            styleClass="p-button-sm p-button-outlined w-full !border-[var(--color-border)] !text-[var(--text-muted)] hover:!text-[var(--color-gold)] hover:!border-[var(--color-gold)]"
+          ></p-button>
         </div>
       </div>
     </div>
@@ -307,8 +371,10 @@ export class DmView implements OnInit {
         name: signal(name),
         audio: audio,
         playing: signal(false),
+        volume: signal(0.7),
       };
 
+      audio.volume = 0.7;
       audio.onended = () => newSound.playing.set(false);
       this.sounds.update((s) => [...s, newSound]);
       target.value = '';
@@ -329,5 +395,10 @@ export class DmView implements OnInit {
     sound.audio.pause();
     sound.audio.currentTime = 0;
     sound.playing.set(false);
+  }
+
+  onVolumeChange(sound: Sound, volume: number) {
+    sound.volume.set(volume);
+    sound.audio.volume = volume;
   }
 }

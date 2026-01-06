@@ -2,3 +2,135 @@
   display: block;
   height: 100%;
 }
+
+.top-nav {
+  background: linear-gradient(180deg, var(--color-bg-elevated) 0%, rgba(36, 28, 22, 0.95) 100%);
+  border-bottom: 1px solid var(--color-gold-dark);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  position: relative;
+  z-index: 10;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, var(--color-gold) 50%, transparent 100%);
+    opacity: 0.8;
+  }
+}
+
+.scene-label {
+  font-family: var(--font-body);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-right: 0.5rem;
+}
+
+.scene-name {
+  color: var(--color-gold-light);
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  font-size: 1.1rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.nav-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 2rem;
+  opacity: 0.5;
+
+  &::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: var(--color-gold);
+    transform: rotate(45deg);
+    box-shadow: 0 0 6px var(--color-gold-dark);
+  }
+}
+
+:host ::ng-deep {
+  .p-button.nav-btn {
+    border-radius: 4px;
+    font-family: var(--font-display);
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+
+    &:focus {
+      box-shadow: 0 0 0 2px rgba(201, 162, 39, 0.2);
+    }
+  }
+
+  .fog-btn {
+    width: auto !important;
+    min-width: 140px;
+    white-space: nowrap;
+    background: rgba(0, 0, 0, 0.2) !important;
+    border-color: var(--color-border) !important;
+    color: var(--text-muted) !important;
+
+    &:hover {
+      background: rgba(201, 162, 39, 0.05) !important;
+      border-color: var(--color-gold) !important;
+      color: var(--color-gold) !important;
+    }
+  }
+
+  .fog-active {
+    background: rgba(201, 162, 39, 0.1) !important;
+    border-color: var(--color-gold) !important;
+    color: var(--color-gold) !important;
+    box-shadow: inset 0 0 10px rgba(201, 162, 39, 0.1);
+
+    .p-button-icon {
+      text-shadow: 0 0 5px var(--color-gold);
+    }
+  }
+
+  .cast-btn {
+    white-space: nowrap;
+    width: 200px;
+    border: 1px solid var(--color-gold) !important;
+    color: var(--color-gold) !important;
+    background: transparent !important;
+
+    &:hover {
+      background: var(--color-gold) !important;
+      color: var(--color-bg) !important;
+      box-shadow: 0 0 15px rgba(201, 162, 39, 0.3);
+    }
+  }
+
+  .cast-active {
+    background: linear-gradient(
+      135deg,
+      var(--color-success),
+      var(--color-success-light)
+    ) !important;
+    border-color: var(--color-success-light) !important;
+    color: white !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 20px rgba(77, 139, 49, 0.4);
+    animation: pulse-green 3s infinite ease-in-out;
+  }
+}
+
+@keyframes pulse-green {
+  0% {
+    box-shadow: 0 0 0 0 rgba(77, 139, 49, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(77, 139, 49, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(77, 139, 49, 0);
+  }
+}

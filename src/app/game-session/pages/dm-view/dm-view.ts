@@ -14,7 +14,7 @@ interface Sound {
 @Component({
   selector: 'app-dm-view',
   imports: [Button, FileUploadModule, InputTextModule, FormsModule],
-  template: `<div class="dm-view flex flex-row h-full w-full overflow-hidden">
+  template: `<div class="flex flex-row h-full w-full overflow-hidden">
     <!-- SCEMNES -->
     <div
       class="flex-1 flex flex-col h-full border-r border-[var(--color-gold)] overflow-hidden max-w-90 bg-[var(--color-bg-elevated)]"
@@ -24,9 +24,12 @@ interface Sound {
         <div class="flex flex-col space-y-1 pl-2 max-h-80 overflow-y-auto pr-1">
           @for (scene of scenes; track $index) {
             <p-button
-              styleClass="w-full !justify-start !text-sm !whitespace-nowrap !overflow-hidden p-button-ghost"
+              styleClass="w-full !justify-start !text-sm !whitespace-nowrap !overflow-hidden p-button-ghost {{
+                activeScene().name === scene.name ? '!text-[var(--color-gold)]' : ''
+              }}"
               icon="pi pi-map"
               label="{{ scene.name }}"
+              (onClick)="activeScene.set(scene)"
             ></p-button>
           }
           <p-button
@@ -114,8 +117,48 @@ interface Sound {
     </div>
 
     <!-- BOARD -->
-    <div class="flex flex-[2] overflow-y-auto flex-col h-full p-4 space-y-6">
-      <div>board-header</div>
+    <div
+      class="flex flex-[2] overflow-y-auto flex-col h-full p-0 space-y-6  border-r border-[var(--color-gold)]"
+    >
+      <div
+        class="p-3 pl-6 pr-6 flex flex-row shrink-0 bg-[var(--color-bg-elevated)] items-center gap-4 top-nav"
+      >
+        <!-- SCENE NAME -->
+        <div class="flex items-center min-w-0">
+          <span class="scene-label">Active Scene:</span>
+          <span class="scene-name truncate" [title]="activeScene().name">{{
+            activeScene().name
+          }}</span>
+        </div>
+
+        <!-- SPACER -->
+        <div class="flex-1"></div>
+
+        <!-- RIGHT CONTROLS -->
+        <div class="flex items-center gap-4">
+          <p-button
+            [icon]="fogOfWar() ? 'pi pi-eye-slash' : 'pi pi-eye'"
+            [styleClass]="
+              'p-button-rounded p-button-sm nav-btn fog-btn ' + (fogOfWar() ? 'fog-active' : '')
+            "
+            [label]="fogOfWar() ? 'Fog Active' : 'Fog Hidden'"
+            (onClick)="toggleFogOfWar()"
+          ></p-button>
+
+          <div class="nav-divider mx-0"></div>
+
+          <p-button
+            [icon]="castingBoard() ? 'pi pi-broadcast' : 'pi pi-map'"
+            [label]="castingBoard() ? 'Casting board...' : 'Launch Player View'"
+            [styleClass]="
+              'p-button-rounded p-button-sm nav-btn cast-btn ' +
+              (castingBoard() ? 'cast-active' : '')
+            "
+            (onClick)="toggleCastingBoard()"
+          ></p-button>
+        </div>
+      </div>
+
       <div>board</div>
       <div>board-tools</div>
       <div>dm-notes</div>
@@ -140,6 +183,18 @@ export class DmView {
 
   protected readonly sounds = signal<Sound[]>([]);
 
+  protected readonly fogOfWar = signal(false);
+  protected readonly castingBoard = signal(false);
+  protected readonly activeScene = signal(this.scenes[0]);
+
+  toggleFogOfWar() {
+    this.fogOfWar.set(!this.fogOfWar());
+  }
+
+  toggleCastingBoard() {
+    this.castingBoard.set(!this.castingBoard());
+  }
+
   onSoundUpload(event: Event) {
     const target = event.target as HTMLInputElement;
     const file = target.files?.[0];
@@ -155,10 +210,7 @@ export class DmView {
       };
 
       audio.onended = () => newSound.playing.set(false);
-
       this.sounds.update((s) => [...s, newSound]);
-
-      // Reset input value to allow uploading same file again
       target.value = '';
     }
   }

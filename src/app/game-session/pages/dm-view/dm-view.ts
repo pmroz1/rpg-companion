@@ -1,8 +1,11 @@
-import { ChangeDetectionStrategy, Component, signal, WritableSignal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { MenuItem } from 'primeng/api';
 import { Button } from 'primeng/button';
+import { DockModule } from 'primeng/dock';
 import { FileUploadModule } from 'primeng/fileupload';
 import { InputTextModule } from 'primeng/inputtext';
+import { TooltipModule } from 'primeng/tooltip';
 
 interface Sound {
   name: WritableSignal<string>;
@@ -13,7 +16,7 @@ interface Sound {
 // TODO: move big chunks of template to separate components
 @Component({
   selector: 'app-dm-view',
-  imports: [Button, FileUploadModule, InputTextModule, FormsModule],
+  imports: [Button, FileUploadModule, InputTextModule, FormsModule, DockModule, TooltipModule],
   template: `<div class="flex flex-row h-full w-full overflow-hidden">
     <!-- SCEMNES -->
     <div
@@ -118,50 +121,130 @@ interface Sound {
 
     <!-- BOARD -->
     <div
-      class="flex flex-[2] overflow-y-auto flex-col h-full p-0 space-y-6  border-r border-[var(--color-gold)]"
+      class="flex flex-[2] overflow-hidden flex-col h-full p-0 relative border-r border-[var(--color-gold)] bg-[var(--color-bg)]"
     >
       <div
-        class="p-3 pl-6 pr-6 flex flex-row shrink-0 bg-[var(--color-bg-elevated)] items-center gap-4 top-nav"
+        class="h-16 px-6 flex flex-row shrink-0 bg-[var(--color-bg-elevated)] items-center gap-4 justify-between border-b border-[var(--color-gold-dark)] shadow-lg z-10"
       >
-        <!-- SCENE NAME -->
-        <div class="flex items-center min-w-0">
-          <span class="scene-label">Active Scene:</span>
-          <span class="scene-name truncate" [title]="activeScene().name">{{
-            activeScene().name
-          }}</span>
+        <div class="flex items-center gap-2">
+          <span class="text-[var(--text-muted)] uppercase tracking-wider text-xs font-semibold"
+            >Active Scene:</span
+          >
+          <span
+            class="text-[var(--color-gold-light)] font-[family-name:var(--font-display)] font-bold text-lg truncate min-w-[150px]"
+            [title]="activeScene().name"
+            >{{ activeScene().name }}</span
+          >
         </div>
 
-        <!-- SPACER -->
-        <div class="flex-1"></div>
+        <div class="flex items-center gap-3">
+          <div class="h-8 w-px bg-[var(--color-border)] mx-2"></div>
 
-        <!-- RIGHT CONTROLS -->
-        <div class="flex items-center gap-4">
-          <p-button
-            [icon]="fogOfWar() ? 'pi pi-eye-slash' : 'pi pi-eye'"
-            [styleClass]="
-              'p-button-rounded p-button-sm nav-btn fog-btn ' + (fogOfWar() ? 'fog-active' : '')
-            "
-            [label]="fogOfWar() ? 'Fog Active' : 'Fog Hidden'"
-            (onClick)="toggleFogOfWar()"
-          ></p-button>
+          <button
+            class="flex items-center gap-3 px-4 py-2 rounded bg-[var(--color-bg)] border border-[var(--color-border)] text-[var(--text-muted)] hover:text-[var(--color-gold)] hover:border-[var(--color-gold)] transition-all cursor-pointer"
+            [class.!bg-[#2a241d]]="fogOfWar()"
+            [class.!text-[var(--color-gold)]]="fogOfWar()"
+            [class.!border-[var(--color-gold)]]="fogOfWar()"
+            (click)="toggleFogOfWar()"
+          >
+            <i [class]="fogOfWar() ? 'pi pi-eye-slash' : 'pi pi-eye'" style="font-size: 1.2rem"></i>
+            <div class="flex flex-col items-start leading-none gap-0.5">
+              <span class="text-[10px] uppercase opacity-70 tracking-wider">Fog of War</span>
+              <span class="font-bold text-xs sticky">{{ fogOfWar() ? 'ACTIVE' : 'OFF' }}</span>
+            </div>
+          </button>
 
-          <div class="nav-divider mx-0"></div>
+          <button
+            class="flex items-center gap-3 px-6 py-2 rounded bg-[var(--color-success)] text-white hover:brightness-110 shadow-lg shadow-green-900/20 transition-all font-semibold tracking-wide cursor-pointer border border-[#ffffff20]"
+            [class.animate-pulse]="castingBoard()"
+            (click)="toggleCastingBoard()"
+          >
+            <i class="pi pi-external-link" style="font-size: 1.2rem"></i>
+            <div class="flex flex-col items-start leading-none gap-0.5">
+              <span class="font-bold text-xs tracking-wider">{{
+                castingBoard() ? 'CASTING...' : 'CAST TO BOARD'
+              }}</span>
+            </div>
+          </button>
 
-          <p-button
-            [icon]="castingBoard() ? 'pi pi-broadcast' : 'pi pi-map'"
-            [label]="castingBoard() ? 'Casting board...' : 'Launch Player View'"
-            [styleClass]="
-              'p-button-rounded p-button-sm nav-btn cast-btn ' +
-              (castingBoard() ? 'cast-active' : '')
-            "
-            (onClick)="toggleCastingBoard()"
-          ></p-button>
+          <button
+            class="w-10 h-10 flex items-center justify-center rounded-full text-[var(--text-muted)] hover:text-[var(--text-body)] hover:bg-[var(--color-bg-elevated)] transition-colors cursor-pointer ml-2"
+          >
+            <i class="pi pi-cog text-xl"></i>
+          </button>
         </div>
       </div>
 
-      <div>board</div>
-      <div>board-tools</div>
-      <div>dm-notes</div>
+      <div
+        class="flex-1 relative overflow-hidden flex items-center justify-center p-8 bg-[var(--color-bg)]"
+      >
+        <div
+          class="absolute inset-0 pointer-events-none opacity-20"
+          style="
+            background-image: radial-gradient(var(--text-muted) 1px, transparent 1px);
+            background-size: 24px 24px;
+          "
+        ></div>
+
+        <div class="text-center space-y-2">
+          <h2
+            class="text-xl font-bold tracking-[0.2em] text-[var(--text-muted)] uppercase font-[family-name:var(--font-display)]"
+          >
+            Map Render Surface
+          </h2>
+          <p class="text-[var(--text-muted)] italic opacity-60 font-[family-name:var(--font-body)]">
+            Players can only see what is revealed via Fog of War brush
+          </p>
+        </div>
+
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-20">
+          <div
+            class="bg-[var(--color-bg-elevated)] border border-[var(--color-border)] rounded-full px-10 py-4 shadow-2xl flex items-center justify-center relative"
+          >
+            <p-dock [model]="dockItems" position="bottom" styleClass="custom-dock">
+              <ng-template pTemplate="item" let-item>
+                <div
+                  class="dock-item flex flex-col items-center gap-1 p-2 transition-all duration-200 hover:scale-110 cursor-pointer group relative"
+                  [pTooltip]="item.label"
+                  tooltipPosition="top"
+                  [class.text-[var(--color-gold)]]="activeTool() === item.id"
+                  [class.text-[var(--text-muted)]]="activeTool() !== item.id"
+                  (click)="setActiveTool(item.id)"
+                  (keydown.enter)="setActiveTool(item.id)"
+                  tabindex="0"
+                >
+                  <div
+                    class="w-10 h-10 rounded-full bg-[var(--color-bg-elevated)] border border-[var(--color-border)] flex items-center justify-center shadow-lg group-hover:border-[var(--color-gold)] transition-colors relative z-10"
+                    [class.!border-[var(--color-gold)]]="activeTool() === item.id"
+                    [class.!bg-[#2a241d]]="activeTool() === item.id"
+                  >
+                    <i [class]="item.icon" style="font-size: 1.2rem"></i>
+                  </div>
+                  <span
+                    class="text-[9px] uppercase font-bold tracking-widest opacity-0 group-hover:opacity-100 transition-opacity absolute -bottom-5 whitespace-nowrap"
+                    >{{ item.label }}</span
+                  >
+                </div>
+              </ng-template>
+            </p-dock>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="shrink-0 h-40 bg-[var(--color-bg-elevated)] border-t border-[var(--color-gold)] flex flex-col"
+      >
+        <div class="px-5 py-3 border-b border-[var(--color-border)] flex items-center gap-2">
+          <i class="pi pi-book text-[var(--text-muted)]"></i>
+          <span class="text-xs font-bold tracking-widest text-[var(--text-muted)] uppercase"
+            >Secret DM Notes</span
+          >
+        </div>
+        <textarea
+          class="flex-1 w-full bg-transparent border-none resize-none p-4 text-[var(--text-body)] placeholder-[var(--text-muted)] opacity-80 focus:opacity-100 focus:ring-0 outline-none font-[family-name:var(--font-body)]"
+          placeholder="Hidden notes for this room... (Traps, DC checks, Loot)"
+        ></textarea>
+      </div>
     </div>
 
     <!-- INITIATIVE AND PLAYERS TOOLS -->
@@ -174,7 +257,7 @@ interface Sound {
   styleUrls: ['./dm-view.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DmView {
+export class DmView implements OnInit {
   scenes = [
     { name: 'The Bloated Dwarf Inn' },
     { name: 'Bandit ambush' },
@@ -186,6 +269,19 @@ export class DmView {
   protected readonly fogOfWar = signal(false);
   protected readonly castingBoard = signal(false);
   protected readonly activeScene = signal(this.scenes[0]);
+  protected readonly activeTool = signal<string>('select');
+
+  dockItems: MenuItem[] = [];
+
+  ngOnInit() {
+    this.dockItems = [
+      { id: 'select', label: 'Select', icon: 'pi pi-arrow-up' },
+      { id: 'brush', label: 'Brush', icon: 'pi pi-pencil' },
+      { id: 'erase', label: 'Erase', icon: 'pi pi-eraser' },
+      { id: 'ping', label: 'Ping', icon: 'pi pi-map-marker' },
+      { id: 'measure', label: 'Measure', icon: 'pi pi-arrows-h' },
+    ];
+  }
 
   toggleFogOfWar() {
     this.fogOfWar.set(!this.fogOfWar());
@@ -193,6 +289,10 @@ export class DmView {
 
   toggleCastingBoard() {
     this.castingBoard.set(!this.castingBoard());
+  }
+
+  setActiveTool(toolId: string) {
+    this.activeTool.set(toolId);
   }
 
   onSoundUpload(event: Event) {

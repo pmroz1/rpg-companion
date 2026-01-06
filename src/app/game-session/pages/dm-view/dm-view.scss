@@ -22,115 +22,66 @@
   }
 }
 
-.scene-label {
-  font-family: var(--font-body);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  font-size: 0.7rem;
-  color: var(--text-muted);
-  margin-right: 0.5rem;
-}
-
-.scene-name {
-  color: var(--color-gold-light);
-  font-family: var(--font-display);
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  font-size: 1.1rem;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-}
-
-.nav-divider {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 2rem;
-  opacity: 0.5;
-
-  &::before {
-    content: '';
-    width: 6px;
-    height: 6px;
-    background: var(--color-gold);
-    transform: rotate(45deg);
-    box-shadow: 0 0 6px var(--color-gold-dark);
-  }
-}
-
 :host ::ng-deep {
-  .p-button.nav-btn {
-    border-radius: 4px;
-    font-family: var(--font-display);
-    border: 1px solid transparent;
-    transition: all 0.2s ease;
-
-    &:focus {
-      box-shadow: 0 0 0 2px rgba(201, 162, 39, 0.2);
+  .custom-dock {
+    &.p-dock-bottom {
+      height: auto;
+      width: auto;
+      left: auto;
+      bottom: auto;
+      position: static;
+      z-index: 1;
+      display: inline-block;
+      overflow: visible !important;
     }
-  }
 
-  .fog-btn {
-    width: auto !important;
-    min-width: 140px;
-    white-space: nowrap;
-    background: rgba(0, 0, 0, 0.2) !important;
-    border-color: var(--color-border) !important;
-    color: var(--text-muted) !important;
-
-    &:hover {
-      background: rgba(201, 162, 39, 0.05) !important;
-      border-color: var(--color-gold) !important;
-      color: var(--color-gold) !important;
+    .p-dock-list-container {
+      background: transparent;
+      border: none;
+      padding: 0;
+      box-shadow: none;
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+      justify-content: center;
+      overflow: visible !important;
+      height: auto !important;
+      min-height: 50px; /* Reduced since pill is outside */
     }
-  }
 
-  .fog-active {
-    background: rgba(201, 162, 39, 0.1) !important;
-    border-color: var(--color-gold) !important;
-    color: var(--color-gold) !important;
-    box-shadow: inset 0 0 10px rgba(201, 162, 39, 0.1);
-
-    .p-button-icon {
-      text-shadow: 0 0 5px var(--color-gold);
+    .p-dock-list {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+      justify-content: center;
+      margin: 0;
+      padding: 0;
+      width: auto !important;
+      overflow: visible !important;
     }
-  }
 
-  .cast-btn {
-    white-space: nowrap;
-    width: 200px;
-    border: 1px solid var(--color-gold) !important;
-    color: var(--color-gold) !important;
-    background: transparent !important;
+    .p-dock-item {
+      padding: 0;
+      transition: transform 0.2s ease;
+      width: auto !important;
+      height: auto !important;
+      overflow: visible !important;
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
-    &:hover {
-      background: var(--color-gold) !important;
-      color: var(--color-bg) !important;
-      box-shadow: 0 0 15px rgba(201, 162, 39, 0.3);
+      .p-dock-action {
+        width: auto;
+        height: auto;
+        padding: 0;
+        cursor: default;
+        overflow: visible !important;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
     }
-  }
-
-  .cast-active {
-    background: linear-gradient(
-      135deg,
-      var(--color-success),
-      var(--color-success-light)
-    ) !important;
-    border-color: var(--color-success-light) !important;
-    color: white !important;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-    box-shadow: 0 0 20px rgba(77, 139, 49, 0.4);
-    animation: pulse-green 3s infinite ease-in-out;
-  }
-}
-
-@keyframes pulse-green {
-  0% {
-    box-shadow: 0 0 0 0 rgba(77, 139, 49, 0.4);
-  }
-  70% {
-    box-shadow: 0 0 0 10px rgba(77, 139, 49, 0);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(77, 139, 49, 0);
   }
 }

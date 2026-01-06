@@ -10,11 +10,15 @@ interface Sound {
   playing: WritableSignal<boolean>;
 }
 
+// TODO: move big chunks of template to separate components
 @Component({
   selector: 'app-dm-view',
   imports: [Button, FileUploadModule, InputTextModule, FormsModule],
   template: `<div class="dm-view flex flex-row h-full w-full overflow-hidden">
-    <div class="flex-1 flex flex-col h-full border-r border-[var(--color-gold)] overflow-hidden">
+    <!-- SCEMNES -->
+    <div
+      class="flex-1 flex flex-col h-full border-r border-[var(--color-gold)] overflow-hidden max-w-90 bg-[var(--color-bg-elevated)]"
+    >
       <div class="p-4 flex flex-col shrink-0">
         <h3 class="text-lg font-semibold uppercase tracking-wider mb-2">scenes</h3>
         <div class="flex flex-col space-y-1 pl-2 max-h-80 overflow-y-auto pr-1">
@@ -108,12 +112,16 @@ interface Sound {
         </div>
       </div>
     </div>
+
+    <!-- BOARD -->
     <div class="flex flex-[2] overflow-y-auto flex-col h-full p-4 space-y-6">
       <div>board-header</div>
       <div>board</div>
       <div>board-tools</div>
       <div>dm-notes</div>
     </div>
+
+    <!-- INITIATIVE AND PLAYERS TOOLS -->
     <div class="flex flex-1 overflow-y-auto flex-col h-full p-4 space-y-6">
       <div>initiative-header</div>
       <div>initiative</div>

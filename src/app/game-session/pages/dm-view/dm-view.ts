@@ -312,10 +312,30 @@ interface Sound {
     </div>
 
     <!-- INITIATIVE AND PLAYERS TOOLS -->
-    <div class="flex flex-1 overflow-y-auto flex-col h-full p-4 space-y-6">
-      <div>initiative-header</div>
-      <div>initiative</div>
-      <div>Add Combatant</div>
+    <div
+      class="flex flex-1 overflow-hidden h-full p-0 bg-[var(--color-bg-elevated)] border-l border-[var(--color-gold)]"
+    >
+      <div class="flex flex-col w-full">
+        <div class="flex items-center gap-3 p-4 border-b border-[var(--color-border)] w-full">
+          <i class="pi pi-users text-[var(--color-gold)]"></i>
+          <h3 class="text-sm font-bold uppercase tracking-[0.15em] m-0">Initiative</h3>
+          <div class="flex-1"></div>
+          <p-button
+            label="NEXT"
+            icon="pi pi-arrow-right"
+            iconPos="right"
+            styleClass="p-button-sm p-button-outlined !border-[var(--color-gold-dark)] !text-[var(--color-gold-light)] hover:!bg-[var(--color-gold-dark)]/20"
+          ></p-button>
+        </div>
+        <div class="p-4 flex flex-col gap-4">
+          <div class="text-[var(--text-muted)] text-sm italic">No active combat...</div>
+          <p-button
+            label="Add Combatant"
+            icon="pi pi-plus"
+            styleClass="p-button-sm p-button-text !text-[var(--color-gold)]"
+          ></p-button>
+        </div>
+      </div>
     </div>
   </div>`,
   styleUrls: ['./dm-view.scss'],

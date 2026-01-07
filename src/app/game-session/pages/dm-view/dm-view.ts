@@ -1,11 +1,13 @@
 import { ChangeDetectionStrategy, Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { DND_MONSTERS } from '@data/dictionaries';
 import { MenuItem } from 'primeng/api';
 import { Button } from 'primeng/button';
 import { DockModule } from 'primeng/dock';
 import { FileUploadModule } from 'primeng/fileupload';
 import { InputTextModule } from 'primeng/inputtext';
 import { TooltipModule } from 'primeng/tooltip';
+import { Select } from 'primeng/select';
 
 interface Sound {
   name: WritableSignal<string>;
@@ -17,7 +19,15 @@ interface Sound {
 // TODO: move big chunks of template to separate components
 @Component({
   selector: 'app-dm-view',
-  imports: [Button, FileUploadModule, InputTextModule, FormsModule, DockModule, TooltipModule],
+  imports: [
+    Button,
+    FileUploadModule,
+    InputTextModule,
+    FormsModule,
+    DockModule,
+    TooltipModule,
+    Select,
+  ],
   template: `<div class="flex flex-row h-full w-full overflow-hidden">
     <!-- SCEMNES -->
     <div class="left-column flex-1 flex flex-col h-full overflow-hidden max-w-90">
@@ -313,7 +323,7 @@ interface Sound {
 
     <!-- INITIATIVE AND PLAYERS TOOLS -->
     <div
-      class="flex flex-1 overflow-hidden h-full p-0 bg-[var(--color-bg-elevated)] border-l border-[var(--color-gold)]"
+      class="flex flex-col flex-1 overflow-hidden h-full p-0 bg-[var(--color-bg-elevated)] border-l border-[var(--color-gold)]"
     >
       <div class="flex flex-col w-full">
         <div class="flex items-center gap-3 p-4 border-b border-[var(--color-border)] w-full">
@@ -327,6 +337,7 @@ interface Sound {
             styleClass="p-button-sm p-button-outlined !border-[var(--color-gold-dark)] !text-[var(--color-gold-light)] hover:!bg-[var(--color-gold-dark)]/20"
           ></p-button>
         </div>
+
         <div class="p-4 flex flex-col gap-4">
           <div class="text-[var(--text-muted)] text-sm italic">No active combat...</div>
           <p-button
@@ -335,6 +346,16 @@ interface Sound {
             styleClass="p-button-sm p-button-text !text-[var(--color-gold)]"
           ></p-button>
         </div>
+      </div>
+
+      <div class="flex-1"></div>
+      <p-select [options]="monsterManual" optionLabel="name" optionValue="name"></p-select>
+      <div class="p-4 flex flex-col gap-4 border-t border-[var(--color-border)]">
+        <p-button
+          label="End Combat"
+          icon="pi pi-times"
+          styleClass="p-button-sm p-button-text !text-[var(--color-gold)]"
+        ></p-button>
       </div>
     </div>
   </div>`,
@@ -347,6 +368,8 @@ export class DmView implements OnInit {
     { name: 'Bandit ambush' },
     { name: 'The Dark Forest - Entrance' },
   ];
+
+  monsterManual = [...DND_MONSTERS];
 
   protected readonly sounds = signal<Sound[]>([]);
 

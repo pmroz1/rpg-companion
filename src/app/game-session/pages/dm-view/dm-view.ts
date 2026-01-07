@@ -8,6 +8,7 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { InputTextModule } from 'primeng/inputtext';
 import { TooltipModule } from 'primeng/tooltip';
 import { Select } from 'primeng/select';
+import { DndMonster } from '@data/models';
 
 interface Sound {
   name: WritableSignal<string>;
@@ -323,13 +324,19 @@ interface Sound {
 
     <!-- INITIATIVE AND PLAYERS TOOLS -->
     <div
-      class="flex flex-col flex-1 overflow-hidden h-full p-0 bg-[var(--color-bg-elevated)] border-l border-[var(--color-gold)]"
+      class="flex flex-col flex-1 overflow-hidden h-full p-0 bg-[var(--color-bg-elevated)] border-l border-[var(--color-gold)] max-w-200"
     >
       <div class="flex flex-col w-full">
         <div class="flex items-center gap-3 p-4 border-b border-[var(--color-border)] w-full">
           <i class="pi pi-users text-[var(--color-gold)]"></i>
           <h3 class="text-sm font-bold uppercase tracking-[0.15em] m-0">Initiative</h3>
           <div class="flex-1"></div>
+          <p-button
+            label="End Combat"
+            icon="pi pi-times"
+            styleClass="p-button-sm p-button-text !text-[var(--color-gold)]"
+            (click)="endCombat()"
+          ></p-button>
           <p-button
             label="NEXT"
             icon="pi pi-arrow-right"
@@ -369,7 +376,8 @@ export class DmView implements OnInit {
     { name: 'The Dark Forest - Entrance' },
   ];
 
-  monsterManual = [...DND_MONSTERS];
+  readonly monsterManual = [...DND_MONSTERS];
+  protected readonly selectedMonster = signal<DndMonster | null>(null);
 
   protected readonly sounds = signal<Sound[]>([]);
 
@@ -388,6 +396,10 @@ export class DmView implements OnInit {
       { id: 'ping', label: 'Ping', icon: 'pi pi-map-marker' },
       { id: 'measure', label: 'Measure', icon: 'pi pi-arrows-h' },
     ];
+  }
+
+  endCombat() {
+    throw new Error('Method not implemented.');
   }
 
   toggleFogOfWar() {

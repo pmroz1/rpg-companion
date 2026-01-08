@@ -324,45 +324,358 @@ interface Sound {
 
     <!-- INITIATIVE AND PLAYERS TOOLS -->
     <div
-      class="flex flex-col flex-1 overflow-hidden h-full p-0 bg-[var(--color-bg-elevated)] border-l border-[var(--color-gold)] max-w-200"
+      class="flex flex-col flex-1 overflow-hidden h-full bg-[#16120e] border-l border-[var(--color-gold)] max-w-200"
     >
-      <div class="flex flex-col w-full">
-        <div class="flex items-center gap-3 p-4 border-b border-[var(--color-border)] w-full">
-          <i class="pi pi-users text-[var(--color-gold)]"></i>
-          <h3 class="text-sm font-bold uppercase tracking-[0.15em] m-0">Initiative</h3>
-          <div class="flex-1"></div>
-          <p-button
-            label="End Combat"
-            icon="pi pi-times"
-            styleClass="p-button-sm p-button-text !text-[var(--color-gold)]"
-            (click)="endCombat()"
-          ></p-button>
-          <p-button
-            label="NEXT"
-            icon="pi pi-arrow-right"
-            iconPos="right"
-            styleClass="p-button-sm p-button-outlined !border-[var(--color-gold-dark)] !text-[var(--color-gold-light)] hover:!bg-[var(--color-gold-dark)]/20"
-          ></p-button>
-        </div>
-
-        <div class="p-4 flex flex-col gap-4">
-          <div class="text-[var(--text-muted)] text-sm italic">No active combat...</div>
-          <p-button
-            label="Add Combatant"
-            icon="pi pi-plus"
-            styleClass="p-button-sm p-button-text !text-[var(--color-gold)]"
-          ></p-button>
-        </div>
+      <div class="flex shrink-0 bg-[#0c0a09] border-b border-[var(--color-gold)]">
+        <button
+          class="flex-1 py-3 text-xs font-bold uppercase tracking-[0.2em] transition-all relative overflow-hidden group"
+          [class.text-black]="rightPanelTab() === 'tracker'"
+          [class.bg-[var(--color-gold)]]="rightPanelTab() === 'tracker'"
+          [class.text-[var(--text-muted)]]="rightPanelTab() !== 'tracker'"
+          [class.hover:text-[var(--color-gold-light)]]="rightPanelTab() !== 'tracker'"
+          (click)="rightPanelTab.set('tracker')"
+        >
+          <span class="relative z-10 flex items-center justify-center gap-2">
+            <i class="pi pi-list"></i> Tracker
+          </span>
+          @if (rightPanelTab() !== 'tracker') {
+            <div
+              class="absolute inset-0 bg-[var(--color-gold)]/5 translate-y-full group-hover:translate-y-0 transition-transform duration-300"
+            ></div>
+          }
+        </button>
+        <div class="w-px bg-[var(--color-gold)] opacity-50"></div>
+        <button
+          class="flex-1 py-3 text-xs font-bold uppercase tracking-[0.2em] transition-all relative overflow-hidden group"
+          [class.text-black]="rightPanelTab() === 'library'"
+          [class.bg-[var(--color-gold)]]="rightPanelTab() === 'library'"
+          [class.text-[var(--text-muted)]]="rightPanelTab() !== 'library'"
+          [class.hover:text-[var(--color-gold-light)]]="rightPanelTab() !== 'library'"
+          (click)="rightPanelTab.set('library')"
+        >
+          <span class="relative z-10 flex items-center justify-center gap-2">
+            <i class="pi pi-book"></i> Library
+          </span>
+          @if (rightPanelTab() !== 'library') {
+            <div
+              class="absolute inset-0 bg-[var(--color-gold)]/5 translate-y-full group-hover:translate-y-0 transition-transform duration-300"
+            ></div>
+          }
+        </button>
       </div>
 
-      <div class="flex-1"></div>
-      <p-select [options]="monsterManual" optionLabel="name" optionValue="name"></p-select>
-      <div class="p-4 flex flex-col gap-4 border-t border-[var(--color-border)]">
-        <p-button
-          label="End Combat"
-          icon="pi pi-times"
-          styleClass="p-button-sm p-button-text !text-[var(--color-gold)]"
-        ></p-button>
+      <div class="flex-1 overflow-hidden relative flex flex-col">
+        @if (rightPanelTab() === 'tracker') {
+          <div class="flex flex-col h-full anim-fade-in">
+            <div
+              class="p-4 border-b border-[var(--color-border)] bg-[var(--color-bg-elevated)] flex items-center justify-between shrink-0 shadow-lg z-10"
+            >
+              <div class="flex items-center gap-2">
+                <div
+                  class="w-8 h-8 rounded-full bg-[#000] border border-[var(--color-gold)] flex items-center justify-center"
+                >
+                  <span
+                    class="font-[family-name:var(--font-display)] text-[var(--color-gold)] font-bold text-lg"
+                    >1</span
+                  >
+                </div>
+                <div class="flex flex-col leading-none">
+                  <span
+                    class="text-[9px] uppercase tracking-widest text-[var(--text-muted)] font-bold"
+                    >Round</span
+                  >
+                  <span class="text-xs font-bold text-[var(--color-gold-light)]"
+                    >Combat Active</span
+                  >
+                </div>
+              </div>
+
+              <div class="flex gap-2">
+                <p-button
+                  icon="pi pi-step-forward"
+                  styleClass="p-button-rounded p-button-text !text-[var(--color-gold)] hover:!bg-[var(--color-gold)]/10 !w-8 !h-8"
+                  pTooltip="Next Turn"
+                  tooltipPosition="left"
+                ></p-button>
+                <p-button
+                  icon="pi pi-flag"
+                  styleClass="p-button-rounded p-button-text !text-red-400 hover:!bg-red-500/10 !w-8 !h-8"
+                  pTooltip="End Combat"
+                  (click)="endCombat()"
+                ></p-button>
+              </div>
+            </div>
+
+            <div
+              class="flex-1 p-6 flex flex-col items-center justify-center text-center opacity-60"
+            >
+              <i class="pi pi-shield text-4xl text-[var(--text-muted)] mb-4 opacity-50"></i>
+              <h3 class="text-sm font-bold text-[var(--text-muted)] uppercase tracking-widest mb-2">
+                Battlefield Empty
+              </h3>
+              <p class="text-xs text-[var(--text-muted)] max-w-[200px] leading-relaxed">
+                Add creatures from the library to begin tracking initiative.
+              </p>
+              <button
+                class="mt-6 text-[var(--color-gold)] text-xs font-bold uppercase tracking-widest hover:text-[var(--color-gold-light)] flex items-center gap-2 group transition-colors"
+                (click)="rightPanelTab.set('library')"
+              >
+                <i class="pi pi-plus-circle group-hover:scale-110 transition-transform"></i>
+                Add Combatant
+              </button>
+            </div>
+          </div>
+        }
+
+        @if (rightPanelTab() === 'library') {
+          <div class="flex flex-col h-full anim-fade-in bg-[#1a1612]">
+            <div
+              class="p-4 bg-[var(--color-bg)] border-b border-[var(--color-border)] shrink-0 z-20 shadow-md"
+            >
+              <div class="relative w-full">
+                <i
+                  class="pi pi-search absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)] text-sm"
+                ></i>
+                <p-select
+                  [options]="monsterManual"
+                  optionLabel="name"
+                  [(ngModel)]="selectedMonster"
+                  [filter]="true"
+                  filterBy="name"
+                  placeholder="Before you stands..."
+                  styleClass="!w-full !pl-8 !bg-[#0c0a09] !border-[var(--color-border)] text-sm !h-10 items-center shadow-inner focus:!border-[var(--color-gold)] transition-colors"
+                  [appendTo]="'body'"
+                >
+                  <ng-template pTemplate="selectedItem" let-selectedOption>
+                    @if (selectedOption) {
+                      <div class="flex items-center gap-2">
+                        <span class="font-bold text-[var(--color-gold)]">{{
+                          selectedOption.name
+                        }}</span>
+                        <span class="text-[10px] bg-[#333] px-1.5 rounded text-white/70"
+                          >CR {{ selectedOption.challengeRating }}</span
+                        >
+                      </div>
+                    }
+                  </ng-template>
+                  <ng-template let-monster pTemplate="item">
+                    <div class="flex items-center justify-between w-full py-1">
+                      <span class="font-medium">{{ monster.name }}</span>
+                      <span class="text-xs text-[var(--text-muted)]"
+                        >CR {{ monster.challengeRating }}</span
+                      >
+                    </div>
+                  </ng-template>
+                </p-select>
+              </div>
+            </div>
+
+            <div class="flex-1 overflow-y-auto custom-scrollbar relative">
+              @if (selectedMonster(); as monster) {
+                <div class="min-h-full bg-[#16120e] p-6 pb-24">
+                  <div class="mb-6 relative">
+                    <h2
+                      class="text-3xl font-bold font-[family-name:var(--font-display)] text-[var(--color-gold)] leading-none mb-2 drop-shadow-sm"
+                    >
+                      {{ monster.name }}
+                    </h2>
+                    <div
+                      class="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-[var(--text-muted)] font-medium uppercase tracking-wide border-b border-[var(--color-gold-dark)]/30 pb-4"
+                    >
+                      <span>{{ monster.size }} {{ monster.type }}</span>
+                      <span
+                        class="w-1 h-1 rounded-full bg-[var(--color-gold-dark)] opacity-50"
+                      ></span>
+                      <span>{{ monster.alignment }}</span>
+                      <span
+                        class="ml-auto bg-[var(--color-gold)] text-black px-2 py-0.5 rounded font-bold"
+                        >CR {{ monster.challengeRating }}</span
+                      >
+                    </div>
+                  </div>
+
+                  <div
+                    class="grid grid-cols-3 gap-4 mb-6 bg-[#000]/20 p-3 rounded border border-[var(--color-border)]/30"
+                  >
+                    <div class="flex flex-col items-center justify-center border-r border-white/5">
+                      <i
+                        class="pi pi-shield text-[var(--color-gold-dark)] text-lg mb-1 opacity-80"
+                      ></i>
+                      <span class="text-xl font-bold text-[var(--text-body)] leading-none">{{
+                        monster.armorClass
+                      }}</span>
+                      <span
+                        class="text-[9px] uppercase tracking-widest text-[var(--text-muted)] mt-1"
+                        >AC</span
+                      >
+                    </div>
+                    <div class="flex flex-col items-center justify-center border-r border-white/5">
+                      <i class="pi pi-heart text-red-900/80 text-lg mb-1"></i>
+                      <span class="text-xl font-bold text-[var(--text-body)] leading-none">{{
+                        monster.hitPoints
+                      }}</span>
+                      <span
+                        class="text-[9px] uppercase tracking-widest text-[var(--text-muted)] mt-1"
+                        >HP</span
+                      >
+                    </div>
+                    <div class="flex flex-col items-center justify-center">
+                      <i
+                        class="pi pi-bolt text-[var(--color-gold-light)] text-lg mb-1 opacity-60"
+                      ></i>
+                      <span
+                        class="text-sm font-bold text-[var(--text-body)] leading-tight text-center px-1"
+                        >{{ monster.speed }}</span
+                      >
+                    </div>
+                  </div>
+
+                  <div class="grid grid-cols-6 gap-2 mb-6">
+                    @for (ability of ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA']; track $index) {
+                      @let score =
+                        [
+                          monster.strength,
+                          monster.dexterity,
+                          monster.constitution,
+                          monster.intelligence,
+                          monster.wisdom,
+                          monster.charisma,
+                        ][$index];
+                      <div
+                        class="flex flex-col items-center bg-[#000]/40 rounded py-2 border border-white/5"
+                      >
+                        <span
+                          class="text-[8px] font-bold text-[var(--color-gold)] uppercase tracking-wider"
+                          >{{ ability }}</span
+                        >
+                        <span class="text-sm font-bold text-[var(--text-body)] mt-0.5">{{
+                          score
+                        }}</span>
+                        <span class="text-[10px] text-[var(--text-muted)]">{{
+                          getModifier(score)
+                        }}</span>
+                      </div>
+                    }
+                  </div>
+
+                  <div class="space-y-2 text-xs mb-8">
+                    @if (monster.senses.length) {
+                      <div class="flex gap-2 leading-relaxed">
+                        <span class="font-bold text-[var(--color-gold-light)] uppercase shrink-0"
+                          >Senses</span
+                        >
+                        <span class="text-[var(--text-muted)]">{{
+                          monster.senses.join(', ')
+                        }}</span>
+                      </div>
+                    }
+                    @if (monster.languages.length) {
+                      <div class="flex gap-2 leading-relaxed">
+                        <span class="font-bold text-[var(--color-gold-light)] uppercase shrink-0"
+                          >Languages</span
+                        >
+                        <span class="text-[var(--text-muted)] italic">{{
+                          monster.languages.join(', ')
+                        }}</span>
+                      </div>
+                    }
+                  </div>
+
+                  <div class="space-y-8">
+                    @if (monster.traits?.length) {
+                      <div class="space-y-4">
+                        @for (trait of monster.traits; track trait) {
+                          <div
+                            class="text-sm leading-6 border-l-2 border-[var(--color-gold-dark)]/30 pl-3"
+                          >
+                            @let parts = getTraitParts(trait);
+                            <span class="font-bold text-[var(--color-gold-light)] block mb-0.5">{{
+                              parts.name
+                            }}</span>
+                            <span class="text-[var(--text-body)] opacity-90 block">{{
+                              parts.desc
+                            }}</span>
+                          </div>
+                        }
+                      </div>
+                    }
+
+                    @if (monster.actions.length) {
+                      <div>
+                        <h4
+                          class="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-gold)] border-b border-[var(--color-gold)]/20 pb-2 mb-4"
+                        >
+                          Actions
+                        </h4>
+                        <div class="space-y-5">
+                          @for (action of monster.actions; track action) {
+                            <div class="text-sm leading-6 group">
+                              @let parts = getTraitParts(action);
+                              <span
+                                class="font-bold text-[var(--color-gold-light)] italic border-b border-dashed border-[var(--color-gold)]/30 group-hover:border-[var(--color-gold)]/60 transition-colors"
+                                >{{ parts.name }}</span
+                              >
+                              <span class="text-[var(--text-body)] ml-1 opacity-90">{{
+                                parts.desc
+                              }}</span>
+                            </div>
+                          }
+                        </div>
+                      </div>
+                    }
+
+                    @if (monster.legendaryActions?.length) {
+                      <div
+                        class="bg-[#2a1d15]/30 p-4 rounded border border-[var(--color-gold-dark)]/20 relative overflow-hidden"
+                      >
+                        <div
+                          class="absolute inset-0 bg-gradient-to-b from-[var(--color-gold)]/5 to-transparent pointer-events-none"
+                        ></div>
+                        <h4
+                          class="text-xs font-bold uppercase tracking-[0.2em] text-[#e8b678] mb-4 relative z-10"
+                        >
+                          Legendary Actions
+                        </h4>
+                        <div class="space-y-4 relative z-10">
+                          @for (action of monster.legendaryActions; track action) {
+                            <div class="text-sm leading-6">
+                              @let parts = getTraitParts(action);
+                              <span class="font-bold text-[var(--color-gold-light)]"
+                                >{{ parts.name }}.</span
+                              >
+                              <span class="text-[var(--text-body)] ml-1 opacity-90">{{
+                                parts.desc
+                              }}</span>
+                            </div>
+                          }
+                        </div>
+                      </div>
+                    }
+                  </div>
+                </div>
+
+                <div
+                  class="absolute bottom-5 left-1/2 -translate-x-1/2 z-20 w-max shadow-[0_8px_30px_rgb(0,0,0)]"
+                >
+                  <p-button
+                    label="Add to Combat"
+                    icon="pi pi-plus"
+                    styleClass="p-button-sm !bg-[var(--color-gold)] !text-black !border-[var(--color-gold)] font-bold uppercase tracking-widest hover:!bg-[#eec170] !px-8 !py-3 !rounded-full shadow-glow transform hover:scale-105 transition-all"
+                  ></p-button>
+                </div>
+              } @else {
+                <div
+                  class="h-full flex flex-col items-center justify-center p-8 text-center opacity-40"
+                >
+                  <i class="pi pi-book text-5xl text-[var(--color-gold-dark)] mb-6 opacity-50"></i>
+                  <p class="text-sm text-[var(--text-muted)] font-[family-name:var(--font-body)]">
+                    Search the compendium to view creature details.
+                  </p>
+                </div>
+              }
+            </div>
+          </div>
+        }
       </div>
     </div>
   </div>`,
@@ -385,6 +698,7 @@ export class DmView implements OnInit {
   protected readonly castingBoard = signal(false);
   protected readonly activeScene = signal(this.scenes[0]);
   protected readonly activeTool = signal<string>('select');
+  protected readonly rightPanelTab = signal<'tracker' | 'library'>('tracker');
 
   dockItems: MenuItem[] = [];
 
@@ -455,5 +769,30 @@ export class DmView implements OnInit {
   onVolumeChange(sound: Sound, volume: number) {
     sound.volume.set(volume);
     sound.audio.volume = volume;
+  }
+
+  protected getModifier(score: number): string {
+    const mod = Math.floor((score - 10) / 2);
+    return (mod >= 0 ? '+' : '') + mod;
+  }
+
+  protected getTraitParts(text: string): { name: string; desc: string } {
+    const dotIndex = text.indexOf('. ');
+    if (dotIndex > -1) {
+      return {
+        name: text.substring(0, dotIndex),
+        desc: text.substring(dotIndex + 1),
+      };
+    }
+
+    const parenIndex = text.indexOf(' (');
+    if (parenIndex > -1) {
+      return {
+        name: text.substring(0, parenIndex),
+        desc: text.substring(parenIndex),
+      };
+    }
+
+    return { name: text, desc: '' };
   }
 }

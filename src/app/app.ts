@@ -18,10 +18,10 @@ import { filter } from 'rxjs';
 @Component({
   selector: 'app-root',
   imports: [RouterLink, RouterLinkActive, RouterOutlet, Menubar, Skeleton],
-  template: `<div class="flex flex-col h-screen overflow-hidden">
+  template: `<div class="flex flex-col h-screen w-full overflow-hidden">
     @if (!hideNavbar()) {
       <header
-        class="bg-[var(--color-bg-elevated)] border-b-2 border-[var(--color-gold-dark)] px-6 py-2 flex-none"
+        class="w-full bg-[var(--color-bg-elevated)] border-b-2 border-[var(--color-gold-dark)] px-6 py-2 flex-none"
       >
         <p-menubar [model]="menuItems">
           <ng-template #start>
@@ -39,7 +39,7 @@ import { filter } from 'rxjs';
         </p-menubar>
       </header>
     }
-    <main class="flex-1 overflow-y-auto" [class.p-6]="!noPadding()">
+    <main class="flex-1 w-full overflow-y-auto" [class.p-6]="!noPadding()">
       @if (isLoading()) {
         <div class="flex flex-col gap-6">
           <div class="grid grid-cols-12 gap-4">

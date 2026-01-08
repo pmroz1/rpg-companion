@@ -10,3 +10,4 @@ export * from './dnd-weapon';
 export * from './dnd-language';
 export * from './dnd-alignment';
 export * from './spell-cantrip';
+export * from './sound';

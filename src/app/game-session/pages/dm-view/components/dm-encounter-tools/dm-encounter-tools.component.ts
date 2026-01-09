@@ -1,5 +1,7 @@
 import { ChangeDetectionStrategy, Component, input, output, signal } from '@angular/core';
 import { TabsModule } from 'primeng/tabs';
+import { ButtonModule } from 'primeng/button';
+import { TooltipModule } from 'primeng/tooltip';
 import { DndMonster } from '@data/models';
 import { CommonModule } from '@angular/common';
 import { DmInitiativeTabComponent } from './tabs/dm-initiative-tab.component';
@@ -15,11 +17,17 @@ import { DmPlayersTabComponent } from './tabs/dm-players-tab.component';
     DmInitiativeTabComponent,
     DmMonstersTabComponent,
     DmPlayersTabComponent,
+    ButtonModule,
+    TooltipModule,
   ],
   template: `
     <div
-      class="flex flex-col flex-none overflow-hidden h-full p-0 bg-[var(--color-bg-elevated)] border-l border-[var(--color-gold)]"
-      style="width: 600px; min-width: 400px;"
+      class="flex flex-col flex-none overflow-hidden h-full p-0 bg-[var(--color-bg-elevated)] border-l border-[var(--color-gold)] transition-all duration-300 ease-in-out shadow-2xl z-50"
+      [class.absolute]="isExpanded()"
+      [class.right-0]="isExpanded()"
+      [class.w-full]="isExpanded()"
+      [style.width]="isExpanded() ? '100%' : '600px'"
+      [style.min-width]="isExpanded() ? '100%' : '400px'"
     >
       <p-tabs
         [value]="activeTab()"
@@ -58,24 +66,45 @@ import { DmPlayersTabComponent } from './tabs/dm-players-tab.component';
               Players
             </div>
           </p-tab>
+
+          <div class="flex items-center px-2 border-l border-[var(--color-border)]">
+            <p-button
+              [icon]="isExpanded() ? 'pi pi-angle-double-right' : 'pi pi-angle-double-left'"
+              styleClass="p-button-text p-button-sm !text-[var(--color-gold)] hover:!bg-[var(--color-gold-dark)]/10"
+              (onClick)="toggleExpand()"
+              [pTooltip]="isExpanded() ? 'Collapse' : 'Expand'"
+              tooltipPosition="left"
+            ></p-button>
+          </div>
         </p-tablist>
 
         <p-tabpanels
           class="flex-1 flex flex-col min-h-0 overflow-hidden relative !p-0 !bg-transparent"
         >
-          <p-tabpanel value="initiative" class="flex-1 flex flex-col overflow-hidden h-full !p-0">
+          <p-tabpanel
+            value="initiative"
+            class="flex-1 flex flex-col overflow-hidden h-full !p-0 w-full"
+          >
             <app-dm-initiative-tab
+              class="w-full h-full block"
               (endCombat)="endCombat.emit()"
               (addCombatant)="onTabChange('monsters')"
             />
           </p-tabpanel>
 
-          <p-tabpanel value="players" class="flex-1 flex flex-col overflow-hidden h-full !p-0">
-            <app-dm-players-tab />
+          <p-tabpanel
+            value="players"
+            class="flex-1 flex flex-col overflow-hidden h-full !p-0 w-full"
+          >
+            <app-dm-players-tab class="w-full h-full block" />
           </p-tabpanel>
 
-          <p-tabpanel value="monsters" class="flex-1 flex flex-col overflow-hidden h-full !p-0">
+          <p-tabpanel
+            value="monsters"
+            class="flex-1 flex flex-col overflow-hidden h-full !p-0 w-full"
+          >
             <app-dm-monsters-tab
+              class="w-full h-full block"
               [monsterManual]="monsterManual()"
               [selectedMonster]="selectedMonster()"
               (selectedMonsterChange)="selectedMonsterChange.emit($event)"
@@ -89,6 +118,14 @@ import { DmPlayersTabComponent } from './tabs/dm-players-tab.component';
     :host {
       display: contents;
     }
+    :host ::ng-deep {
+      .p-tabpanel {
+        height: 100%;
+      }
+      .p-tabpanels {
+        height: 100%;
+      }
+    }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -99,10 +136,15 @@ export class DmEncounterToolsComponent {
   endCombat = output<void>();
 
   activeTab = signal<'players' | 'initiative' | 'monsters'>('initiative');
+  isExpanded = signal(false);
 
   onTabChange(value: string | number | undefined) {
     if (value === 'players' || value === 'initiative' || value === 'monsters') {
       this.activeTab.set(value);
     }
+  }
+
+  toggleExpand() {
+    this.isExpanded.update((v) => !v);
   }
 }

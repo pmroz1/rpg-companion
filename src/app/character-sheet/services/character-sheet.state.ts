@@ -11,6 +11,7 @@ import { ProficienciesState } from '../components/proficiencies/proficiencies.st
 import { SpellcastingAbilityState } from '../components/spellcasting-ability/spellcasting-ability.state';
 import { NotesState } from '../components/tabs/views/notes/notes.state';
 import { SpellsCantripsState } from '../components/tabs/views/spells-cantrips/spell-cantrips.state';
+import { AvatarState } from '../components/avatar/avatar-state';
 import { CharacterSheetState } from '../models/character-sheet-state.interface';
 
 @Injectable()
@@ -28,6 +29,7 @@ export class CharacterSheetStateService {
   private readonly spellCasting = inject(SpellcastingAbilityState);
   private readonly spellsCantrips = inject(SpellsCantripsState);
   private readonly notes = inject(NotesState);
+  private readonly avatar = inject(AvatarState);
 
   readonly character = computed<CharacterSheetState>(() => ({
     abilities: this.abilities.state(),
@@ -42,6 +44,7 @@ export class CharacterSheetStateService {
     spellCasting: this.spellCasting.state(),
     spellsCantrips: this.spellsCantrips.state(),
     notes: this.notes.state(),
+    avatar: this.avatar.state(),
   }));
 
   constructor() {
@@ -88,6 +91,7 @@ export class CharacterSheetStateService {
           this.spellCasting.setState(state.spellCasting);
           this.spellsCantrips.setState(state.spellsCantrips);
           this.notes.setState(state.notes);
+          this.avatar.setState(state.avatar);
         } else {
           console.warn('Invalid character sheet state loaded.');
         }
@@ -124,7 +128,8 @@ export class CharacterSheetStateService {
       typeof s['spellCasting'] === 'object' &&
       s['spellCasting'] !== null &&
       Array.isArray(s['spellsCantrips']) &&
-      typeof s['notes'] === 'string'
+      typeof s['notes'] === 'string' &&
+      typeof s['avatar'] === 'string'
     );
   }
 }

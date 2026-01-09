@@ -21,7 +21,7 @@ import { MonsterStatBlockComponent } from '../monster-stat-block/monster-stat-bl
   template: `
     <div
       class="flex flex-col flex-none overflow-hidden h-full p-0 bg-[var(--color-bg-elevated)] border-l border-[var(--color-gold)]"
-      style="width: 400px; min-width: 400px;"
+      style="width: 600px; min-width: 400px;"
     >
       <div
         class="flex border-b border-[var(--color-border)] bg-[var(--color-bg-elevated)] sticky top-0 z-10"

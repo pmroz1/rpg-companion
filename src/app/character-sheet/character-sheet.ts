@@ -156,6 +156,12 @@ export class CharacterSheet implements OnInit, OnDestroy {
         ),
     });
 
+    items.push({
+      label: 'Export Character',
+      icon: 'pi pi-download',
+      command: () => this.onExport(),
+    });
+
     if (config?.enableFullscreen) {
       items.push({
         label: 'Open fullscreen',
@@ -217,6 +223,18 @@ export class CharacterSheet implements OnInit, OnDestroy {
 
   onExplain() {
     // @TODO @FIXME: implement explain functionality
+  }
+
+  onExport() {
+    const data = this.form.value;
+    const characterName = this.form.get('characterInfo.name')?.value || 'character';
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `${characterName}.json`;
+    link.click();
+    window.URL.revokeObjectURL(url);
   }
 
   ngOnDestroy() {

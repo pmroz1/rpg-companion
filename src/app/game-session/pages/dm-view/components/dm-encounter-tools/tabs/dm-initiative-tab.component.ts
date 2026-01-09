@@ -12,7 +12,7 @@ import { TooltipModule } from 'primeng/tooltip';
         class="flex items-center gap-3 p-4 border-b border-[var(--color-border)] w-full bg-[var(--color-bg-elevated)] shrink-0"
       >
         <h3
-          class="text-[10px] font-bold uppercase tracking-[0.15em] m-0 text-[var(--color-gold-light)]"
+          class="text-xs font-bold uppercase tracking-[0.15em] m-0 text-[var(--color-gold-light)]"
         >
           Combat Status
         </h3>
@@ -41,17 +41,17 @@ import { TooltipModule } from 'primeng/tooltip';
           >
             <i class="pi pi-shield text-4xl text-[var(--color-gold-dark)] opacity-50"></i>
           </div>
-          <h3 class="text-xs font-bold uppercase tracking-widest mb-3 text-[var(--color-gold)]">
+          <h3 class="text-sm font-bold uppercase tracking-widest mb-3 text-[var(--color-gold)]">
             Battlefield Empty
           </h3>
-          <p class="text-[11px] leading-relaxed max-w-[200px] text-[var(--text-muted)]">
+          <p class="text-xs leading-relaxed max-w-[200px] text-[var(--text-muted)]">
             The initiative order is currently empty. Add creatures from the Monster Manual to begin.
           </p>
           <div class="mt-8 flex flex-col gap-2 w-full max-w-[180px]">
             <p-button
               label="Add Combatant"
               icon="pi pi-plus"
-              styleClass="p-button-sm p-button-outlined w-full !border-[var(--color-gold)]/50 !text-[var(--color-gold)] hover:!bg-[var(--color-gold)]/10 font-bold tracking-widest text-[10px]"
+              styleClass="p-button-sm p-button-outlined w-full !border-[var(--color-gold)]/50 !text-[var(--color-gold)] hover:!bg-[var(--color-gold)]/10 font-bold tracking-widest text-xs"
               (onClick)="addCombatant.emit()"
             ></p-button>
           </div>

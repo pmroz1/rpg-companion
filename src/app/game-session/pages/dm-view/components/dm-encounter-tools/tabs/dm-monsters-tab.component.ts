@@ -28,18 +28,18 @@ import { MonsterStatBlockComponent } from '../../monster-stat-block/monster-stat
             [filter]="true"
             filterBy="name"
             placeholder="Search Bestiary..."
-            styleClass="w-full !pl-8 !py-2 !text-xs !bg-[var(--color-bg)] !border-[var(--color-border)] focus:!border-[var(--color-gold)] focus:!shadow-[0_0_0_1px_var(--color-gold)] transition-all"
+            styleClass="w-full !pl-8 !py-2 !text-sm !bg-[var(--color-bg)] !border-[var(--color-border)] focus:!border-[var(--color-gold)] focus:!shadow-[0_0_0_1px_var(--color-gold)] transition-all"
             [appendTo]="'body'"
           >
             <ng-template pTemplate="selectedItem" let-selectedOption>
               @if (selectedOption) {
                 <div class="flex items-center gap-2">
                   <span
-                    class="font-bold text-xs text-[var(--color-gold-light)] uppercase tracking-wide"
+                    class="font-bold text-sm text-[var(--color-gold-light)] uppercase tracking-wide"
                     >{{ selectedOption.name }}</span
                   >
                   <span
-                    class="text-[9px] px-1.5 py-0.5 rounded bg-[var(--color-border)] text-[var(--text-muted)] font-mono"
+                    class="text-xs px-1.5 py-0.5 rounded bg-[var(--color-border)] text-[var(--text-muted)] font-mono"
                     >CR {{ selectedOption.challengeRating }}</span
                   >
                 </div>
@@ -49,15 +49,15 @@ import { MonsterStatBlockComponent } from '../../monster-stat-block/monster-stat
               <div
                 class="flex flex-col py-1.5 px-1 border-b border-white/5 last:border-0 hover:bg-white/5 -mx-2 px-2 transition-colors"
               >
-                <span class="font-bold text-xs text-[var(--color-gold-light)] mb-1">{{
+                <span class="font-bold text-sm text-[var(--color-gold-light)] mb-1">{{
                   monster.name
                 }}</span>
                 <div class="flex items-center justify-between">
                   <span
-                    class="text-[9px] text-[var(--text-muted)] uppercase tracking-wider opacity-70"
+                    class="text-xs text-[var(--text-muted)] uppercase tracking-wider opacity-70"
                     >{{ monster.type }}</span
                   >
-                  <span class="text-[9px] px-1.5 rounded bg-white/5 text-[var(--text-muted)]"
+                  <span class="text-xs px-1.5 rounded bg-white/5 text-[var(--text-muted)]"
                     >CR {{ monster.challengeRating }}</span
                   >
                 </div>
@@ -90,11 +90,11 @@ import { MonsterStatBlockComponent } from '../../monster-stat-block/monster-stat
               <i class="pi pi-book text-2xl text-[var(--color-gold-dark)]"></i>
             </div>
             <h4
-              class="text-sm font-bold text-[var(--color-gold-dark)] uppercase tracking-[0.2em] mb-3"
+              class="text-base font-bold text-[var(--color-gold-dark)] uppercase tracking-[0.2em] mb-3"
             >
               Monster Manual
             </h4>
-            <p class="text-xs text-[var(--text-muted)] opacity-60 leading-relaxed px-6">
+            <p class="text-sm text-[var(--text-muted)] opacity-60 leading-relaxed px-6">
               Search the compendium to view creature details and add them to the initiative tracker.
             </p>
           </div>

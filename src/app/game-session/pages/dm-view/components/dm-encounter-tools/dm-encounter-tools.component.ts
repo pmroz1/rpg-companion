@@ -39,30 +39,30 @@ import { DmPlayersTabComponent } from './tabs/dm-players-tab.component';
         >
           <p-tab
             value="initiative"
-            class="flex-1 group !p-4 !text-[10px] font-bold uppercase tracking-[0.2em] transition-all relative overflow-hidden !text-[var(--text-muted)] data-[p-active=true]:!text-[var(--color-gold)]"
+            class="flex-1 group !p-4 !text-xs font-bold uppercase tracking-[0.2em] transition-all relative overflow-hidden !text-[var(--text-muted)] data-[p-active=true]:!text-[var(--color-gold)]"
           >
             <div class="relative z-10 flex items-center justify-center gap-2">
-              <i class="pi pi-users text-xs"></i>
+              <i class="pi pi-users text-sm"></i>
               Initiative
             </div>
           </p-tab>
 
           <p-tab
             value="monsters"
-            class="flex-1 group !p-4 !text-[10px] font-bold uppercase tracking-[0.2em] transition-all relative overflow-hidden !text-[var(--text-muted)] data-[p-active=true]:!text-[var(--color-gold)]"
+            class="flex-1 group !p-4 !text-xs font-bold uppercase tracking-[0.2em] transition-all relative overflow-hidden !text-[var(--text-muted)] data-[p-active=true]:!text-[var(--color-gold)]"
           >
             <div class="relative z-10 flex items-center justify-center gap-2">
-              <i class="pi pi-book text-xs"></i>
+              <i class="pi pi-book text-sm"></i>
               Monsters
             </div>
           </p-tab>
 
           <p-tab
             value="players"
-            class="flex-1 group !p-4 !text-[10px] font-bold uppercase tracking-[0.2em] transition-all relative overflow-hidden !text-[var(--text-muted)] data-[p-active=true]:!text-[var(--color-gold)]"
+            class="flex-1 group !p-4 !text-xs font-bold uppercase tracking-[0.2em] transition-all relative overflow-hidden !text-[var(--text-muted)] data-[p-active=true]:!text-[var(--color-gold)]"
           >
             <div class="relative z-10 flex items-center justify-center gap-2">
-              <i class="pi pi-user text-xs"></i>
+              <i class="pi pi-user text-sm"></i>
               Players
             </div>
           </p-tab>

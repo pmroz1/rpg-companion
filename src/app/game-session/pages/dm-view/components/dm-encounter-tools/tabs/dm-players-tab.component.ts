@@ -12,7 +12,7 @@ import { GameSessionService } from '@app/core/session/game-session.service';
         class="flex items-center gap-3 p-4 border-b border-[var(--color-border)] w-full bg-[var(--color-bg-elevated)] shrink-0"
       >
         <h3
-          class="text-[10px] font-bold uppercase tracking-[0.15em] m-0 text-[var(--color-gold-light)]"
+          class="text-xs font-bold uppercase tracking-[0.15em] m-0 text-[var(--color-gold-light)]"
         >
           Party Members
         </h3>

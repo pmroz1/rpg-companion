@@ -91,16 +91,16 @@ import { AvatarComponent } from './components/avatar/avatar';
           <app-dnd-card title="inspiration" />
           <!--  checkbox jest/lub nie -->
         </app-dnd-grid-cell>
-        <app-dnd-grid-cell [colspan]="3" [rowspan]="2">
+        <app-dnd-grid-cell [colspan]="3" [rowspan]="3">
           <app-abilities (contextmenu)="onContextMenu($event, 'app-abilities')" />
         </app-dnd-grid-cell>
 
-        <app-dnd-grid-cell [colspan]="4">
+        <app-dnd-grid-cell [colspan]="4" [rowspan]="1">
           <app-spellcasting-ability
             (contextmenu)="onContextMenu($event, 'app-spellcasting-ability')"
           />
         </app-dnd-grid-cell>
-        <app-dnd-grid-cell [colspan]="5">
+        <app-dnd-grid-cell [colspan]="5" [rowspan]="1">
           <app-spell-slots
             title="spell slots"
             (contextmenu)="onContextMenu($event, 'app-spell-slots')"
@@ -114,18 +114,19 @@ import { AvatarComponent } from './components/avatar/avatar';
           <app-proficiencies (contextmenu)="onContextMenu($event, 'app-proficiencies')" />
         </app-dnd-grid-cell>
 
-        <app-dnd-grid-cell [colspan]="4">
-          <app-appearance (contextmenu)="onContextMenu($event, 'app-appearance')" />
-        </app-dnd-grid-cell>
-
-        <app-dnd-grid-cell [colspan]="4">
+        <app-dnd-grid-cell [colspan]="5">
           <app-dnd-card title="equipment" />
         </app-dnd-grid-cell>
+
         <app-dnd-grid-cell [colspan]="4">
           <app-coins (contextmenu)="onContextMenu($event, 'app-coins')" />
         </app-dnd-grid-cell>
         <app-dnd-grid-cell [colspan]="4">
           <app-languages (contextmenu)="onContextMenu($event, 'app-languages')" />
+        </app-dnd-grid-cell>
+
+        <app-dnd-grid-cell [colspan]="4">
+          <app-appearance (contextmenu)="onContextMenu($event, 'app-appearance')" />
         </app-dnd-grid-cell>
       </app-dnd-grid>
     </form>

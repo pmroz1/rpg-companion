@@ -7,7 +7,7 @@ import { GameSessionService } from '@app/core/session/game-session.service';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="flex flex-col h-full bg-[#12161a]">
+    <div class="flex flex-col h-full">
       <div
         class="flex items-center gap-3 p-4 border-b border-[var(--color-border)] w-full bg-[var(--color-bg-elevated)] shrink-0"
       >

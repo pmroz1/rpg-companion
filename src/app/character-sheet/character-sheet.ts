@@ -30,6 +30,7 @@ import { fullscreenMap } from './fullscreen.config';
 import { Coins } from './components/coins/coins';
 import { Languages } from './components/languages/languages';
 import { CharacterSheetStateService } from './services/character-sheet.state';
+import { AvatarComponent } from './components/avatar/avatar';
 
 @Component({
   selector: 'app-character-sheet',
@@ -50,17 +51,21 @@ import { CharacterSheetStateService } from './services/character-sheet.state';
     SpellcastingAbility,
     Coins,
     Languages,
+    AvatarComponent,
   ],
   providers: [CharacterSheetStateService],
   template: `<form [formGroup]="form" (contextmenu)="onContextMenu($event, '')">
       <app-dnd-grid>
+        <app-dnd-grid-cell [colspan]="3" [rowspan]="2">
+          <app-avatar />
+        </app-dnd-grid-cell>
         <app-dnd-grid-cell [colspan]="5" [rowspan]="2">
           <app-info (contextmenu)="onContextMenu($event, 'app-info')" />
         </app-dnd-grid-cell>
         <app-dnd-grid-cell [colspan]="1" [rowspan]="2">
           <app-armor-class (contextmenu)="onContextMenu($event, 'app-armor-class')" />
         </app-dnd-grid-cell>
-        <app-dnd-grid-cell [colspan]="6" [rowspan]="2">
+        <app-dnd-grid-cell [colspan]="3" [rowspan]="2">
           <app-hitpoints (contextmenu)="onContextMenu($event, 'app-hitpoints')" />
         </app-dnd-grid-cell>
 

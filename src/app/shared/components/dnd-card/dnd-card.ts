@@ -10,7 +10,7 @@ import { Card } from 'primeng/card';
   },
   template: `
     <p-card class="dnd-card p-2" [style.minHeight]="minHeight()">
-      @if (displayTitle()) {
+      @if (title()) {
         <ng-template #header>
           <div class="dnd-divider"></div>
           <div class="w-full h-auto text-2xl flex items-center justify-center select-none">
@@ -29,8 +29,7 @@ import { Card } from 'primeng/card';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DndCard {
-  title = input.required<string>();
-  displayTitle = input<boolean>(true);
+  title = input<string>();
   displayDivider = input<boolean>(true);
   minHeight = input<string | null>(null);
 }

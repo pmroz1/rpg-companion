@@ -18,26 +18,28 @@ import { filter } from 'rxjs';
 @Component({
   selector: 'app-root',
   imports: [RouterLink, RouterLinkActive, RouterOutlet, Menubar, Skeleton],
-  template: `<div class="flex flex-col h-screen overflow-hidden">
-    <header
-      class="bg-[var(--color-bg-elevated)] border-b-2 border-[var(--color-gold-dark)] px-6 py-2 flex-none"
-    >
-      <p-menubar [model]="menuItems">
-        <ng-template #start>
-          <h1 class="text-2xl gold-text tracking-wide">D&D 5e Companion</h1>
-        </ng-template>
-        <ng-template #item let-item>
-          <a
-            [routerLink]="item.routerLink"
-            class="p-menubar-item-link"
-            routerLinkActive="active-route"
-          >
-            <span class="p-menubar-item-label">{{ item.label }}</span>
-          </a>
-        </ng-template>
-      </p-menubar>
-    </header>
-    <main class="flex-1 overflow-y-auto p-6">
+  template: `<div class="flex flex-col h-screen w-full overflow-hidden">
+    @if (!hideNavbar()) {
+      <header
+        class="w-full bg-[var(--color-bg-elevated)] border-b-2 border-[var(--color-gold-dark)] px-6 py-2 flex-none"
+      >
+        <p-menubar [model]="menuItems">
+          <ng-template #start>
+            <h1 class="text-2xl gold-text tracking-wide">D&D 5e Companion</h1>
+          </ng-template>
+          <ng-template #item let-item>
+            <a
+              [routerLink]="item.routerLink"
+              class="p-menubar-item-link"
+              routerLinkActive="active-route"
+            >
+              <span class="p-menubar-item-label">{{ item.label }}</span>
+            </a>
+          </ng-template>
+        </p-menubar>
+      </header>
+    }
+    <main class="flex-1 w-full overflow-y-auto" [class.p-6]="!noPadding()">
       @if (isLoading()) {
         <div class="flex flex-col gap-6">
           <div class="grid grid-cols-12 gap-4">
@@ -67,11 +69,13 @@ import { filter } from 'rxjs';
 export class App {
   private readonly router = inject(Router);
   protected readonly isLoading = signal(false);
+  protected readonly hideNavbar = signal(false);
+  protected readonly noPadding = signal(false);
 
   constructor() {
     this.router.events
-      .pipe(takeUntilDestroyed())
       .pipe(
+        takeUntilDestroyed(),
         filter(
           (event) =>
             event instanceof NavigationStart ||
@@ -82,6 +86,14 @@ export class App {
       )
       .subscribe((event) => {
         this.isLoading.set(event instanceof NavigationStart);
+
+        if (event instanceof NavigationEnd) {
+          const url = event.urlAfterRedirects;
+          this.hideNavbar.set(url.includes('game-session/board'));
+          this.noPadding.set(
+            url.includes('game-session/board') || url.includes('game-session/dm-view'),
+          );
+        }
       });
   }
 

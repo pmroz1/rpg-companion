@@ -1,12 +1,12 @@
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
-import { RouterLink } from '@angular/router';
-import { GameSessionService } from '@app/core/session/game-session.service';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { Router } from '@angular/router';
+import { GameSessionService, parseGameSession } from '@app/core/session/game-session.service';
 import { DndCard } from '@app/shared/components/dnd-card/dnd-card';
 import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-wrapper',
-  imports: [DndCard, ButtonModule, RouterLink],
+  imports: [DndCard, ButtonModule],
   template: `<div
     class="flex flex-col w-full h-full bg-dnd-darken justify-center items-center align-center p-4"
   >
@@ -25,9 +25,24 @@ import { ButtonModule } from 'primeng/button';
       } @else {
         <p class="text-center">No active game session. Please create or load a session.</p>
       }
+      @if (error()) {
+        <p role="alert" class="mt-4 text-red-400 text-center">{{ error() }}</p>
+      }
       <div class="flex flex-row gap-4 mt-4 w-full justify-center">
-        <p-button label="Continue" routerLink="../dm-tools" [disabled]="!session()"></p-button>
-        <p-button label="New Session" routerLink="../new-session"></p-button>
+        <p-button label="Continue" (onClick)="continueGame()" [disabled]="!session()"></p-button>
+        <input
+          #sessionFile
+          type="file"
+          accept=".json,application/json"
+          class="hidden"
+          (change)="loadGame($event)"
+        />
+        <p-button
+          label="Load Session"
+          icon="pi pi-upload"
+          (onClick)="sessionFile.click()"
+        ></p-button>
+        <p-button label="New Session" (onClick)="newGame()"></p-button>
       </div>
     </app-dnd-card>
   </div>`,
@@ -40,5 +55,33 @@ import { ButtonModule } from 'primeng/button';
 })
 export class GameSessionWrapper {
   readonly sessionsService = inject(GameSessionService);
-  readonly session = computed(() => this.sessionsService.session());
+  readonly session = this.sessionsService.session;
+  readonly error = signal<string | null>(null);
+  private readonly router = inject(Router);
+
+  continueGame(): void {
+    if (this.session()) {
+      void this.router.navigate(['/game-session/dm-view']);
+    }
+  }
+
+  async loadGame(event: Event): Promise<void> {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (!file) return;
+
+    this.error.set(null);
+    try {
+      const session = parseGameSession(await file.text());
+      this.sessionsService.setSession(session);
+    } catch (error) {
+      this.error.set(error instanceof Error ? error.message : 'Could not read the session file.');
+    } finally {
+      input.value = '';
+    }
+  }
+
+  newGame(): void {
+    void this.router.navigate(['/game-session/new-session']);
+  }
 }

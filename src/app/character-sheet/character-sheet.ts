@@ -30,6 +30,7 @@ import { fullscreenMap } from './fullscreen.config';
 import { Coins } from './components/coins/coins';
 import { Languages } from './components/languages/languages';
 import { CharacterSheetStateService } from './services/character-sheet.state';
+import { AvatarComponent } from './components/avatar/avatar';
 
 @Component({
   selector: 'app-character-sheet',
@@ -50,17 +51,21 @@ import { CharacterSheetStateService } from './services/character-sheet.state';
     SpellcastingAbility,
     Coins,
     Languages,
+    AvatarComponent,
   ],
   providers: [CharacterSheetStateService],
   template: `<form [formGroup]="form" (contextmenu)="onContextMenu($event, '')">
       <app-dnd-grid>
+        <app-dnd-grid-cell [colspan]="3" [rowspan]="2">
+          <app-avatar />
+        </app-dnd-grid-cell>
         <app-dnd-grid-cell [colspan]="5" [rowspan]="2">
           <app-info (contextmenu)="onContextMenu($event, 'app-info')" />
         </app-dnd-grid-cell>
         <app-dnd-grid-cell [colspan]="1" [rowspan]="2">
           <app-armor-class (contextmenu)="onContextMenu($event, 'app-armor-class')" />
         </app-dnd-grid-cell>
-        <app-dnd-grid-cell [colspan]="6" [rowspan]="2">
+        <app-dnd-grid-cell [colspan]="3" [rowspan]="2">
           <app-hitpoints (contextmenu)="onContextMenu($event, 'app-hitpoints')" />
         </app-dnd-grid-cell>
 
@@ -86,16 +91,16 @@ import { CharacterSheetStateService } from './services/character-sheet.state';
           <app-dnd-card title="inspiration" />
           <!--  checkbox jest/lub nie -->
         </app-dnd-grid-cell>
-        <app-dnd-grid-cell [colspan]="3" [rowspan]="2">
+        <app-dnd-grid-cell [colspan]="3" [rowspan]="3">
           <app-abilities (contextmenu)="onContextMenu($event, 'app-abilities')" />
         </app-dnd-grid-cell>
 
-        <app-dnd-grid-cell [colspan]="4">
+        <app-dnd-grid-cell [colspan]="4" [rowspan]="1">
           <app-spellcasting-ability
             (contextmenu)="onContextMenu($event, 'app-spellcasting-ability')"
           />
         </app-dnd-grid-cell>
-        <app-dnd-grid-cell [colspan]="5">
+        <app-dnd-grid-cell [colspan]="5" [rowspan]="1">
           <app-spell-slots
             title="spell slots"
             (contextmenu)="onContextMenu($event, 'app-spell-slots')"
@@ -109,18 +114,19 @@ import { CharacterSheetStateService } from './services/character-sheet.state';
           <app-proficiencies (contextmenu)="onContextMenu($event, 'app-proficiencies')" />
         </app-dnd-grid-cell>
 
-        <app-dnd-grid-cell [colspan]="4">
-          <app-appearance (contextmenu)="onContextMenu($event, 'app-appearance')" />
-        </app-dnd-grid-cell>
-
-        <app-dnd-grid-cell [colspan]="4">
+        <app-dnd-grid-cell [colspan]="5">
           <app-dnd-card title="equipment" />
         </app-dnd-grid-cell>
+
         <app-dnd-grid-cell [colspan]="4">
           <app-coins (contextmenu)="onContextMenu($event, 'app-coins')" />
         </app-dnd-grid-cell>
         <app-dnd-grid-cell [colspan]="4">
           <app-languages (contextmenu)="onContextMenu($event, 'app-languages')" />
+        </app-dnd-grid-cell>
+
+        <app-dnd-grid-cell [colspan]="4">
+          <app-appearance (contextmenu)="onContextMenu($event, 'app-appearance')" />
         </app-dnd-grid-cell>
       </app-dnd-grid>
     </form>
@@ -154,6 +160,12 @@ export class CharacterSheet implements OnInit, OnDestroy {
           'Character Sheet Form Value',
           `${JSON.stringify(this.form.value, null, 2)}`,
         ),
+    });
+
+    items.push({
+      label: 'Export Character',
+      icon: 'pi pi-download',
+      command: () => this.onExport(),
     });
 
     if (config?.enableFullscreen) {
@@ -217,6 +229,18 @@ export class CharacterSheet implements OnInit, OnDestroy {
 
   onExplain() {
     // @TODO @FIXME: implement explain functionality
+  }
+
+  onExport() {
+    const data = this.state.character();
+    const characterName = data.info.name || 'character';
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `${characterName}.json`;
+    link.click();
+    window.URL.revokeObjectURL(url);
   }
 
   ngOnDestroy() {

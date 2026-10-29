@@ -13,8 +13,8 @@ import { DynamicDialogRef } from 'primeng/dynamicdialog';
   selector: 'app-monsters-table',
   imports: [TableModule, ButtonModule, DndCard, KeyValuePipe, Chip],
   template: `
-    <app-dnd-card title="Monsters" [displayTitle]="false">
-      <app-dnd-card title="Selected Monsters" [displayTitle]="false">
+    <app-dnd-card>
+      <app-dnd-card>
         @for (monsterCounts of selectedMonsters | keyvalue; track monsterCounts.key) {
           <div>
             <p-chip>

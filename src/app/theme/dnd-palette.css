@@ -23,6 +23,9 @@
 
   --color-hover: rgba(201, 162, 39, 0.1);
 
+  --color-success: #4d8b31;
+  --color-success-light: #6eb04a;
+
   --font-display: 'Cinzel', 'Times New Roman', serif;
   --font-body: 'Segoe UI', system-ui, sans-serif;
 }

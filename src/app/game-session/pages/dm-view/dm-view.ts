@@ -16,7 +16,7 @@ import { DmEncounterToolsComponent } from './components/dm-encounter-tools/dm-en
     DmEncounterToolsComponent,
   ],
   template: `
-    <div class="flex flex-row h-full w-full overflow-hidden">
+    <div class="flex flex-col lg:flex-row h-full w-full overflow-y-auto lg:overflow-hidden">
       <app-dm-scene-manager
         [scenes]="scenes"
         [activeScene]="activeScene()"

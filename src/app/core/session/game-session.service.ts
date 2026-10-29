@@ -1,9 +1,11 @@
 import { Injectable, signal } from '@angular/core';
 import { CharacterInfo } from '@app/character-sheet/components/info/model/character-info';
+import { ClassType, SubclassType } from '@data/enums';
 
 export interface GameSession {
   name: string;
   playerCharacters: CharacterInfo[];
+  notes?: string;
 }
 
 function isCharacterInfo(value: unknown): value is CharacterInfo {
@@ -14,6 +16,9 @@ function isCharacterInfo(value: unknown): value is CharacterInfo {
     c['name'].trim().length > 0 &&
     typeof c['background'] === 'string' &&
     typeof c['race'] === 'string' &&
+    (c['class'] === null || Object.values(ClassType).includes(c['class'] as ClassType)) &&
+    (c['subclass'] === null ||
+      Object.values(SubclassType).includes(c['subclass'] as SubclassType)) &&
     typeof c['level'] === 'number' &&
     typeof c['xp'] === 'number'
   );
@@ -26,7 +31,8 @@ export function isGameSession(value: unknown): value is GameSession {
     typeof s['name'] === 'string' &&
     s['name'].trim().length > 0 &&
     Array.isArray(s['playerCharacters']) &&
-    s['playerCharacters'].every(isCharacterInfo)
+    s['playerCharacters'].every(isCharacterInfo) &&
+    (s['notes'] === undefined || typeof s['notes'] === 'string')
   );
 }
 

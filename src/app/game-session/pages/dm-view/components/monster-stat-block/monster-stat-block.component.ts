@@ -96,30 +96,22 @@ import { DndMonster } from '@data/models';
         }
       </div>
 
-      <div
-        class="space-y-3 text-xs mb-8 p-4 bg-[#000]/20 rounded border border-dashed border-[var(--color-border)]/50"
-      >
-        @if (monster().senses.length) {
-          <div class="flex gap-2 leading-relaxed items-baseline">
-            <span
-              class="font-bold text-[var(--color-gold-dark)] uppercase tracking-wide shrink-0 text-[10px]"
-              >Senses</span
-            >
-            <span class="text-[var(--text-body)]">{{ monster().senses.join(', ') }}</span>
-          </div>
-        }
-        @if (monster().languages.length) {
-          <div class="flex gap-2 leading-relaxed items-baseline">
-            <span
-              class="font-bold text-[var(--color-gold-dark)] uppercase tracking-wide shrink-0 text-[10px]"
-              >Languages</span
-            >
-            <span class="text-[var(--text-body)] italic opacity-90">{{
-              monster().languages.join(', ')
-            }}</span>
-          </div>
-        }
-      </div>
+      @let details = getDetailRows(monster());
+      @if (details.length) {
+        <div
+          class="space-y-3 text-xs mb-8 p-4 bg-[#000]/20 rounded border border-dashed border-[var(--color-border)]/50"
+        >
+          @for (row of details; track row.label) {
+            <div class="flex gap-2 leading-relaxed items-baseline">
+              <span
+                class="font-bold text-[var(--color-gold-dark)] uppercase tracking-wide shrink-0 text-[10px]"
+                >{{ row.label }}</span
+              >
+              <span class="text-[var(--text-body)]">{{ row.values.join(', ') }}</span>
+            </div>
+          }
+        </div>
+      }
 
       <div class="space-y-10">
         @if (monster().traits?.length) {
@@ -139,7 +131,7 @@ import { DndMonster } from '@data/models';
           </div>
         }
 
-        @if (monster().actions.length) {
+        @for (section of getActionSections(monster()); track section.title) {
           <div>
             <h4
               class="text-lg font-bold font-[family-name:var(--font-display)] uppercase text-[var(--color-gold)] border-b border-[var(--color-border)] pb-2 mb-6 flex items-center gap-3"
@@ -147,16 +139,16 @@ import { DndMonster } from '@data/models';
               <span
                 class="h-px bg-gradient-to-r from-transparent to-[var(--color-gold)] flex-1 opacity-50"
               ></span>
-              Actions
+              {{ section.title }}
               <span
                 class="h-px bg-gradient-to-l from-transparent to-[var(--color-gold)] flex-1 opacity-50"
               ></span>
             </h4>
 
             <div class="space-y-6">
-              @for (action of monster().actions; track action) {
+              @for (item of section.items; track item) {
                 <div class="text-sm leading-7 group">
-                  @let parts = getTraitParts(action);
+                  @let parts = getTraitParts(item);
                   <span
                     class="font-bold text-[var(--color-gold-light)] text-[15px] font-serif italic border-b border-dashed border-[var(--color-gold)]/30 group-hover:border-[var(--color-gold)]/60 transition-colors"
                   >
@@ -217,6 +209,26 @@ export class MonsterStatBlockComponent {
   getModifier(score: number): string {
     const mod = Math.floor((score - 10) / 2);
     return (mod >= 0 ? '+' : '') + mod;
+  }
+
+  getDetailRows(monster: DndMonster): { label: string; values: string[] }[] {
+    return [
+      { label: 'Skills', values: monster.skills },
+      { label: 'Vulnerabilities', values: monster.vulnerabilities },
+      { label: 'Resistances', values: monster.resistances },
+      { label: 'Immunities', values: monster.immunities },
+      { label: 'Gear', values: monster.gear },
+      { label: 'Senses', values: monster.senses },
+      { label: 'Languages', values: monster.languages },
+    ].filter((row): row is { label: string; values: string[] } => !!row.values?.length);
+  }
+
+  getActionSections(monster: DndMonster): { title: string; items: string[] }[] {
+    return [
+      { title: 'Actions', items: monster.actions },
+      { title: 'Bonus Actions', items: monster.bonusActions ?? [] },
+      { title: 'Reactions', items: monster.reactions ?? [] },
+    ].filter((section) => section.items.length > 0);
   }
 
   getTraitParts(text: string): { name: string; desc: string } {

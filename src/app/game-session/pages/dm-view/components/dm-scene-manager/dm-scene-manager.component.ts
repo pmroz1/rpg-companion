@@ -16,7 +16,7 @@ import { Sound } from '@data/models';
   selector: 'app-dm-scene-manager',
   imports: [Button, InputTextModule, FormsModule, TooltipModule],
   template: `
-    <div class="left-column w-80 flex-none flex flex-col h-full overflow-hidden">
+    <div class="left-column w-full lg:w-80 flex-none flex flex-col lg:h-full overflow-hidden">
       <div class="p-5 pb-2 flex flex-col shrink-0">
         <div class="flex justify-between items-center mb-3">
           <h3 class="text-sm font-bold uppercase tracking-[0.15em]">Scenes</h3>
@@ -134,6 +134,7 @@ import { Sound } from '@data/models';
                   [class.hover:text-[var(--color-gold)]]="!sound.playing()"
                   [class.border]="!sound.playing()"
                   [class.border-white/10]="!sound.playing()"
+                  [attr.aria-label]="(sound.playing() ? 'Pause ' : 'Play ') + sound.name()"
                   (click)="toggleSound(sound)"
                 >
                   <i
@@ -150,6 +151,7 @@ import { Sound } from '@data/models';
                     class="p-inputtext-sm w-full bg-transparent border-none !p-0 font-bold font-[family-name:var(--font-display)] tracking-wide focus:text-[var(--color-gold)] focus:shadow-none truncate text-xs transition-colors"
                     [class.text-[var(--color-gold-light)]]="sound.playing()"
                     [class.text-[var(--text-body)]]="!sound.playing()"
+                    [attr.aria-label]="'Track name for ' + sound.name()"
                     [ngModel]="sound.name()"
                     (ngModelChange)="sound.name.set($event)"
                   />
@@ -166,6 +168,7 @@ import { Sound } from '@data/models';
 
                 <button
                   class="text-[var(--text-muted)] hover:text-red-400 transition-colors cursor-pointer w-6 h-6 flex items-center justify-center rounded hover:bg-white/5"
+                  [attr.aria-label]="'Stop ' + sound.name()"
                   (click)="stopSound(sound)"
                   pTooltip="Stop"
                 >
@@ -183,6 +186,7 @@ import { Sound } from '@data/models';
                     min="0"
                     max="1"
                     step="0.05"
+                    [attr.aria-label]="'Volume for ' + sound.name()"
                     [ngModel]="sound.volume()"
                     (ngModelChange)="onVolumeChange(sound, $event)"
                     class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20"

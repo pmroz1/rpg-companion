@@ -19,12 +19,13 @@ import { DmPlayersTabComponent } from './tabs/dm-players-tab.component';
   ],
   template: `
     <div
-      class="flex flex-col flex-none overflow-hidden h-full p-0 bg-[var(--color-bg-elevated)] border-l border-[var(--color-gold)] transition-all duration-300 ease-in-out shadow-2xl z-50"
+      class="flex flex-col flex-none overflow-hidden w-full lg:h-full p-0 bg-[var(--color-bg-elevated)] border-l border-[var(--color-gold)] transition-all duration-300 ease-in-out shadow-2xl z-50"
       [class.absolute]="isExpanded()"
       [class.right-0]="isExpanded()"
-      [class.w-full]="isExpanded()"
-      [style.width]="isExpanded() ? '100%' : '600px'"
-      [style.min-width]="isExpanded() ? '100%' : '400px'"
+      [class.lg:w-full]="isExpanded()"
+      [class.lg:w-[600px]]="!isExpanded()"
+      [class.lg:max-w-[45vw]]="!isExpanded()"
+      [class.lg:min-w-[320px]]="!isExpanded()"
     >
       <p-tabs
         [value]="activeTab()"

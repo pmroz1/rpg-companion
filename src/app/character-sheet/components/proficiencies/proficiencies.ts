@@ -1,19 +1,16 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  computed,
   effect,
   inject,
-  signal,
-  Injector,
   OnInit,
   OnDestroy,
 } from '@angular/core';
 import { CardModule } from 'primeng/card';
 import { DividerModule } from 'primeng/divider';
-import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CheckboxModule } from 'primeng/checkbox';
-import { DynamicFormService } from '@app/shared/services';
+import { DynamicFormService } from '@app/core/form';
 import { ArmorProficiency, WeaponProficiency } from '@data/enums/proficiency.enum';
 import { TitleCasePipe } from '@angular/common';
 import { DndCard } from '@app/shared/components/dnd-card/dnd-card';
@@ -24,12 +21,9 @@ import { DND_TOOLS } from '@data/dictionaries';
 import { DndTool } from '@data/models';
 import { DndDialogService } from '@app/shared/components/dnd-dialog/dnd-dialog.service';
 import { DndCheckbox } from '@app/shared/components/dnd-checkbox/dnd-checkbox';
-
-export interface ProficienciesInfo {
-  armorTrainingTypes: string[];
-  weapons: string[];
-  tools: DndTool[];
-}
+import { ProficienciesState } from './proficiencies.state';
+import { ProficienciesInfo } from './model/proficiencies-info';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-proficiencies',
@@ -55,6 +49,7 @@ export interface ProficienciesInfo {
             <div class="flex w-full items-center">
               <app-dnd-checkbox
                 class="flex w-full items-center"
+                [checked]="proficienciesState().armorTrainingTypes.includes(armor)"
                 (click)="onTrainingCheckboxChange(armor)"
                 label="{{ armor | titlecase }} "
               ></app-dnd-checkbox>
@@ -69,6 +64,7 @@ export interface ProficienciesInfo {
               <div class="flex w-full items-center">
                 <app-dnd-checkbox
                   class="h-100screen mt-2 mb-auto"
+                  [checked]="proficienciesState().weapons.includes(weapon)"
                   (click)="onWeaponCheckboxChange(weapon)"
                   label="{{ weapon | titlecase }}"
                 ></app-dnd-checkbox>
@@ -80,7 +76,7 @@ export interface ProficienciesInfo {
           <span class="field-label">Tools</span>
         </div>
         <div class="flex flex-row flex-wrap items-center">
-          @for (tool of toolTypes(); track tool.id) {
+          @for (tool of this.proficienciesState().tools; track tool.id) {
             <p-chip
               [removable]="true"
               (onRemove)="removeTool(tool)"
@@ -98,77 +94,79 @@ export interface ProficienciesInfo {
 })
 export class Proficiencies implements OnInit, OnDestroy {
   private readonly formService = inject(DynamicFormService);
-  private readonly injector = inject(Injector);
   private readonly dndDialogService = inject(DndDialogService);
-  private readonly control = new FormControl<ProficienciesInfo>({
-    armorTrainingTypes: [],
-    weapons: [],
-    tools: [],
-  });
-
-  ref: DynamicDialogRef | undefined | null;
+  readonly state = inject(ProficienciesState);
 
   armorProficiencies = Object.values(ArmorProficiency);
   weaponProficiencies = Object.values(WeaponProficiency);
   tools = [...DND_TOOLS];
-  armorTrainingTypes = signal<string[]>([]);
-  weaponTypes = signal<string[]>([]);
-  toolTypes = signal<DndTool[]>([]);
 
-  proficienciesInfo = computed(
-    (): ProficienciesInfo => ({
-      armorTrainingTypes: this.armorTrainingTypes(),
-      weapons: this.weaponTypes(),
-      tools: this.toolTypes(),
-    }),
-  );
+  proficienciesState = this.state.state;
+  ref: DynamicDialogRef | undefined | null;
+  form = new FormGroup({
+    armorTrainingTypes: new FormControl<string[]>([], { nonNullable: true }),
+    weapons: new FormControl<string[]>([], { nonNullable: true }),
+    tools: new FormControl<DndTool[]>([], { nonNullable: true }),
+  });
+
+  constructor() {
+    this.form.valueChanges.pipe(takeUntilDestroyed()).subscribe((value) => {
+      this.state.updateState(value as Partial<ProficienciesInfo>);
+    });
+
+    effect(() => {
+      const stateValue = this.proficienciesState();
+      this.form.patchValue(stateValue, { emitEvent: false });
+    });
+  }
 
   ngOnInit(): void {
-    effect(
-      () => {
-        this.control.setValue(this.proficienciesInfo());
-      },
-      { injector: this.injector },
-    );
-
-    this.formService.addControl('proficienciesInfo', this.control);
+    this.formService.addControl('proficienciesInfo', this.form);
   }
 
   show() {
     this.ref = this.dndDialogService.openMultiselect(
       'Select tools',
       ' ',
-      this.tools.filter((tool) => !this.toolTypes().includes(tool)),
+      this.tools.filter((tool) => !this.proficienciesState().tools.includes(tool)),
     );
 
     this.ref?.onClose.subscribe((selectedTools: DndTool[]) => {
       if (selectedTools && selectedTools.length > 0) {
-        const currentTools = this.toolTypes();
+        const currentTools = this.proficienciesState().tools;
         const newTools = selectedTools.filter(
           (tool) => !currentTools.some((t) => t.name === tool.name),
         );
-        this.toolTypes.set([...this.toolTypes(), ...newTools]);
+        this.state.updateState({ tools: [...currentTools, ...newTools] });
       }
     });
   }
 
   removeTool(tool: DndTool) {
-    this.toolTypes.set(this.toolTypes().filter((t) => t.id !== tool.id));
+    this.state.updateState({
+      tools: this.proficienciesState().tools.filter((t) => t.id !== tool.id),
+    });
   }
 
   onWeaponCheckboxChange(weapon: string) {
-    if (this.weaponTypes().includes(weapon)) {
-      this.weaponTypes.set(this.weaponTypes().filter((a) => a !== weapon));
+    if (this.proficienciesState().weapons.includes(weapon)) {
+      this.state.updateState({
+        weapons: this.proficienciesState().weapons.filter((a) => a !== weapon),
+      });
     } else {
-      this.weaponTypes.set([...this.weaponTypes(), weapon]);
+      this.state.updateState({ weapons: [...this.proficienciesState().weapons, weapon] });
     }
   }
 
   onTrainingCheckboxChange(armor: string) {
-    if (this.armorTrainingTypes().includes(armor)) {
-      this.armorTrainingTypes.set(this.armorTrainingTypes().filter((a) => a !== armor));
+    if (this.proficienciesState().armorTrainingTypes.includes(armor)) {
+      this.state.updateState({
+        armorTrainingTypes: this.proficienciesState().armorTrainingTypes.filter((a) => a !== armor),
+      });
     } else {
-      this.armorTrainingTypes.set([...this.armorTrainingTypes(), armor]);
+      this.state.updateState({
+        armorTrainingTypes: [...this.proficienciesState().armorTrainingTypes, armor],
+      });
     }
   }
 

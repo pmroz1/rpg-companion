@@ -1,5 +1,5 @@
 import { computed, Injectable } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { AbstractControl, FormGroup } from '@angular/forms';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { startWith } from 'rxjs';
 
@@ -9,16 +9,13 @@ import { startWith } from 'rxjs';
 export class DynamicFormService {
   private readonly form = new FormGroup({});
 
-  private readonly controlRefs = new Map<
-    string,
-    { control: FormControl<unknown>; count: number }
-  >();
+  private readonly controlRefs = new Map<string, { control: AbstractControl; count: number }>();
 
   getFormGroup(): FormGroup {
     return this.form;
   }
 
-  addControl(name: string, control: FormControl<unknown>) {
+  addControl(name: string, control: AbstractControl) {
     const existing = this.controlRefs.get(name);
     if (existing) {
       existing.count++;

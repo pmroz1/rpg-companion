@@ -10,7 +10,7 @@ import {
   signal,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { DynamicFormService } from '@shared/services/dynamic-form.service';
+import { DynamicFormService } from '@core/form/dynamic-form.service';
 import { FormControl, Validators } from '@angular/forms';
 import { InputNumber } from 'primeng/inputnumber';
 import { DndCheckbox } from '@app/shared/components/dnd-checkbox/dnd-checkbox';

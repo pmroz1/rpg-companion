@@ -1,10 +1,19 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit, OnDestroy } from '@angular/core';
-import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
-import { DynamicFormService } from '@app/shared/services';
-import { CardModule } from 'primeng/card';
-import { TextareaModule } from 'primeng/textarea';
-import { DividerModule } from 'primeng/divider';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  effect,
+  inject,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { DndCard } from '@app/shared/components/dnd-card/dnd-card';
+import { DynamicFormService } from '@app/core/form';
+import { CardModule } from 'primeng/card';
+import { DividerModule } from 'primeng/divider';
+import { TextareaModule } from 'primeng/textarea';
+import { AppearanceState } from './appearance-state';
 
 @Component({
   selector: 'app-appearance',
@@ -24,8 +33,23 @@ import { DndCard } from '@app/shared/components/dnd-card/dnd-card';
 })
 export class Appearance implements OnInit, OnDestroy {
   private readonly formService = inject(DynamicFormService);
+  readonly state = inject(AppearanceState);
 
-  control = new FormControl('', Validators.required);
+  appearanceState = this.state.state;
+  control = new FormControl(this.appearanceState(), { nonNullable: true });
+
+  constructor() {
+    this.control.valueChanges.pipe(takeUntilDestroyed()).subscribe((value) => {
+      this.state.setState(value);
+    });
+
+    effect(() => {
+      const stateValue = this.appearanceState();
+      if (this.control.value !== stateValue) {
+        this.control.setValue(stateValue, { emitEvent: false });
+      }
+    });
+  }
 
   ngOnInit() {
     this.formService.addControl('appearance', this.control);

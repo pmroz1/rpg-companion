@@ -7,9 +7,10 @@ import {
   ViewChild,
 } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { DynamicFormService } from '@shared/services/dynamic-form.service';
+import { DynamicFormService } from '@core/form/dynamic-form.service';
 
 import { Appearance } from './components/appearance/appearance';
+import { Abilities } from './components/abilities/abilities';
 import { DndCard } from '@app/shared/components/dnd-card/dnd-card';
 import { DndGrid, DndGridCell } from '@app/shared/components/dnd-grid/dnd-grid';
 import { Info } from './components/info/info';
@@ -26,12 +27,17 @@ import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { fullscreenMap } from './fullscreen.config';
+import { Coins } from './components/coins/coins';
+import { Languages } from './components/languages/languages';
+import { CharacterSheetStateService } from './services/character-sheet.state';
+import { AvatarComponent } from './components/avatar/avatar';
 
 @Component({
   selector: 'app-character-sheet',
   imports: [
     ReactiveFormsModule,
     Appearance,
+    Abilities,
     Info,
     TabsComponent,
     Proficiencies,
@@ -43,21 +49,30 @@ import { fullscreenMap } from './fullscreen.config';
     ContextMenu,
     Hitpoints,
     SpellcastingAbility,
+    Coins,
+    Languages,
+    AvatarComponent,
   ],
+  providers: [CharacterSheetStateService],
   template: `<form [formGroup]="form" (contextmenu)="onContextMenu($event, '')">
       <app-dnd-grid>
+        <app-dnd-grid-cell [colspan]="3" [rowspan]="2">
+          <app-avatar />
+        </app-dnd-grid-cell>
         <app-dnd-grid-cell [colspan]="5" [rowspan]="2">
           <app-info (contextmenu)="onContextMenu($event, 'app-info')" />
         </app-dnd-grid-cell>
         <app-dnd-grid-cell [colspan]="1" [rowspan]="2">
           <app-armor-class (contextmenu)="onContextMenu($event, 'app-armor-class')" />
         </app-dnd-grid-cell>
-        <app-dnd-grid-cell [colspan]="6" [rowspan]="2">
+        <app-dnd-grid-cell [colspan]="3" [rowspan]="2">
           <app-hitpoints (contextmenu)="onContextMenu($event, 'app-hitpoints')" />
         </app-dnd-grid-cell>
 
+        <!-- to najlepiej do jakiegoś jednego komponentu 'quickstats' wyciągnąć-->
         <app-dnd-grid-cell [colspan]="2">
-          <app-dnd-card title="proficiency bonus" />
+          <app-dnd-card title="proficiency" />
+          <!-- wartość modyfikatora eg +2; -1; 0; +14 -->
         </app-dnd-grid-cell>
         <app-dnd-grid-cell [colspan]="2">
           <app-dnd-card title="initiative" />
@@ -69,21 +84,23 @@ import { fullscreenMap } from './fullscreen.config';
           <app-dnd-card title="size" />
         </app-dnd-grid-cell>
         <app-dnd-grid-cell [colspan]="2">
-          <app-dnd-card title="passive perception" />
+          <app-dnd-card title="perception" />
+          <!--  wartość modyfikatora eg +2; -1; 0; +14 -->
         </app-dnd-grid-cell>
         <app-dnd-grid-cell [colspan]="2">
           <app-dnd-card title="inspiration" />
+          <!--  checkbox jest/lub nie -->
         </app-dnd-grid-cell>
-        <app-dnd-grid-cell [colspan]="3" [rowspan]="2">
-          <app-dnd-card title="abilities" />
+        <app-dnd-grid-cell [colspan]="3" [rowspan]="3">
+          <app-abilities (contextmenu)="onContextMenu($event, 'app-abilities')" />
         </app-dnd-grid-cell>
 
-        <app-dnd-grid-cell [colspan]="4">
+        <app-dnd-grid-cell [colspan]="4" [rowspan]="1">
           <app-spellcasting-ability
             (contextmenu)="onContextMenu($event, 'app-spellcasting-ability')"
           />
         </app-dnd-grid-cell>
-        <app-dnd-grid-cell [colspan]="5">
+        <app-dnd-grid-cell [colspan]="5" [rowspan]="1">
           <app-spell-slots
             title="spell slots"
             (contextmenu)="onContextMenu($event, 'app-spell-slots')"
@@ -97,12 +114,19 @@ import { fullscreenMap } from './fullscreen.config';
           <app-proficiencies (contextmenu)="onContextMenu($event, 'app-proficiencies')" />
         </app-dnd-grid-cell>
 
-        <app-dnd-grid-cell [colspan]="4">
-          <app-appearance (contextmenu)="onContextMenu($event, 'app-appearance')" />
+        <app-dnd-grid-cell [colspan]="5">
+          <app-dnd-card title="equipment" />
         </app-dnd-grid-cell>
 
         <app-dnd-grid-cell [colspan]="4">
-          <app-dnd-card title="equipment" />
+          <app-coins (contextmenu)="onContextMenu($event, 'app-coins')" />
+        </app-dnd-grid-cell>
+        <app-dnd-grid-cell [colspan]="4">
+          <app-languages (contextmenu)="onContextMenu($event, 'app-languages')" />
+        </app-dnd-grid-cell>
+
+        <app-dnd-grid-cell [colspan]="4">
+          <app-appearance (contextmenu)="onContextMenu($event, 'app-appearance')" />
         </app-dnd-grid-cell>
       </app-dnd-grid>
     </form>
@@ -113,9 +137,11 @@ import { fullscreenMap } from './fullscreen.config';
 export class CharacterSheet implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>();
   private readonly dialogService = inject(DndDialogService);
-  private readonly characterSheetForm = inject(DynamicFormService);
   private readonly route = inject(ActivatedRoute);
-  readonly form = this.characterSheetForm.getFormGroup();
+  protected readonly state = inject(CharacterSheetStateService);
+  protected readonly formService = inject(DynamicFormService);
+
+  readonly form = this.formService.getFormGroup();
 
   @ViewChild('contextMenu') contextMenu: ContextMenu | undefined;
   contextTarget?: string;
@@ -134,6 +160,12 @@ export class CharacterSheet implements OnInit, OnDestroy {
           'Character Sheet Form Value',
           `${JSON.stringify(this.form.value, null, 2)}`,
         ),
+    });
+
+    items.push({
+      label: 'Export Character',
+      icon: 'pi pi-download',
+      command: () => this.onExport(),
     });
 
     if (config?.enableFullscreen) {
@@ -196,7 +228,19 @@ export class CharacterSheet implements OnInit, OnDestroy {
   }
 
   onExplain() {
-    // @TODO @FIXME: Implement explain functionality
+    // @TODO @FIXME: implement explain functionality
+  }
+
+  onExport() {
+    const data = this.state.character();
+    const characterName = data.info.name || 'character';
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `${characterName}.json`;
+    link.click();
+    window.URL.revokeObjectURL(url);
   }
 
   ngOnDestroy() {

@@ -28,7 +28,7 @@ export type DndDialogType = 'simple' | 'picklist' | 'multiselect' | 'fullscreen'
             <div class="whitespace-pre-wrap break-words">{{ content() }}</div>
           } @else {
             <div class="font-medium mb-2">
-              Select {{ dialogType() === 'picklist' ? 'items' : 'tools' }}:
+              {{ dialogType() === 'picklist' ? 'Select items' : content() }}
             </div>
           }
         }
@@ -59,15 +59,15 @@ export type DndDialogType = 'simple' | 'picklist' | 'multiselect' | 'fullscreen'
                 [options]="allOptions()"
                 [(ngModel)]="pickedOptions"
                 optionLabel="name"
-                placeholder="Select tools"
+                [placeholder]="'Select items'"
                 [maxSelectedLabels]="5"
                 class="w-full md:w-80"
               >
-                <ng-template let-tool pTemplate="item">
-                  {{ tool.name | titlecase }}
+                <ng-template let-item pTemplate="item">
+                  {{ item.name | titlecase }}
                 </ng-template>
-                <ng-template let-tool pTemplate="selectedItem">
-                  {{ tool.name | titlecase }}
+                <ng-template let-item pTemplate="selectedItem">
+                  {{ item.name | titlecase }}
                 </ng-template>
               </p-multiselect>
             </div>

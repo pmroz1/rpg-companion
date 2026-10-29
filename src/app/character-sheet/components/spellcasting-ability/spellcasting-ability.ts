@@ -4,28 +4,29 @@ import {
   inject,
   OnDestroy,
   effect,
-  Injector,
   OnInit,
 } from '@angular/core';
-import { FormControl, FormsModule } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DndCard } from '@app/shared/components/dnd-card/dnd-card';
-import { DynamicFormService } from '@app/shared/services';
+import { DynamicFormService } from '@app/core/form';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { SpellCastingAbilities } from '@data/enums';
 import { SelectModule } from 'primeng/select';
-import { SpellcastingAbilityState } from './spellcasting-ability-state';
-
-export interface SpellcastingAbilityProps {
-  spellcastingAbility: string;
-  spellcastingModifier: number;
-  spellSaveDC: number;
-  spellAttackBonus: number;
-}
+import { SpellcastingAbilityState } from './spellcasting-ability.state';
+import { SpellcastingStats } from './model/spellcasting';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-spellcasting-ability',
-  imports: [DndCard, FormsModule, InputTextModule, InputNumberModule, SelectModule],
+  imports: [
+    DndCard,
+    FormsModule,
+    InputTextModule,
+    InputNumberModule,
+    SelectModule,
+    ReactiveFormsModule,
+  ],
   template: `<app-dnd-card title="Spellcasting Ability">
     <div class="spellcasting-grid">
       <div class="field col-gap  my-1">
@@ -33,8 +34,7 @@ export interface SpellcastingAbilityProps {
         <p-select
           id="spellcasting-ability"
           [options]="spellCastingAbilitiesOptions"
-          [ngModel]="state.spellcastingAbilityProps().spellcastingAbility"
-          (ngModelChange)="state.updateSpellcastingAbilityProps({ spellcastingAbility: $event })"
+          [formControl]="form.controls['spellcastingAbility']"
           optionLabel="name"
           optionValue="id"
           placeholder="Select a spellcasting ability"
@@ -47,8 +47,7 @@ export interface SpellcastingAbilityProps {
           <p-inputnumber
             [inputStyle]="{ width: '4rem', textAlign: 'center' }"
             id="spellcasting-modifier"
-            [ngModel]="state.spellcastingAbilityProps().spellcastingModifier"
-            (ngModelChange)="state.updateSpellcastingAbilityProps({ spellcastingModifier: $event })"
+            [formControl]="form.controls['spellcastingModifier']"
           />
           <label for="spellcasting-modifier" class="field-label number"
             >Spellcasting Modifier</label
@@ -58,8 +57,7 @@ export interface SpellcastingAbilityProps {
           <p-inputnumber
             [inputStyle]="{ width: '4rem', textAlign: 'center' }"
             id="spell-save-dc"
-            [ngModel]="state.spellcastingAbilityProps().spellSaveDC"
-            (ngModelChange)="state.updateSpellcastingAbilityProps({ spellSaveDC: $event })"
+            [formControl]="form.controls['spellSaveDC']"
           />
           <label for="spell-save-dc" class="field-label number">Spell Save DC</label>
         </div>
@@ -67,8 +65,7 @@ export interface SpellcastingAbilityProps {
           <p-inputnumber
             [inputStyle]="{ width: '4rem', textAlign: 'center' }"
             id="spell-attack-bonus"
-            [ngModel]="state.spellcastingAbilityProps().spellAttackBonus"
-            (ngModelChange)="state.updateSpellcastingAbilityProps({ spellAttackBonus: $event })"
+            [formControl]="form.controls['spellAttackBonus']"
           />
           <label for="spell-attack-bonus" class="field-label number">Spell Attack Bonus</label>
         </div>
@@ -80,7 +77,6 @@ export interface SpellcastingAbilityProps {
 })
 export class SpellcastingAbility implements OnDestroy, OnInit {
   private readonly formService = inject(DynamicFormService);
-  private readonly injector = inject(Injector);
   readonly state = inject(SpellcastingAbilityState);
 
   spellCastingAbilitiesOptions = Object.values(SpellCastingAbilities).map((ability) => ({
@@ -88,18 +84,41 @@ export class SpellcastingAbility implements OnDestroy, OnInit {
     name: ability,
   }));
 
-  spellCastingAbilityProps = this.state.spellcastingAbilityProps;
+  spellCastingState = this.state.state;
 
-  control = new FormControl<SpellcastingAbilityProps>(this.spellCastingAbilityProps());
+  form = new FormGroup({
+    spellcastingAbility: new FormControl<SpellCastingAbilities>(
+      SpellCastingAbilities.Intelligence,
+      { nonNullable: true },
+    ),
+    spellcastingModifier: new FormControl<number>(0, { nonNullable: true }),
+    spellSaveDC: new FormControl<number>(0, { nonNullable: true }),
+    spellAttackBonus: new FormControl<number>(0, { nonNullable: true }),
+  });
+
+  constructor() {
+    this.form.valueChanges.pipe(takeUntilDestroyed()).subscribe((value) => {
+      this.state.updateState(value as Partial<SpellcastingStats>);
+    });
+
+    effect(() => {
+      const currentState = this.spellCastingState();
+      this.form.controls['spellcastingAbility'].setValue(
+        currentState.spellcastingAbility as SpellCastingAbilities,
+        { emitEvent: false },
+      );
+      this.form.controls['spellcastingModifier'].setValue(currentState.spellcastingModifier, {
+        emitEvent: false,
+      });
+      this.form.controls['spellSaveDC'].setValue(currentState.spellSaveDC, { emitEvent: false });
+      this.form.controls['spellAttackBonus'].setValue(currentState.spellAttackBonus, {
+        emitEvent: false,
+      });
+    });
+  }
+
   ngOnInit(): void {
-    effect(
-      () => {
-        this.control.setValue(this.spellCastingAbilityProps());
-      },
-      { injector: this.injector },
-    );
-
-    this.formService.addControl('spellCastingAbility', this.control);
+    this.formService.addControl('spellCastingAbility', this.form);
   }
   ngOnDestroy(): void {
     this.formService.removeControl('spellCastingAbility');

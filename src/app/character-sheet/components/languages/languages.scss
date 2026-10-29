@@ -1,0 +1,20 @@
+:host {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+.field-label {
+  color: var(--color-gold);
+}
+
+.add-language-chip {
+  color: var(--color-parchment);
+  cursor: pointer;
+  background: var(--color-crimson);
+}
+
+::ng-deep .dnd-box .p-dialog-header {
+  padding-top: 5px !important;
+  padding-bottom: 0rem !important;
+}

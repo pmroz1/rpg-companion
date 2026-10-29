@@ -21,8 +21,10 @@
       "@env/*": ["environments/*"],
       "@shared/*": ["app/shared/*"],
       "@character-sheet/*": ["app/character-sheet/*"],
+      "@maps/*": ["app/map-editor/*"],
       "@data/*": ["data/*"],
-      "@theme/*": ["theme/*"]
+      "@theme/*": ["theme/*"],
+      "@core/*": ["app/core/*"]
     }
   },
   "angularCompilerOptions": {

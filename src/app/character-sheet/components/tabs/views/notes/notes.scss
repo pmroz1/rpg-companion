@@ -1,0 +1,26 @@
+:host {
+  display: block;
+}
+.dnd-editor ::ng-deep .ql-toolbar {
+  font-family: var(--font-family);
+  color: var(--text-muted);
+  background: var(--color-bg);
+  border: 1px solid rgba(201, 162, 39, 0.4);
+  border-radius: 6px;
+}
+
+.dnd-editor ::ng-deep .ql-editor:not(.ql-blank) {
+  font-family: var(--font-family);
+  color: var(--text-muted);
+  background: var(--color-bg);
+  border: 1px solid rgba(201, 162, 39, 0.4);
+  border-radius: 6px;
+}
+
+.dnd-editor ::ng-deep .ql-editor.ql-blank {
+  font-family: var(--font-family);
+  color: var(--text-muted);
+  background: var(--color-bg);
+  border: 1px solid rgba(201, 162, 39, 0.4);
+  border-radius: 6px;
+}

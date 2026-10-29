@@ -1,27 +1,38 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   effect,
   inject,
-  Injector,
   NgZone,
   OnDestroy,
   OnInit,
   signal,
 } from '@angular/core';
-import { FormControl, FormsModule } from '@angular/forms';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { deepEqual } from '@app/shared/utils/deep-equal';
 import { DndDialogService } from '@app/shared/components/dnd-dialog/dnd-dialog.service';
-import { DynamicFormService } from '@app/shared/services';
+import { DynamicFormService } from '@app/core/form';
 import { DND_SPELLS_CANTRIPS } from '@data/dictionaries/spells-cantrips.dictionary';
 import { SpellCantrip } from '@data/models';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
-import { TableModule } from 'primeng/table';
 import { Popover, PopoverModule } from 'primeng/popover';
+import { TableModule } from 'primeng/table';
+import { SpellsCantripsState } from './spell-cantrips.state';
+
 @Component({
   selector: 'app-spells-cantrips',
-  imports: [TableModule, CheckboxModule, FormsModule, ButtonModule, PopoverModule],
+  imports: [
+    TableModule,
+    CheckboxModule,
+    FormsModule,
+    ReactiveFormsModule,
+    ButtonModule,
+    PopoverModule,
+  ],
   template: `<div class="sc-container">
     <p-table
       [value]="knownSpellsCantrips()"
@@ -78,19 +89,15 @@ import { Popover, PopoverModule } from 'primeng/popover';
           <td>{{ spellCantrip.castingTime }}</td>
           <td>{{ spellCantrip.range }}</td>
           <td>
-            <p-checkbox
-              [binary]="true"
-              [(ngModel)]="spellCantrip.concentration"
-              [disabled]="true"
-            />
+            <p-checkbox [binary]="true" [ngModel]="spellCantrip.concentration" [disabled]="true" />
           </td>
           <td>
-            <p-checkbox [binary]="true" [(ngModel)]="spellCantrip.ritual" [disabled]="true" />
+            <p-checkbox [binary]="true" [ngModel]="spellCantrip.ritual" [disabled]="true" />
           </td>
           <td>
             <p-checkbox
               [binary]="true"
-              [(ngModel)]="spellCantrip.requiredMaterial"
+              [ngModel]="spellCantrip.requiredMaterial"
               [disabled]="true"
             />
           </td>
@@ -131,26 +138,41 @@ import { Popover, PopoverModule } from 'primeng/popover';
 export class SpellsCantrips implements OnInit, OnDestroy {
   private readonly formService = inject(DynamicFormService);
   private readonly zone = inject(NgZone);
-  private readonly injector = inject(Injector);
+  readonly state = inject(SpellsCantripsState);
 
-  spellsCantrips = signal<SpellCantrip[]>([...DND_SPELLS_CANTRIPS]);
-  knownSpellsCantrips = signal<SpellCantrip[]>([]);
+  knownSpellsCantrips = this.state.state;
+  spellsCantrips = computed(() => {
+    const knownNames = this.knownSpellsCantrips().map((sc) => sc.name);
+    return DND_SPELLS_CANTRIPS.filter((sc) => !knownNames.includes(sc.name));
+  });
   addSpellButtonText = 'Add Spell';
   selectedSpellName = signal<string | null>(null);
-  knownSpellsControl = new FormControl<SpellCantrip[]>([]);
+
+  form = new FormGroup({
+    knownSpells: new FormControl<SpellCantrip[]>([], { nonNullable: true }),
+  });
 
   dialogService = inject(DndDialogService);
   ref: DynamicDialogRef | undefined | null;
 
-  ngOnInit(): void {
-    this.formService.addControl('knownSpells', this.knownSpellsControl);
+  constructor() {
+    this.form.valueChanges.pipe(takeUntilDestroyed()).subscribe((value) => {
+      if (value.knownSpells) {
+        this.state.setState(value.knownSpells);
+      }
+    });
 
-    effect(
-      () => {
-        this.knownSpellsControl.setValue(this.knownSpellsCantrips());
-      },
-      { injector: this.injector },
-    );
+    effect(() => {
+      const stateValue = this.knownSpellsCantrips();
+      const currentValue = this.form.controls.knownSpells.value;
+      if (!deepEqual(currentValue, stateValue)) {
+        this.form.patchValue({ knownSpells: stateValue }, { emitEvent: false });
+      }
+    });
+  }
+
+  ngOnInit(): void {
+    this.formService.addControl('knownSpells', this.form);
   }
 
   onInfoClick(popover: Popover, spellCantrip: SpellCantrip, event: Event) {
@@ -179,16 +201,16 @@ export class SpellsCantrips implements OnInit, OnDestroy {
     this.ref?.onClose.subscribe((pickedSpellsCantrips: SpellCantrip[]) => {
       if (pickedSpellsCantrips) {
         this.zone.run(() => {
-          this.knownSpellsCantrips.set(pickedSpellsCantrips);
+          this.form.controls.knownSpells.setValue(pickedSpellsCantrips);
         });
       }
     });
   }
 
   removeSpell(spellCantrip: SpellCantrip) {
-    const updatedList = this.knownSpellsCantrips().filter((sc) => sc.name !== spellCantrip.name);
-    this.knownSpellsCantrips.set(updatedList);
-    this.spellsCantrips.update((list) => [...list, spellCantrip]);
+    const current = this.form.controls.knownSpells.value;
+    const updatedList = current.filter((sc) => sc.name !== spellCantrip.name);
+    this.form.controls.knownSpells.setValue(updatedList);
   }
 
   ngOnDestroy(): void {

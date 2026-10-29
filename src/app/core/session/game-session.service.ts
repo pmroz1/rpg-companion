@@ -19,8 +19,11 @@ function isCharacterInfo(value: unknown): value is CharacterInfo {
     (c['class'] === null || Object.values(ClassType).includes(c['class'] as ClassType)) &&
     (c['subclass'] === null ||
       Object.values(SubclassType).includes(c['subclass'] as SubclassType)) &&
-    typeof c['level'] === 'number' &&
-    typeof c['xp'] === 'number'
+    Number.isInteger(c['level']) &&
+    (c['level'] as number) >= 1 &&
+    (c['level'] as number) <= 20 &&
+    Number.isSafeInteger(c['xp']) &&
+    (c['xp'] as number) >= 0
   );
 }
 
@@ -39,7 +42,7 @@ export function isGameSession(value: unknown): value is GameSession {
 export function parseGameSession(text: string): GameSession {
   let value: unknown;
   try {
-    value = JSON.parse(text);
+    value = JSON.parse(text.replace(/^\uFEFF/, ''));
   } catch {
     throw new Error('This file is not valid JSON.');
   }
@@ -58,13 +61,13 @@ export class GameSessionService {
   readonly session = this.sessionData.asReadonly();
 
   constructor() {
-    const savedSession = localStorage.getItem(this._localStorageKey);
-    if (savedSession) {
-      try {
+    try {
+      const savedSession = localStorage.getItem(this._localStorageKey);
+      if (savedSession) {
         this.sessionData.set(parseGameSession(savedSession));
-      } catch (error) {
-        console.error('Failed to parse saved game session data:', error);
       }
+    } catch (error) {
+      console.error('Failed to load saved game session data:', error);
     }
   }
 

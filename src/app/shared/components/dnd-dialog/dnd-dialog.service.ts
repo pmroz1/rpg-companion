@@ -1,5 +1,5 @@
-import { inject, Injectable, Injector, ApplicationRef } from '@angular/core';
-import { DOCUMENT, Location } from '@angular/common';
+import { inject, Injectable, Injector, runInInjectionContext } from '@angular/core';
+import { Location } from '@angular/common';
 import { DialogService, DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { DndDialogComponent } from './dnd-dialog';
 import { Router } from '@angular/router';
@@ -11,16 +11,14 @@ export class DndDialogService {
   private primengDialog = inject(DialogService);
   private router = inject(Router);
   private location = inject(Location);
-  private appRef = inject(ApplicationRef);
   private injector = inject(Injector);
-  private document = inject(DOCUMENT);
 
   private isFullscreenOpen = false;
   private secondaryDialog: DialogService | null = null;
 
   private ensureSecondaryDialog(): void {
     if (this.isFullscreenOpen && !this.secondaryDialog) {
-      this.secondaryDialog = new DialogService(this.appRef, this.injector, this.document);
+      this.secondaryDialog = runInInjectionContext(this.injector, () => new DialogService());
     }
   }
 

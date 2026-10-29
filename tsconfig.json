@@ -14,17 +14,16 @@
     "importHelpers": true,
     "target": "ES2022",
     "module": "preserve",
-    "baseUrl": "src",
     "paths": {
-      "@app/*": ["app/*"],
-      "@assets/*": ["assets/*"],
-      "@env/*": ["environments/*"],
-      "@shared/*": ["app/shared/*"],
-      "@character-sheet/*": ["app/character-sheet/*"],
-      "@maps/*": ["app/map-editor/*"],
-      "@data/*": ["data/*"],
-      "@theme/*": ["theme/*"],
-      "@core/*": ["app/core/*"]
+      "@app/*": ["./src/app/*"],
+      "@assets/*": ["./src/assets/*"],
+      "@env/*": ["./src/environments/*"],
+      "@shared/*": ["./src/app/shared/*"],
+      "@character-sheet/*": ["./src/app/character-sheet/*"],
+      "@maps/*": ["./src/app/map-editor/*"],
+      "@data/*": ["./src/data/*"],
+      "@theme/*": ["./src/theme/*"],
+      "@core/*": ["./src/app/core/*"]
     }
   },
   "angularCompilerOptions": {

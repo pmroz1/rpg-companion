@@ -70,43 +70,43 @@ import { DynamicDialogRef } from 'primeng/dynamicdialog';
             <th pSortableColumn="name">
               <div class="flex items-center gap-2">
                 Name
-                <p-sortIcon field="name"></p-sortIcon>
+                <p-sorticon field="name"></p-sorticon>
               </div>
             </th>
             <th pSortableColumn="type">
               <div class="flex items-center gap-2">
                 Type
-                <p-sortIcon field="type"></p-sortIcon>
+                <p-sorticon field="type"></p-sorticon>
               </div>
             </th>
             <th pSortableColumn="size">
               <div class="flex items-center gap-2">
                 Size
-                <p-sortIcon field="size"></p-sortIcon>
+                <p-sorticon field="size"></p-sorticon>
               </div>
             </th>
             <th pSortableColumn="habitat">
               <div class="flex items-center gap-2">
                 Habitat
-                <p-sortIcon field="habitat"></p-sortIcon>
+                <p-sorticon field="habitat"></p-sorticon>
               </div>
             </th>
             <th pSortableColumn="challengeRating">
               <div class="flex items-center gap-2">
                 Challenge Rating
-                <p-sortIcon field="challengeRating"></p-sortIcon>
+                <p-sorticon field="challengeRating"></p-sorticon>
               </div>
             </th>
             <th pSortableColumn="armorClass">
               <div class="flex items-center gap-2">
                 Armor Class
-                <p-sortIcon field="armorClass"></p-sortIcon>
+                <p-sorticon field="armorClass"></p-sorticon>
               </div>
             </th>
             <th pSortableColumn="hitPoints">
               <div class="flex items-center gap-2">
                 Hit Points
-                <p-sortIcon field="hitPoints"></p-sortIcon>
+                <p-sorticon field="hitPoints"></p-sorticon>
               </div>
             </th>
           </tr>

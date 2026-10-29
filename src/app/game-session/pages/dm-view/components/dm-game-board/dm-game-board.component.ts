@@ -84,7 +84,7 @@ import { DockModule } from 'primeng/dock';
             class="bg-[var(--color-bg-elevated)] border border-[var(--color-border)] rounded-full px-10 py-4 shadow-2xl flex items-center justify-center relative"
           >
             <p-dock [model]="dockItems()" position="bottom" styleClass="custom-dock">
-              <ng-template pTemplate="item" let-item>
+              <ng-template #item let-item>
                 <button
                   type="button"
                   disabled

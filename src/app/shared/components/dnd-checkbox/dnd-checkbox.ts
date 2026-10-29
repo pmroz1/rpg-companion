@@ -1,22 +1,14 @@
-import { ChangeDetectionStrategy, Component, input, model, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, model } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Checkbox } from 'primeng/checkbox';
 
 @Component({
   selector: 'app-dnd-checkbox',
   imports: [Checkbox, FormsModule],
-  template: `<span
-    class="dnd-checkbox select-none"
-    (click)="toggleChecked()"
-    tabindex="0"
-    role="checkbox"
-    [attr.aria-checked]="checked()"
-    (keydown.enter)="toggleChecked()"
-    (keydown.space)="toggleChecked(); $event.preventDefault()"
-  >
-    <p-checkbox binary="true" [(ngModel)]="checked"></p-checkbox>
+  template: `<label class="dnd-checkbox select-none" [for]="inputId">
+    <p-checkbox [binary]="true" [(ngModel)]="checked" [inputId]="inputId"></p-checkbox>
     <span>{{ label() }}</span>
-  </span>`,
+  </label>`,
   styles: `
     :host {
       display: block;
@@ -40,12 +32,8 @@ import { Checkbox } from 'primeng/checkbox';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DndCheckbox {
+  private static nextId = 0;
+  readonly inputId = 'dnd-checkbox-' + DndCheckbox.nextId++;
   checked = model<boolean>(false);
   label = input.required<string>();
-  checkedChange = output<boolean>();
-
-  toggleChecked() {
-    this.checked.set(!this.checked());
-    this.checkedChange.emit(this.checked());
-  }
 }

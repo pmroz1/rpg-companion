@@ -40,7 +40,7 @@ import { SpellSlotsState } from './spell-slots.state';
       <ng-container formArrayName="spellSlots">
         @for (column of spellDefaultConfig; track $index) {
           <p-table [value]="column" size="small">
-            <ng-template pTemplate="header">
+            <ng-template #header>
               <tr>
                 <th>Level</th>
                 <th>Total</th>
@@ -48,7 +48,7 @@ import { SpellSlotsState } from './spell-slots.state';
               </tr>
             </ng-template>
 
-            <ng-template pTemplate="body" let-row>
+            <ng-template #body let-row>
               <tr [formGroupName]="row.level - 1">
                 <td>Lvl {{ row.level }}</td>
 

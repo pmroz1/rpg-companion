@@ -37,42 +37,43 @@ import { SpellsCantripsState } from './spell-cantrips.state';
     <p-table
       [value]="knownSpellsCantrips()"
       stripedRows
+      sortField="level"
       [paginator]="true"
       [rows]="8"
       class="sc-table"
     >
-      <ng-template pTemplate="header" sortField="level">
+      <ng-template #header>
         <tr>
           <th pSortableColumn="level">
             <div class="flex items-center gap-2">
               level
-              <p-sortIcon field="level" />
+              <p-sorticon field="level" />
             </div>
           </th>
 
           <th pSortableColumn="name">
             <div class="flex items-center gap-2">
               name
-              <p-sortIcon field="name" />
+              <p-sorticon field="name" />
             </div>
           </th>
           <th pSortableColumn="category">
             <div class="flex items-center gap-2">
               category
-              <p-sortIcon field="category" />
+              <p-sorticon field="category" />
             </div>
           </th>
 
           <th pSortableColumn="castingTime">
             <div class="flex items-center gap-2">
               casting time
-              <p-sortIcon field="castingTime" />
+              <p-sorticon field="castingTime" />
             </div>
           </th>
           <th pSortableColumn="range">
             <div class="flex items-center gap-2">
               range
-              <p-sortIcon field="range" />
+              <p-sorticon field="range" />
             </div>
           </th>
           <th>concentration</th>
@@ -81,7 +82,7 @@ import { SpellsCantripsState } from './spell-cantrips.state';
           <th>actions</th>
         </tr>
       </ng-template>
-      <ng-template let-spellCantrip pTemplate="body">
+      <ng-template let-spellCantrip #body>
         <tr [class.sc-row-active]="selectedSpellName() === spellCantrip.name">
           <td>{{ spellCantrip.level }}</td>
           <td>{{ spellCantrip.name }}</td>
@@ -125,7 +126,7 @@ import { SpellsCantripsState } from './spell-cantrips.state';
         </tr>
       </ng-template>
 
-      <ng-template pTemplate="footer" class="flex justify-end ">
+      <ng-template #footer>
         <div class="p-2 table-footer">
           <p-button label="{{ addSpellButtonText }}" (onClick)="showAddSpellDialog()"></p-button>
         </div>

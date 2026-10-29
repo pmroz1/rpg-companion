@@ -32,13 +32,13 @@ import { DndCheckbox } from '@app/shared/components/dnd-checkbox/dnd-checkbox';
           class="shield-shape"
         />
       </svg>
-      <p-inputNumber
+      <p-inputnumber
         class="ac-input"
         [ngModel]="effectiveArmorClass()"
-        (ngModelChange)="armorClass.set($event)"
+        (ngModelChange)="armorClass.set(($event ?? 10) - (hasShield() ? 2 : 0))"
         [min]="0"
         [max]="30"
-      ></p-inputNumber>
+      ></p-inputnumber>
 
       <app-dnd-checkbox
         class="h-100screen mt-2 mb-auto"

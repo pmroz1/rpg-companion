@@ -29,7 +29,7 @@ import { MonsterStatBlockComponent } from '../../monster-stat-block/monster-stat
             styleClass="w-full !pl-8 !py-2 !text-sm !bg-[var(--color-bg)] !border-[var(--color-border)] focus:!border-[var(--color-gold)] focus:!shadow-[0_0_0_1px_var(--color-gold)] transition-all"
             [appendTo]="'body'"
           >
-            <ng-template pTemplate="selectedItem" let-selectedOption>
+            <ng-template #selectedItem let-selectedOption>
               @if (selectedOption) {
                 <div class="flex items-center gap-2">
                   <span
@@ -43,7 +43,7 @@ import { MonsterStatBlockComponent } from '../../monster-stat-block/monster-stat
                 </div>
               }
             </ng-template>
-            <ng-template pTemplate="item" let-monster>
+            <ng-template #item let-monster>
               <div
                 class="flex flex-col py-1.5 px-1 border-b border-white/5 last:border-0 hover:bg-white/5 -mx-2 px-2 transition-colors"
               >

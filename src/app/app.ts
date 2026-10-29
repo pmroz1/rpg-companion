@@ -60,9 +60,10 @@ import { filter } from 'rxjs';
             </div>
           </div>
         </div>
-      } @else {
-        <router-outlet />
       }
+      <div class="h-full" [class.hidden]="isLoading()">
+        <router-outlet />
+      </div>
     </main>
   </div> `,
 })

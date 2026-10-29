@@ -34,7 +34,7 @@ const DndPreset = definePreset(Aura, {
         },
         primary: {
           color: '#c9a227',
-          inverseColor: '#1a1410',
+          contrastColor: '#1a1410',
           hoverColor: '#d4b33a',
           activeColor: '#b8910e',
         },

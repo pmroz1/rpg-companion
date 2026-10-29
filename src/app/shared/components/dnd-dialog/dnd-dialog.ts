@@ -35,12 +35,14 @@ export type DndDialogType = 'simple' | 'picklist' | 'multiselect' | 'fullscreen'
       </div>
       @switch (dialogType()) {
         @case ('picklist') {
-          <p-pickList
+          <p-picklist
             [dragdrop]="true"
             [source]="allOptions()"
             [target]="pickedOptions()"
             filterBy="name"
-          ></p-pickList>
+          >
+            <ng-template #item let-item>{{ item.name | titlecase }}</ng-template>
+          </p-picklist>
 
           <div class="py-4 flex justify-end">
             <p-button
@@ -63,10 +65,7 @@ export type DndDialogType = 'simple' | 'picklist' | 'multiselect' | 'fullscreen'
                 [maxSelectedLabels]="5"
                 class="w-full md:w-80"
               >
-                <ng-template let-item pTemplate="item">
-                  {{ item.name | titlecase }}
-                </ng-template>
-                <ng-template let-item pTemplate="selectedItem">
+                <ng-template let-item #item>
                   {{ item.name | titlecase }}
                 </ng-template>
               </p-multiselect>

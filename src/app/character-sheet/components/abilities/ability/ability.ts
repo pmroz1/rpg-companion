@@ -37,7 +37,7 @@ import { DndSkill } from '@data/models';
           <span class="text-[0.65rem] font-bold text-[var(--text-muted)] mb-1 tracking-wide"
             >SCORE</span
           >
-          <p-inputNumber
+          <p-inputnumber
             formControlName="score"
             [showButtons]="true"
             buttonLayout="horizontal"
@@ -47,13 +47,13 @@ import { DndSkill } from '@data/models';
             [max]="30"
             class="ability-input"
           >
-            <ng-template pTemplate="incrementbuttonicon">
+            <ng-template #incrementbuttonicon>
               <span class="pi pi-plus text-xs"></span>
             </ng-template>
-            <ng-template pTemplate="decrementbuttonicon">
+            <ng-template #decrementbuttonicon>
               <span class="pi pi-minus text-xs"></span>
             </ng-template>
-          </p-inputNumber>
+          </p-inputnumber>
         </div>
       </div>
 
@@ -62,13 +62,13 @@ import { DndSkill } from '@data/models';
         formGroupName="savingThrow"
       >
         <p-checkbox formControlName="proficient" [binary]="true"></p-checkbox>
-        <p-inputNumber
+        <p-inputnumber
           formControlName="value"
           [min]="-10"
           [max]="30"
           inputStyleClass="w-12 text-center p-1 text-sm"
           placeholder="-"
-        ></p-inputNumber>
+        ></p-inputnumber>
         <span class="font-semibold text-sm uppercase tracking-wide text-[var(--text-body)]"
           >Saving Throw</span
         >
@@ -81,13 +81,13 @@ import { DndSkill } from '@data/models';
             class="flex items-center gap-3 p-2 rounded-md hover:bg-[var(--color-hover)] transition-colors"
           >
             <p-checkbox formControlName="proficient" [binary]="true"></p-checkbox>
-            <p-inputNumber
+            <p-inputnumber
               formControlName="value"
               [min]="-10"
               [max]="30"
               inputStyleClass="w-12 text-center p-1 text-sm"
               placeholder="-"
-            ></p-inputNumber>
+            ></p-inputnumber>
             <span class="text-sm text-[var(--text-body)]">{{ skill.name }}</span>
           </div>
         }

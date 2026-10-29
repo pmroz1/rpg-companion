@@ -5,7 +5,6 @@ import { compressImage } from '@app/shared/utils/image-compress';
 
 @Component({
   selector: 'app-avatar',
-  standalone: true,
   imports: [DndCard],
   template: `<app-dnd-card class="w-full h-full" [displayDivider]="false">
     <div
@@ -28,7 +27,7 @@ import { compressImage } from '@app/shared/utils/image-compress';
         #fileInput
         type="file"
         accept="image/*"
-        class="hidden-upload"
+        class="hidden"
         (change)="onFileChange($event)"
       />
     </div>

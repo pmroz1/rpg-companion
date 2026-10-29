@@ -22,5 +22,5 @@ export interface CharacterSheetState {
   spellCasting: SpellcastingStats;
   spellsCantrips: SpellCantrip[];
   notes: string;
-  avatar: string;
+  avatar?: string | null;
 }

@@ -1,4 +1,5 @@
 import { Route } from '@angular/router';
+import { sessionGuard } from '@app/core/session/session.guard';
 
 export const GAME_SESSION_ROUTES: Route[] = [
   {
@@ -13,10 +14,12 @@ export const GAME_SESSION_ROUTES: Route[] = [
   },
   {
     path: 'board',
+    canActivate: [sessionGuard],
     loadComponent: () => import('./pages/board/board').then((m) => m.Board),
   },
   {
     path: 'dm-view',
+    canActivate: [sessionGuard],
     loadComponent: () => import('./pages/dm-view/dm-view').then((m) => m.DmView),
   },
   {

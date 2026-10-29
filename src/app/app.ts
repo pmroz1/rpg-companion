@@ -74,8 +74,8 @@ export class App {
 
   constructor() {
     this.router.events
-      .pipe(takeUntilDestroyed())
       .pipe(
+        takeUntilDestroyed(),
         filter(
           (event) =>
             event instanceof NavigationStart ||

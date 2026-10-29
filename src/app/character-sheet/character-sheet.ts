@@ -232,8 +232,8 @@ export class CharacterSheet implements OnInit, OnDestroy {
   }
 
   onExport() {
-    const data = this.form.value;
-    const characterName = this.form.get('characterInfo.name')?.value || 'character';
+    const data = this.state.character();
+    const characterName = data.info.name || 'character';
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
     const url = window.URL.createObjectURL(blob);
     const link = document.createElement('a');

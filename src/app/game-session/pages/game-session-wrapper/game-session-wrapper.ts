@@ -1,13 +1,12 @@
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { GameSessionService } from '@app/core/session/game-session.service';
+import { GameSessionService, parseGameSession } from '@app/core/session/game-session.service';
 import { DndCard } from '@app/shared/components/dnd-card/dnd-card';
 import { ButtonModule } from 'primeng/button';
-import { FileUploadEvent, FileUploadModule } from 'primeng/fileupload';
 
 @Component({
   selector: 'app-wrapper',
-  imports: [DndCard, ButtonModule, FileUploadModule],
+  imports: [DndCard, ButtonModule],
   template: `<div
     class="flex flex-col w-full h-full bg-dnd-darken justify-center items-center align-center p-4"
   >
@@ -26,19 +25,23 @@ import { FileUploadEvent, FileUploadModule } from 'primeng/fileupload';
       } @else {
         <p class="text-center">No active game session. Please create or load a session.</p>
       }
+      @if (error()) {
+        <p role="alert" class="mt-4 text-red-400 text-center">{{ error() }}</p>
+      }
       <div class="flex flex-row gap-4 mt-4 w-full justify-center">
         <p-button label="Continue" (onClick)="continueGame()" [disabled]="!session()"></p-button>
-        <p-fileupload
-          mode="basic"
-          name="demo[]"
-          chooseIcon="pi pi-save"
-          url="https://www.primefaces.org/cdn/api/upload.php"
-          accept="image/*"
-          maxFileSize="1000000"
-          (onUpload)="loadGame($event)"
-          [auto]="true"
-          chooseLabel="Load Session"
+        <input
+          #sessionFile
+          type="file"
+          accept=".json,application/json"
+          class="hidden"
+          (change)="loadGame($event)"
         />
+        <p-button
+          label="Load Session"
+          icon="pi pi-upload"
+          (onClick)="sessionFile.click()"
+        ></p-button>
         <p-button label="New Session" (onClick)="newGame()"></p-button>
       </div>
     </app-dnd-card>
@@ -52,18 +55,33 @@ import { FileUploadEvent, FileUploadModule } from 'primeng/fileupload';
 })
 export class GameSessionWrapper {
   readonly sessionsService = inject(GameSessionService);
-  readonly session = computed(() => this.sessionsService.session());
+  readonly session = this.sessionsService.session;
+  readonly error = signal<string | null>(null);
   private readonly router = inject(Router);
 
   continueGame(): void {
-    console.log('Continuing game session:', this.session()?.name);
+    if (this.session()) {
+      void this.router.navigate(['/game-session/dm-view']);
+    }
   }
 
-  loadGame(event: FileUploadEvent): void {
-    console.log('Navigating to load session page');
+  async loadGame(event: Event): Promise<void> {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (!file) return;
+
+    this.error.set(null);
+    try {
+      const session = parseGameSession(await file.text());
+      this.sessionsService.setSession(session);
+    } catch (error) {
+      this.error.set(error instanceof Error ? error.message : 'Could not read the session file.');
+    } finally {
+      input.value = '';
+    }
   }
 
   newGame(): void {
-    this.router.navigate(['/game-session/dm-view']);
+    void this.router.navigate(['/game-session/new-session']);
   }
 }

@@ -5,29 +5,15 @@ export async function compressImage(file: File, maxWidth = 512, quality = 0.8): 
       const img = new Image();
       img.onload = () => {
         const canvas = document.createElement('canvas');
-        let width = img.width;
-        let height = img.height;
-
-        if (width > height) {
-          if (width > maxWidth) {
-            height *= maxWidth / width;
-            width = maxWidth;
-          }
-        } else {
-          if (height > maxWidth) {
-            width *= maxWidth / height;
-            height = maxWidth;
-          }
-        }
+        const scale = Math.min(1, maxWidth / Math.max(img.width, img.height));
+        const width = img.width * scale;
+        const height = img.height * scale;
 
         canvas.width = width;
         canvas.height = height;
+        canvas.getContext('2d')?.drawImage(img, 0, 0, width, height);
 
-        const ctx = canvas.getContext('2d');
-        ctx?.drawImage(img, 0, 0, width, height);
-
-        const dataUrl = canvas.toDataURL('image/jpeg', quality);
-        resolve(dataUrl);
+        resolve(canvas.toDataURL('image/jpeg', quality));
       };
       img.onerror = (error) => reject(error);
       img.src = e.target?.result as string;

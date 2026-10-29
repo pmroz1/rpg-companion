@@ -9,7 +9,8 @@
     "test": "ng test",
     "format": "prettier \"src/**/*.{ts,html,scss,css}\" --write",
     "lint": "ng lint",
-    "pre-commit": "npm run format && npm run lint"
+    "pre-commit": "npm run format && npm run lint",
+    "format:check": "prettier \"src/**/*.{ts,html,scss,css}\" --check"
   },
   "prettier": {
     "printWidth": 100,

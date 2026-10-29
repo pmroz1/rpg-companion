@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { DND_MONSTERS } from '@data/dictionaries';
 import { DndMonster, Sound } from '@data/models';
@@ -9,7 +9,6 @@ import { DmEncounterToolsComponent } from './components/dm-encounter-tools/dm-en
 
 @Component({
   selector: 'app-dm-view',
-  standalone: true,
   imports: [
     DmSceneManagerComponent,
     DmGameBoardComponent,
@@ -26,16 +25,7 @@ import { DmEncounterToolsComponent } from './components/dm-encounter-tools/dm-en
         (soundsChange)="sounds.set($event)"
       ></app-dm-scene-manager>
 
-      <app-dm-game-board
-        [activeScene]="activeScene()"
-        [fogOfWar]="fogOfWar()"
-        (toggleFogOfWar)="toggleFogOfWar()"
-        [castingBoard]="castingBoard()"
-        (toggleCastingBoard)="toggleCastingBoard()"
-        [dockItems]="dockItems"
-        [activeTool]="activeTool()"
-        (activeToolChange)="activeTool.set($event)"
-      >
+      <app-dm-game-board [activeScene]="activeScene()" [dockItems]="dockItems">
         <app-dm-secret-notes notes></app-dm-secret-notes>
       </app-dm-game-board>
 
@@ -43,15 +33,14 @@ import { DmEncounterToolsComponent } from './components/dm-encounter-tools/dm-en
         [monsterManual]="monsterManual"
         [selectedMonster]="selectedMonster()"
         (selectedMonsterChange)="selectedMonster.set($event)"
-        (endCombat)="endCombat()"
       ></app-dm-encounter-tools>
     </div>
   `,
   styleUrls: ['./dm-view.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DmView implements OnInit {
-  scenes = [
+export class DmView {
+  readonly scenes = [
     { name: 'The Bloated Dwarf Inn' },
     { name: 'Bandit ambush' },
     { name: 'The Dark Forest - Entrance' },
@@ -60,33 +49,13 @@ export class DmView implements OnInit {
   readonly monsterManual = [...DND_MONSTERS];
   protected readonly selectedMonster = signal<DndMonster | null>(null);
   protected readonly sounds = signal<Sound[]>([]);
-
-  protected readonly fogOfWar = signal(false);
-  protected readonly castingBoard = signal(false);
   protected readonly activeScene = signal(this.scenes[0]);
-  protected readonly activeTool = signal<string>('select');
 
-  dockItems: MenuItem[] = [];
-
-  ngOnInit() {
-    this.dockItems = [
-      { id: 'select', label: 'Select', icon: 'pi pi-arrow-up' },
-      { id: 'brush', label: 'Brush', icon: 'pi pi-pencil' },
-      { id: 'erase', label: 'Erase', icon: 'pi pi-eraser' },
-      { id: 'ping', label: 'Ping', icon: 'pi pi-map-marker' },
-      { id: 'measure', label: 'Measure', icon: 'pi pi-arrows-h' },
-    ];
-  }
-
-  endCombat(): void {
-    return;
-  }
-
-  toggleFogOfWar() {
-    this.fogOfWar.set(!this.fogOfWar());
-  }
-
-  toggleCastingBoard() {
-    this.castingBoard.set(!this.castingBoard());
-  }
+  readonly dockItems: MenuItem[] = [
+    { id: 'select', label: 'Select', icon: 'pi pi-arrow-up', disabled: true },
+    { id: 'brush', label: 'Brush', icon: 'pi pi-pencil', disabled: true },
+    { id: 'erase', label: 'Erase', icon: 'pi pi-eraser', disabled: true },
+    { id: 'ping', label: 'Ping', icon: 'pi pi-map-marker', disabled: true },
+    { id: 'measure', label: 'Measure', icon: 'pi pi-arrows-h', disabled: true },
+  ];
 }

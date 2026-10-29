@@ -91,7 +91,11 @@ export class CharacterSheetStateService {
           this.spellCasting.setState(state.spellCasting);
           this.spellsCantrips.setState(state.spellsCantrips);
           this.notes.setState(state.notes);
-          this.avatar.setState(state.avatar);
+          if (state.avatar && state.avatar !== '/images/silhouette.png') {
+            this.avatar.setState(state.avatar);
+          } else {
+            this.avatar.resetState();
+          }
         } else {
           console.warn('Invalid character sheet state loaded.');
         }
@@ -129,7 +133,7 @@ export class CharacterSheetStateService {
       s['spellCasting'] !== null &&
       Array.isArray(s['spellsCantrips']) &&
       typeof s['notes'] === 'string' &&
-      typeof s['avatar'] === 'string'
+      (s['avatar'] === undefined || s['avatar'] === null || typeof s['avatar'] === 'string')
     );
   }
 }

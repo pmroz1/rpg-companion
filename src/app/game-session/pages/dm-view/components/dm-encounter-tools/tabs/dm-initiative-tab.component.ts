@@ -1,10 +1,9 @@
-import { ChangeDetectionStrategy, Component, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Button } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-dm-initiative-tab',
-  standalone: true,
   imports: [Button, TooltipModule],
   template: `
     <div class="flex flex-col h-full bg-[#1a1612]">
@@ -22,12 +21,13 @@ import { TooltipModule } from 'primeng/tooltip';
           styleClass="p-button-rounded p-button-text !text-[var(--color-gold)] w-8 h-8 hover:!bg-[var(--color-gold-dark)]/10"
           pTooltip="End Combat"
           tooltipPosition="left"
-          (click)="endCombat.emit()"
+          [disabled]="true"
         ></p-button>
         <p-button
           icon="pi pi-arrow-right"
           styleClass="p-button-rounded p-button-outlined !border-[var(--color-gold-dark)] !text-[var(--color-gold-light)] w-8 h-8 hover:!bg-[var(--color-gold-dark)]/20"
           pTooltip="Next Turn"
+          [disabled]="true"
           tooltipPosition="left"
         ></p-button>
       </div>
@@ -45,14 +45,14 @@ import { TooltipModule } from 'primeng/tooltip';
             Battlefield Empty
           </h3>
           <p class="text-xs leading-relaxed max-w-[200px] text-[var(--text-muted)]">
-            The initiative order is currently empty. Add creatures from the Monster Manual to begin.
+            Combat tracking is not implemented yet.
           </p>
           <div class="mt-8 flex flex-col gap-2 w-full max-w-[180px]">
             <p-button
               label="Add Combatant"
               icon="pi pi-plus"
               styleClass="p-button-sm p-button-outlined w-full !border-[var(--color-gold)]/50 !text-[var(--color-gold)] hover:!bg-[var(--color-gold)]/10 font-bold tracking-widest text-xs"
-              (onClick)="addCombatant.emit()"
+              [disabled]="true"
             ></p-button>
           </div>
         </div>
@@ -61,7 +61,4 @@ import { TooltipModule } from 'primeng/tooltip';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DmInitiativeTabComponent {
-  endCombat = output<void>();
-  addCombatant = output<void>();
-}
+export class DmInitiativeTabComponent {}

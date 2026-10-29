@@ -1,11 +1,9 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { GameSessionService } from '@app/core/session/game-session.service';
 
 @Component({
   selector: 'app-dm-players-tab',
-  standalone: true,
-  imports: [CommonModule],
+  imports: [],
   template: `
     <div class="flex flex-col h-full">
       <div
@@ -17,6 +15,16 @@ import { GameSessionService } from '@app/core/session/game-session.service';
           Party Members
         </h3>
       </div>
+      <ul class="p-4 space-y-3">
+        @for (player of players()?.playerCharacters ?? []; track $index) {
+          <li>
+            <strong>{{ player.name }}</strong> — Level {{ player.level }}
+            {{ player.class || 'character' }}
+          </li>
+        } @empty {
+          <li>No player characters in this session. Import a session JSON file to load a party.</li>
+        }
+      </ul>
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
   selector: 'app-dm-secret-notes',
-  standalone: true,
   template: `
     <div
       class="shrink-0 h-40 bg-[var(--color-bg-elevated)] border-t border-[var(--color-gold)] flex flex-col"

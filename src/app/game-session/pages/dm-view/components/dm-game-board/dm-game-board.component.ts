@@ -1,12 +1,10 @@
-import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { DockModule } from 'primeng/dock';
-import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-dm-game-board',
-  standalone: true,
-  imports: [DockModule, TooltipModule],
+  imports: [DockModule],
   template: `
     <div
       class="flex-1 min-w-0 overflow-hidden flex flex-col h-full p-0 relative border-r border-[var(--color-gold)] bg-[var(--color-bg)]"
@@ -30,34 +28,32 @@ import { TooltipModule } from 'primeng/tooltip';
           <div class="h-8 w-px bg-[var(--color-border)] mx-2"></div>
 
           <button
-            class="flex items-center gap-3 px-4 py-2 rounded bg-[var(--color-bg)] border border-[var(--color-border)] text-[var(--text-muted)] hover:text-[var(--color-gold)] hover:border-[var(--color-gold)] transition-all cursor-pointer"
-            [class.!bg-[#2a241d]]="fogOfWar()"
-            [class.!text-[var(--color-gold)]]="fogOfWar()"
-            [class.!border-[var(--color-gold)]]="fogOfWar()"
-            (click)="toggleFogOfWar.emit()"
+            disabled
+            type="button"
+            class="flex items-center gap-3 px-4 py-2 rounded bg-[var(--color-bg)] border border-[var(--color-border)] text-[var(--text-muted)] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <i [class]="fogOfWar() ? 'pi pi-eye-slash' : 'pi pi-eye'" style="font-size: 1.2rem"></i>
+            <i class="pi pi-eye-slash" style="font-size: 1.2rem"></i>
             <div class="flex flex-col items-start leading-none gap-0.5">
               <span class="text-[10px] uppercase opacity-70 tracking-wider">Fog of War</span>
-              <span class="font-bold text-xs sticky">{{ fogOfWar() ? 'ACTIVE' : 'OFF' }}</span>
+              <span class="font-bold text-xs sticky">OFF</span>
             </div>
           </button>
 
           <button
-            class="flex items-center gap-3 px-6 py-2 rounded bg-[var(--color-success)] text-white hover:brightness-110 shadow-lg shadow-green-900/20 transition-all font-semibold tracking-wide cursor-pointer border border-[#ffffff20]"
-            [class.animate-pulse]="castingBoard()"
-            (click)="toggleCastingBoard.emit()"
+            disabled
+            type="button"
+            class="flex items-center gap-3 px-6 py-2 rounded bg-[var(--color-success)] text-white shadow-lg shadow-green-900/20 transition-all font-semibold tracking-wide disabled:opacity-50 disabled:cursor-not-allowed border border-[#ffffff20]"
           >
             <i class="pi pi-external-link" style="font-size: 1.2rem"></i>
             <div class="flex flex-col items-start leading-none gap-0.5">
-              <span class="font-bold text-xs tracking-wider">{{
-                castingBoard() ? 'CASTING...' : 'CAST TO BOARD'
-              }}</span>
+              <span class="font-bold text-xs tracking-wider">CAST TO BOARD</span>
             </div>
           </button>
 
           <button
-            class="w-10 h-10 flex items-center justify-center rounded-full text-[var(--text-muted)] hover:text-[var(--text-body)] hover:bg-[var(--color-bg-elevated)] transition-colors cursor-pointer ml-2"
+            disabled
+            type="button"
+            class="w-10 h-10 flex items-center justify-center rounded-full text-[var(--text-muted)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed ml-2"
           >
             <i class="pi pi-cog text-xl"></i>
           </button>
@@ -79,7 +75,7 @@ import { TooltipModule } from 'primeng/tooltip';
             Map Render Surface
           </h2>
           <p class="text-[var(--text-muted)] italic opacity-60 font-[family-name:var(--font-body)]">
-            Players can only see what is revealed via Fog of War brush
+            Map rendering, fog of war and player casting are not implemented yet.
           </p>
         </div>
 
@@ -89,20 +85,14 @@ import { TooltipModule } from 'primeng/tooltip';
           >
             <p-dock [model]="dockItems()" position="bottom" styleClass="custom-dock">
               <ng-template pTemplate="item" let-item>
-                <div
-                  class="dock-item flex flex-col items-center gap-1 p-2 transition-all duration-200 hover:scale-110 cursor-pointer group relative"
-                  [pTooltip]="item.label"
-                  tooltipPosition="top"
-                  [class.text-[var(--color-gold)]]="activeTool() === item.id"
-                  [class.text-[var(--text-muted)]]="activeTool() !== item.id"
-                  (click)="activeToolChange.emit(item.id)"
-                  (keydown.enter)="activeToolChange.emit(item.id)"
-                  tabindex="0"
+                <button
+                  type="button"
+                  disabled
+                  class="dock-item flex flex-col items-center gap-1 p-2 opacity-50"
+                  [title]="item.label"
                 >
                   <div
-                    class="w-10 h-10 rounded-full bg-[var(--color-bg-elevated)] border border-[var(--color-border)] flex items-center justify-center shadow-lg group-hover:border-[var(--color-gold)] transition-colors relative z-10"
-                    [class.!border-[var(--color-gold)]]="activeTool() === item.id"
-                    [class.!bg-[#2a241d]]="activeTool() === item.id"
+                    class="w-10 h-10 rounded-full bg-[var(--color-bg-elevated)] border border-[var(--color-border)] flex items-center justify-center shadow-lg relative z-10"
                   >
                     <i [class]="item.icon" style="font-size: 1.2rem"></i>
                   </div>
@@ -111,7 +101,7 @@ import { TooltipModule } from 'primeng/tooltip';
                   >
                     {{ item.label }}
                   </span>
-                </div>
+                </button>
               </ng-template>
             </p-dock>
           </div>
@@ -133,11 +123,5 @@ import { TooltipModule } from 'primeng/tooltip';
 })
 export class DmGameBoardComponent {
   activeScene = input.required<{ name: string }>();
-  fogOfWar = input.required<boolean>();
-  toggleFogOfWar = output<void>();
-  castingBoard = input.required<boolean>();
-  toggleCastingBoard = output<void>();
   dockItems = input.required<MenuItem[]>();
-  activeTool = input.required<string>();
-  activeToolChange = output<string>();
 }

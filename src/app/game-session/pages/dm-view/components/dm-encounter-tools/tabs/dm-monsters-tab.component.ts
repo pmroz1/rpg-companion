@@ -3,13 +3,11 @@ import { FormsModule } from '@angular/forms';
 import { Button } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
 import { DndMonster } from '@data/models';
-import { CommonModule } from '@angular/common';
 import { MonsterStatBlockComponent } from '../../monster-stat-block/monster-stat-block.component';
 
 @Component({
   selector: 'app-dm-monsters-tab',
-  standalone: true,
-  imports: [CommonModule, Button, SelectModule, FormsModule, MonsterStatBlockComponent],
+  imports: [Button, SelectModule, FormsModule, MonsterStatBlockComponent],
   template: `
     <div class="flex flex-col h-full bg-[#16120e]">
       <div
@@ -75,7 +73,8 @@ import { MonsterStatBlockComponent } from '../../monster-stat-block/monster-stat
             class="p-4 border-t border-[var(--color-border)] bg-[var(--color-bg)] shadow-[0_-8px_16px_rgba(0,0,0,0.3)] shrink-0"
           >
             <p-button
-              label="Add to Combat"
+              label="Add to Combat — planned"
+              [disabled]="true"
               icon="pi pi-plus-circle"
               styleClass="p-button-sm w-full !bg-[var(--color-gold)] !border-[var(--color-gold)] !text-black hover:!bg-[var(--color-gold-light)] font-bold uppercase tracking-widest"
             ></p-button>
@@ -95,7 +94,7 @@ import { MonsterStatBlockComponent } from '../../monster-stat-block/monster-stat
               Monster Manual
             </h4>
             <p class="text-sm text-[var(--text-muted)] opacity-60 leading-relaxed px-6">
-              Search the compendium to view creature details and add them to the initiative tracker.
+              Search the compendium to view creature details. Adding creatures to combat is planned.
             </p>
           </div>
         }

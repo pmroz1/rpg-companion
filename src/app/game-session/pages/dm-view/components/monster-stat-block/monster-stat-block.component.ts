@@ -3,7 +3,6 @@ import { DndMonster } from '@data/models';
 
 @Component({
   selector: 'app-monster-stat-block',
-  standalone: true,
   template: `
     <div class="min-h-full bg-[#16120e] p-6 pb-24 relative">
       <div
@@ -74,8 +73,8 @@ import { DndMonster } from '@data/models';
       </div>
 
       <div class="grid grid-cols-6 gap-2 mb-8">
-        @for (ability of abilities; track $index) {
-          @let score = getAbilityScore(monster(), ability);
+        @for (ability of abilities; track ability.key) {
+          @let score = monster()[ability.key];
           <div
             class="flex flex-col items-center bg-[#251d18] rounded-md py-2 border border-[#3a2e25] relative overflow-hidden group"
           >
@@ -84,7 +83,7 @@ import { DndMonster } from '@data/models';
             ></div>
             <span
               class="text-[9px] font-bold text-[var(--text-muted)] uppercase tracking-wider mb-0.5"
-              >{{ ability }}</span
+              >{{ ability.label }}</span
             >
             <span class="text-lg font-bold text-[var(--color-gold)] font-serif leading-none">{{
               score
@@ -206,30 +205,18 @@ import { DndMonster } from '@data/models';
 })
 export class MonsterStatBlockComponent {
   monster = input.required<DndMonster>();
-  abilities = ['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA'];
+  readonly abilities = [
+    { label: 'STR', key: 'strength' },
+    { label: 'DEX', key: 'dexterity' },
+    { label: 'CON', key: 'constitution' },
+    { label: 'INT', key: 'intelligence' },
+    { label: 'WIS', key: 'wisdom' },
+    { label: 'CHA', key: 'charisma' },
+  ] as const;
 
   getModifier(score: number): string {
     const mod = Math.floor((score - 10) / 2);
     return (mod >= 0 ? '+' : '') + mod;
-  }
-
-  getAbilityScore(monster: DndMonster, ability: string): number {
-    switch (ability) {
-      case 'STR':
-        return monster.strength;
-      case 'DEX':
-        return monster.dexterity;
-      case 'CON':
-        return monster.constitution;
-      case 'INT':
-        return monster.intelligence;
-      case 'WIS':
-        return monster.wisdom;
-      case 'CHA':
-        return monster.charisma;
-      default:
-        return 10;
-    }
   }
 
   getTraitParts(text: string): { name: string; desc: string } {

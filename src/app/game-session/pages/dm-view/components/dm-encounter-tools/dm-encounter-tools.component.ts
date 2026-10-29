@@ -3,16 +3,13 @@ import { TabsModule } from 'primeng/tabs';
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
 import { DndMonster } from '@data/models';
-import { CommonModule } from '@angular/common';
 import { DmInitiativeTabComponent } from './tabs/dm-initiative-tab.component';
 import { DmMonstersTabComponent } from './tabs/dm-monsters-tab.component';
 import { DmPlayersTabComponent } from './tabs/dm-players-tab.component';
 
 @Component({
   selector: 'app-dm-encounter-tools',
-  standalone: true,
   imports: [
-    CommonModule,
     TabsModule,
     DmInitiativeTabComponent,
     DmMonstersTabComponent,
@@ -85,11 +82,7 @@ import { DmPlayersTabComponent } from './tabs/dm-players-tab.component';
             value="initiative"
             class="flex-1 flex flex-col overflow-hidden h-full !p-0 w-full"
           >
-            <app-dm-initiative-tab
-              class="w-full h-full block"
-              (endCombat)="endCombat.emit()"
-              (addCombatant)="onTabChange('monsters')"
-            />
+            <app-dm-initiative-tab class="w-full h-full block" />
           </p-tabpanel>
 
           <p-tabpanel
@@ -133,7 +126,6 @@ export class DmEncounterToolsComponent {
   monsterManual = input.required<DndMonster[]>();
   selectedMonster = input.required<DndMonster | null>();
   selectedMonsterChange = output<DndMonster | null>();
-  endCombat = output<void>();
 
   activeTab = signal<'players' | 'initiative' | 'monsters'>('initiative');
   isExpanded = signal(false);

@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component, input, output, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  input,
+  OnDestroy,
+  output,
+  signal,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Button } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
@@ -7,7 +14,6 @@ import { Sound } from '@data/models';
 
 @Component({
   selector: 'app-dm-scene-manager',
-  standalone: true,
   imports: [Button, InputTextModule, FormsModule, TooltipModule],
   template: `
     <div class="left-column w-80 flex-none flex flex-col h-full overflow-hidden">
@@ -18,6 +24,7 @@ import { Sound } from '@data/models';
             icon="pi pi-plus"
             styleClass="p-button-rounded p-button-text p-button-sm w-7 h-7 !p-0 text-[var(--color-gold)] hover:bg-[var(--color-gold-dark)]/20"
             pTooltip="New Scene"
+            [disabled]="true"
           ></p-button>
         </div>
 
@@ -211,11 +218,13 @@ import { Sound } from '@data/models';
           <p-button
             icon="pi pi-save"
             label="Save"
+            [disabled]="true"
             styleClass="p-button-sm p-button-outlined w-full !border-[var(--color-border)] !text-[var(--text-muted)] hover:!text-[var(--color-gold)] hover:!border-[var(--color-gold)]"
           ></p-button>
           <p-button
             icon="pi pi-download"
             label="Export"
+            [disabled]="true"
             styleClass="p-button-sm p-button-outlined w-full !border-[var(--color-border)] !text-[var(--text-muted)] hover:!text-[var(--color-gold)] hover:!border-[var(--color-gold)]"
           ></p-button>
         </div>
@@ -232,7 +241,7 @@ import { Sound } from '@data/models';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DmSceneManagerComponent {
+export class DmSceneManagerComponent implements OnDestroy {
   scenes = input.required<{ name: string }[]>();
   activeScene = input.required<{ name: string }>();
   activeSceneChange = output<{ name: string }>();
@@ -262,13 +271,17 @@ export class DmSceneManagerComponent {
     }
   }
 
-  toggleSound(sound: Sound) {
+  async toggleSound(sound: Sound): Promise<void> {
     if (sound.playing()) {
       sound.audio.pause();
       sound.playing.set(false);
     } else {
-      sound.audio.play();
-      sound.playing.set(true);
+      try {
+        await sound.audio.play();
+        sound.playing.set(true);
+      } catch {
+        sound.playing.set(false);
+      }
     }
   }
 
@@ -276,6 +289,13 @@ export class DmSceneManagerComponent {
     sound.audio.pause();
     sound.audio.currentTime = 0;
     sound.playing.set(false);
+  }
+
+  ngOnDestroy(): void {
+    for (const sound of this.sounds()) {
+      sound.audio.pause();
+      URL.revokeObjectURL(sound.audio.src);
+    }
   }
 
   onVolumeChange(sound: Sound, volume: number) {
